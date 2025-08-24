@@ -3,23 +3,47 @@
     "name": "University Map",
     "slug": "university-map",
     "version": "1.0.0",
-    "platforms": ["ios", "android", "web"],
-    "permissions": [
-      "LOCATION",
-      "ACCESS_FINE_LOCATION",
-      "ACCESS_COARSE_LOCATION"
-    ],
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
     "ios": {
+      "icon": "./assets/images/icon.png",
+      "supportsTablet": true,
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "このアプリは地図上で現在地を表示するために位置情報を使用します。",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "この アプリは地図上で現在地を表示するために位置情報を使用します。"
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "このアプリは地図上で現在地を表示するために位置情報を使用します。"
       }
     },
     "android": {
+      "icon": "./assets/images/icon.png",
+      "package": "com.yourname.universitymap",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION"
       ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "このアプリは地図上で現在地を表示するために位置情報を使用します。"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
     }
   }
 }

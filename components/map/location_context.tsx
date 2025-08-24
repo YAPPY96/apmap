@@ -1,7 +1,6 @@
 // components/map/LocationContext.tsx
 import * as Location from 'expo-location';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-
 interface LocationContextType {
   location: Location.LocationObject | null;
   errorMsg: string | null;

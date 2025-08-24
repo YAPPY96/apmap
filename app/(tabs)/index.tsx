@@ -2,12 +2,11 @@
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { BuildingModal } from '@/components/map/BuildingModal';
-import { useLocation } from '@/components/map/LocationContext';
+import { useLocation } from '@/components/map/location_context';
 import { MapWebView } from '@/components/map/MapWebView';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Alert, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
-
 interface BuildingFeature {
   properties: {
     name: string;
