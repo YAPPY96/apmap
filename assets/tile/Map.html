@@ -1,1 +1,47 @@
-<!DOCTYPE html><html><head><title>Leaflet preview</title><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H"crossorigin=""/><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH"crossorigin=""></script><style type="text/css">body {margin: 0;padding: 0;} html, body, #map{width: 100%;height: 100%;}</style></head><body><div id="map"></div><script>var map = L.map('map', {attributionControl: false}).setView([35.1572, 136.925], 20);L.control.attribution({prefix: false}).addTo(map);var tilesource_layer = L.tileLayer('{z}/{x}/{y}.png', {minZoom: 18, maxZoom: 22, tms: false, attribution: 'Created by QGIS'}).addTo(map);</script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Leaflet Local Tiles</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body, #map { height: 100%; margin: 0; padding: 0; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ローカルタイルのパス（WebViewからの相対パス）
+    const tileUrl = './{z}/{x}/{y}.png';
+
+    // 地図の初期中心座標とズーム
+    const map = L.map('map').setView([35.681236, 139.767125], 16);
+
+    // ローカルタイルレイヤー
+    L.tileLayer(tileUrl, {
+      minZoom: 15,
+      maxZoom: 18,
+      tileSize: 256,
+      attribution: 'Local Tiles',
+      tms: false,
+      noWrap: true,
+      bounds: [[35.68, 139.76], [35.69, 139.77]] // 必要に応じて調整
+    }).addTo(map);
+
+    // buildings.geojsonをあとで読み込むための関数
+    window.loadBuildingsGeoJSON = function(geojson) {
+      if (window.buildingsLayer) {
+        map.removeLayer(window.buildingsLayer);
+      }
+      window.buildingsLayer = L.geoJSON(geojson).addTo(map);
+    };
+
+    // WebViewに準備完了を通知
+    if (window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'mapReady' }));
+    }
+  </script>
+</body>
+</html>

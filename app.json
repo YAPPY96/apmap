@@ -25,7 +25,9 @@
       },
       "permissions": [
         "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION"
+        "ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
       ]
     },
     "web": {
@@ -40,13 +42,22 @@
         {
           "locationAlwaysAndWhenInUsePermission": "このアプリは地図上で現在地を表示するために位置情報を使用します。"
         }
-      ]
+      ],
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true
     },
     "assetBundlePatterns": [
       "assets/**"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "a0d9037b-75d3-4ecd-bdd3-d6b07f53566e"
+      }
+    }
   }
 }
