@@ -13,16 +13,17 @@
   <div id="map"></div>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // ローカルタイルのパス（WebViewからの相対パス）
-    const tileUrl = './{z}/{x}/{y}.png';
-
+    // ベースURLを動的に生成
+    const baseUrl = document.location.pathname.substring(0, document.location.pathname.lastIndexOf('/')) + '/';
+    
     // 地図の初期中心座標とズーム
     const map = L.map('map').setView([35.681236, 139.767125], 16);
 
-    // ローカルタイルレイヤー
-    L.tileLayer(tileUrl, {
+    // ローカルタイルレイヤー (URLはRNから注入)
+    // window.tileUrlTemplate は injectedJavaScript によって設定される
+    L.tileLayer(baseUrl + window.tileUrlTemplate, {
       minZoom: 15,
-      maxZoom: 18,
+      maxZoom: 22,
       tileSize: 256,
       attribution: 'Local Tiles',
       tms: false,

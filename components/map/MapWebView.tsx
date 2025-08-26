@@ -1,8 +1,9 @@
 // components/map/MapWebView.tsx
 import * as Location from 'expo-location';
-import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
+import buildingsData from '../../buildings.json';
 
 interface MapWebViewProps {
   userLocation: Location.LocationObject | null;
@@ -11,7 +12,7 @@ interface MapWebViewProps {
 
 const MyWebView = forwardRef<WebView, MapWebViewProps>(({ userLocation, onBuildingClick }, ref) => {
   const webViewRef = useRef<WebView>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isMapReady, setIsMapReady] = useState(false);
 
   // WebViewからのメッセージを処理
   const handleMessage = (event: any) => {
@@ -20,7 +21,7 @@ const MyWebView = forwardRef<WebView, MapWebViewProps>(({ userLocation, onBuildi
       if (message.type === 'buildingClick') {
         onBuildingClick(message.data);
       } else if (message.type === 'mapReady') {
-        setIsLoading(false);
+        setIsMapReady(true);
       }
     } catch (error) {
       console.error('Error parsing WebView message:', error);
@@ -39,11 +40,28 @@ const MyWebView = forwardRef<WebView, MapWebViewProps>(({ userLocation, onBuildi
     }
   };
 
-  React.useEffect(() => {
-    if (userLocation && !isLoading) {
+  useEffect(() => {
+    if (isMapReady && webViewRef.current) {
+      // 地図の準備ができたらGeoJSONを送信
+      const message = {
+        type: 'loadGeoJson',
+        data: buildingsData,
+      };
+      webViewRef.current.postMessage(JSON.stringify(message));
+
+      // ユーザーの初期位置も送信
+      if (userLocation) {
+        updateLocation(userLocation);
+      }
+    }
+  }, [isMapReady]);
+
+  useEffect(() => {
+    // マップ準備後に位置情報が更新された場合
+    if (isMapReady && userLocation) {
       updateLocation(userLocation);
     }
-  }, [userLocation, isLoading]);
+  }, [userLocation]);
 
   const getHtmlContent = () => `
   <!DOCTYPE html>
@@ -61,27 +79,72 @@ const MyWebView = forwardRef<WebView, MapWebViewProps>(({ userLocation, onBuildi
     <div id="map"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-      // Expo Go では assets/tile/ への相対パスでアクセス
-      const tileUrl = 'assets/tile/{z}/{x}/{y}.png';
+      // OpenStreetMapのタイルURL
+      const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
-      const map = L.map('map').setView([35.681236, 139.767125], 16);
+      const map = L.map('map'); // setViewを削除
 
       L.tileLayer(tileUrl, {
-        minZoom: 15,
-        maxZoom: 18,
+        minZoom: 15, // boundsを考慮して下限は広めに設定
+        maxZoom: 19,
         tileSize: 256,
-        attribution: 'Local Tiles',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         tms: false,
-        noWrap: true,
-        bounds: [[35.68, 139.76], [35.69, 139.77]]
+        noWrap: true
       }).addTo(map);
 
       window.loadBuildingsGeoJSON = function(geojson) {
         if (window.buildingsLayer) {
           map.removeLayer(window.buildingsLayer);
         }
-        window.buildingsLayer = L.geoJSON(geojson).addTo(map);
+        window.buildingsLayer = L.geoJSON(geojson, {
+          style: function(feature) {
+            return { color: '#ff7800', weight: 1, opacity: 0.8, fillOpacity: 0.3 };
+          },
+          onEachFeature: function(feature, layer) {
+            if (feature.properties && feature.properties.name) {
+              layer.bindPopup(feature.properties.name);
+              layer.on('click', function() {
+                window.ReactNativeWebView.postMessage(JSON.stringify({
+                  type: 'buildingClick',
+                  data: feature
+                }));
+              });
+            }
+          }
+        }).addTo(map);
+        
+        // GeoJSONの範囲に地図をフィットさせる
+        map.fitBounds(window.buildingsLayer.getBounds());
       };
+
+      var userMarker;
+      document.addEventListener('message', function(event) {
+        var message;
+        try {
+          message = JSON.parse(event.data);
+        } catch (e) {
+          // Not a JSON message
+          return;
+        }
+
+        if (message.type === 'updateLocation') {
+          var latLng = [message.latitude, message.longitude];
+          if (userMarker) {
+            userMarker.setLatLng(latLng);
+          } else {
+            userMarker = L.marker(latLng, {
+              icon: L.divIcon({
+                className: 'user-location-marker',
+                html: '<div style="background-color: #4A90E2; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>',
+                iconSize: [20, 20]
+              })
+            }).addTo(map);
+          }
+        } else if (message.type === 'loadGeoJson') {
+          window.loadBuildingsGeoJSON(message.data);
+        }
+      });
 
       if (window.ReactNativeWebView) {
         window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'mapReady' }));
@@ -111,7 +174,7 @@ const MyWebView = forwardRef<WebView, MapWebViewProps>(({ userLocation, onBuildi
 
   return (
     <View style={styles.container}>
-      {isLoading && (
+      {!isMapReady && (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#4A90E2" />
         </View>
@@ -124,8 +187,8 @@ const MyWebView = forwardRef<WebView, MapWebViewProps>(({ userLocation, onBuildi
         javaScriptEnabled={true}
         domStorageEnabled={true}
         startInLoadingState={true}
-        onLoad={() => setIsLoading(false)}
-        onError={() => setIsLoading(false)}
+        onLoad={() => {}}
+        onError={(e) => console.error('WebView Error: ', e.nativeEvent)}
         allowFileAccess={true}
         allowUniversalAccessFromFileURLs={true}
         mixedContentMode="compatibility"
