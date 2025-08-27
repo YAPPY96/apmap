@@ -1,4 +1,5 @@
 // app/(tabs)/index.tsx
+import { AnnounceBar } from '@/components/AnnounceBar';
 import { BuildingModal } from '@/components/map/BuildingModal';
 import { useLocation } from '@/components/map/location_context';
 import { MapWebView } from '@/components/map/MapWebView';
@@ -94,24 +95,16 @@ export default function MapScreen() {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerContent}>
-          <ThemedText style={styles.headerTitle}>キャンパスマップ</ThemedText>
+          <ThemedText style={styles.headerTitle}>名工大MAP</ThemedText>
           <TouchableOpacity style={styles.locationButton} onPress={requestLocation}>
             <MaterialIcons 
               name={location ? "my-location" : "location-searching"} 
-              size={24} 
+              size={23} 
               color="#4A90E2" 
             />
           </TouchableOpacity>
         </View>
-        
-        {location && (
-          <View style={styles.locationInfo}>
-            <MaterialIcons name="place" size={16} color="#666" />
-            <ThemedText style={styles.locationText}>
-              {location.coords.latitude.toFixed(6)}, {location.coords.longitude.toFixed(6)}
-            </ThemedText>
-          </View>
-        )}
+        <AnnounceBar />
       </View>
 
       {/* Map */}
@@ -129,18 +122,7 @@ export default function MapScreen() {
         onClose={closeModal}
       />
 
-      {/* Info Panel */}
-      <View style={styles.infoPanel}>
-        <ThemedText style={styles.infoPanelTitle}>操作方法</ThemedText>
-        <View style={styles.infoItem}>
-          <MaterialIcons name="touch-app" size={16} color="#666" />
-          <ThemedText style={styles.infoText}>建物をタップして詳細を表示</ThemedText>
-        </View>
-        <View style={styles.infoItem}>
-          <MaterialIcons name="pinch" size={16} color="#666" />
-          <ThemedText style={styles.infoText}>ピンチで拡大・縮小</ThemedText>
-        </View>
-      </View>
+      
     </ThemedView>
   );
 }
@@ -150,7 +132,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingTop: 50,
+    paddingTop: 40,
     paddingHorizontal: 20,
     paddingBottom: 10,
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
@@ -164,7 +146,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
   },

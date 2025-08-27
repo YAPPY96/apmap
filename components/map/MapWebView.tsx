@@ -84,13 +84,11 @@ const MyWebView = forwardRef<WebView, MapWebViewProps>(({ userLocation, onBuildi
 
       const map = L.map('map'); // setViewを削除
 
+      // 標準のタイルレイヤーを追加
       L.tileLayer(tileUrl, {
-        minZoom: 15, // boundsを考慮して下限は広めに設定
+        minZoom: 17,
         maxZoom: 19,
-        tileSize: 256,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        tms: false,
-        noWrap: true
       }).addTo(map);
 
       window.loadBuildingsGeoJSON = function(geojson) {
@@ -111,11 +109,20 @@ const MyWebView = forwardRef<WebView, MapWebViewProps>(({ userLocation, onBuildi
                 }));
               });
             }
+          },
+          filter: function(feature) {
+            // "name"と"building"プロパティが存在する地物のみ表示
+            return feature.properties && feature.properties.name && feature.properties.building;
           }
         }).addTo(map);
         
-        // GeoJSONの範囲に地図をフィットさせる
-        map.fitBounds(window.buildingsLayer.getBounds());
+        if (window.buildingsLayer.getLayers().length > 0) {
+          const bounds = window.buildingsLayer.getBounds();
+          const paddedBounds = bounds.pad(0.1); // 10%のパディングを追加
+
+          map.fitBounds(paddedBounds);
+          map.setMaxBounds(paddedBounds);
+        }
       };
 
       var userMarker;

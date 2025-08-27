@@ -17,12 +17,12 @@
     const baseUrl = document.location.pathname.substring(0, document.location.pathname.lastIndexOf('/')) + '/';
     
     // 地図の初期中心座標とズーム
-    const map = L.map('map').setView([35.681236, 139.767125], 16);
+    const map = L.map('map').setView([35.681236, 139.767125], 21);
 
     // ローカルタイルレイヤー (URLはRNから注入)
     // window.tileUrlTemplate は injectedJavaScript によって設定される
     L.tileLayer(baseUrl + window.tileUrlTemplate, {
-      minZoom: 15,
+      minZoom: 21,
       maxZoom: 22,
       tileSize: 256,
       attribution: 'Local Tiles',
