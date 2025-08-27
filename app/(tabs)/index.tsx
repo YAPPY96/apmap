@@ -1,6 +1,6 @@
 // app/(tabs)/index.tsx
-import { AnnounceBar } from '@/components/AnnounceBar';
 import { BuildingModal } from '@/components/map/BuildingModal';
+import { EventDetailModal } from '@/components/map/EventDetailModal';
 import { useLocation } from '@/components/map/location_context';
 import { MapWebView } from '@/components/map/MapWebView';
 import { ThemedText } from '@/components/ThemedText';
@@ -8,31 +8,53 @@ import { ThemedView } from '@/components/ThemedView';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useState } from 'react';
 import { Alert, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
+import eventData from '../../events.json';
+
+// 型定義
 interface BuildingFeature {
   properties: {
     name: string;
-    building?: string;
-    building_id?: string;
-    historic?: string;
-    amenity?: string;
     [key: string]: any;
   };
 }
 
+interface Event {
+  buildingName: string;
+  eventName: string;
+  time: string;
+  description: string;
+}
+
 export default function MapScreen() {
   const { location, errorMsg, hasPermission, requestLocation } = useLocation();
+  
+  // Building Modal State
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingFeature | null>(null);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [buildingModalVisible, setBuildingModalVisible] = useState(false);
+
+  // Event Modal State
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [eventModalVisible, setEventModalVisible] = useState(false);
 
   const handleBuildingClick = (buildingData: BuildingFeature) => {
-    console.log('Building clicked:', buildingData);
-    setSelectedBuilding(buildingData);
-    setModalVisible(true);
+    const buildingName = buildingData.properties.name;
+    const eventForBuilding = eventData.find(event => event.buildingName === buildingName);
+
+    if (eventForBuilding) {
+      setSelectedEvent(eventForBuilding);
+      setEventModalVisible(true);
+    }
+    // イベントがない場合は、地図上のポップアップのみ表示し、モーダルは開かない
   };
 
-  const closeModal = () => {
-    setModalVisible(false);
+  const closeBuildingModal = () => {
+    setBuildingModalVisible(false);
     setSelectedBuilding(null);
+  };
+
+  const closeEventModal = () => {
+    setEventModalVisible(false);
+    setSelectedEvent(null);
   };
 
   const handleLocationRequest = () => {
@@ -40,14 +62,8 @@ export default function MapScreen() {
       '位置情報の取得',
       '位置情報を取得してよろしいですか？',
       [
-        {
-          text: 'キャンセル',
-          style: 'cancel',
-        },
-        {
-          text: '許可',
-          onPress: requestLocation,
-        },
+        { text: 'キャンセル', style: 'cancel' },
+        { text: '許可', onPress: requestLocation },
       ]
     );
   };
@@ -95,16 +111,24 @@ export default function MapScreen() {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerContent}>
-          <ThemedText style={styles.headerTitle}>名工大MAP</ThemedText>
+          <ThemedText style={styles.headerTitle}>キャンパスマップ</ThemedText>
           <TouchableOpacity style={styles.locationButton} onPress={requestLocation}>
             <MaterialIcons 
               name={location ? "my-location" : "location-searching"} 
-              size={23} 
+              size={24} 
               color="#4A90E2" 
             />
           </TouchableOpacity>
         </View>
-        <AnnounceBar />
+        
+        {location && (
+          <View style={styles.locationInfo}>
+            <MaterialIcons name="place" size={16} color="#666" />
+            <ThemedText style={styles.locationText}>
+              {location.coords.latitude.toFixed(6)}, {location.coords.longitude.toFixed(6)}
+            </ThemedText>
+          </View>
+        )}
       </View>
 
       {/* Map */}
@@ -117,12 +141,18 @@ export default function MapScreen() {
 
       {/* Building Modal */}
       <BuildingModal
-        visible={modalVisible}
+        visible={buildingModalVisible}
         building={selectedBuilding}
-        onClose={closeModal}
+        onClose={closeBuildingModal}
       />
 
-      
+      {/* Event Modal */}
+      <EventDetailModal
+        visible={eventModalVisible}
+        event={selectedEvent}
+        onClose={closeEventModal}
+      />
+
     </ThemedView>
   );
 }
@@ -132,7 +162,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingTop: 40,
+    paddingTop: 50,
     paddingHorizontal: 20,
     paddingBottom: 10,
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
@@ -146,7 +176,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
   },
