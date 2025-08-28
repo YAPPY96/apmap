@@ -8,6 +8,7 @@ import { ThemedView } from '@/components/ThemedView';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useState } from 'react';
 import { Alert, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import eventData from '../../events.json';
 
 // 型定義
@@ -26,7 +27,16 @@ interface Event {
 }
 
 export default function MapScreen() {
-  const { location, errorMsg, hasPermission, requestLocation } = useLocation();
+  const {
+    location,
+    errorMsg,
+    hasPermission,
+    requestLocation,
+    highlightedBuilding,
+    setHighlightedBuilding,
+    zoomToUserTrigger,
+    triggerZoomToUser,
+  } = useLocation();
   
   // Building Modal State
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingFeature | null>(null);
@@ -55,6 +65,7 @@ export default function MapScreen() {
   const closeEventModal = () => {
     setEventModalVisible(false);
     setSelectedEvent(null);
+    setHighlightedBuilding(null); // Clear highlight when modal is closed
   };
 
   const handleLocationRequest = () => {
@@ -105,14 +116,14 @@ export default function MapScreen() {
   }
 
   return (
-    <ThemedView style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
       
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerContent}>
           <ThemedText style={styles.headerTitle}>キャンパスマップ</ThemedText>
-          <TouchableOpacity style={styles.locationButton} onPress={requestLocation}>
+          <TouchableOpacity style={styles.locationButton} onPress={triggerZoomToUser}>
             <MaterialIcons 
               name={location ? "my-location" : "location-searching"} 
               size={24} 
@@ -136,6 +147,8 @@ export default function MapScreen() {
         <MapWebView 
           userLocation={location} 
           onBuildingClick={handleBuildingClick}
+          highlightedBuilding={highlightedBuilding}
+          zoomToUserTrigger={zoomToUserTrigger}
         />
       </View>
 
@@ -153,7 +166,7 @@ export default function MapScreen() {
         onClose={closeEventModal}
       />
 
-    </ThemedView>
+    </SafeAreaView>
   );
 }
 
@@ -162,7 +175,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingTop: 50,
+    paddingTop: 10,
     paddingHorizontal: 20,
     paddingBottom: 10,
     backgroundColor: 'rgba(255, 255, 255, 0.95)',

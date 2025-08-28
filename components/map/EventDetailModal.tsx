@@ -1,8 +1,10 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import {
-  Dimensions,
   Modal,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -10,29 +12,88 @@ import {
   View,
 } from 'react-native';
 
-// イベントデータの型定義
-interface Event {
-  buildingName: string;
-  eventName: string;
-  time: string;
-  description: string;
-}
+import { useLocation } from './location_context';
+import { AppEvent } from './types';
 
-// コンポーネントのプロパティの型定義
 interface EventDetailModalProps {
   visible: boolean;
-  event: Event | null;
+  event: AppEvent | null;
   onClose: () => void;
+  isFullScreen: boolean;
 }
-
-const { height: screenHeight } = Dimensions.get('window');
 
 export const EventDetailModal: React.FC<EventDetailModalProps> = ({
   visible,
   event,
   onClose,
+  isFullScreen,
 }) => {
+  const router = useRouter();
+  const { setHighlightedBuilding } = useLocation();
+
   if (!event) return null;
+
+  const handleViewLocation = () => {
+    if (event) {
+      setHighlightedBuilding(event.buildingName);
+      router.push('/(tabs)/'); // Navigate to Map tab
+      onClose(); // Close the modal
+    }
+  };
+
+  const imageSources: { [key: string]: any } = {
+    'event_soudankai.jpg': require('../../assets/eventimage/event_soudankai.jpg'),
+    'event_kouenkai.jpg': require('../../assets/eventimage/event_kouenkai.jpg'),
+    'event_live.jpg': require('../../assets/eventimage/event_live.jpg'),
+  };
+  const imageSource = imageSources[event.image];
+
+  const modalContent = (
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+        <MaterialIcons name="close" size={24} color="#333" />
+      </TouchableOpacity>
+
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {imageSource && <Image source={imageSource} style={styles.eventImage} />}
+        <View style={styles.header}>
+          <Text style={styles.eventName}>{event.eventName}</Text>
+        </View>
+        <View style={styles.detailsContainer}>
+          <View style={styles.detailRow}>
+            <MaterialIcons name="place" size={20} color="#666" style={styles.icon} />
+            <Text style={styles.detailText}>{event.buildingName}</Text>
+          </View>
+          <View style={styles.detailRow}>
+            <MaterialIcons name="schedule" size={20} color="#666" style={styles.icon} />
+            <Text style={styles.detailText}>{event.time}</Text>
+          </View>
+          <View style={styles.detailRow}>
+            <MaterialIcons name="info-outline" size={20} color="#666" style={styles.icon} />
+            <Text style={styles.descriptionText}>{event.description}</Text>
+          </View>
+        </View>
+
+        <TouchableOpacity style={styles.viewLocationButton} onPress={handleViewLocation}>
+          <MaterialIcons name="map" size={20} color="white" />
+          <Text style={styles.viewLocationButtonText}>場所を見る</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
+  );
+
+  if (isFullScreen) {
+    return (
+      <Modal
+        visible={visible}
+        animationType="slide"
+        transparent={false}
+        onRequestClose={onClose}
+      >
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>{modalContent}</SafeAreaView>
+      </Modal>
+    );
+  }
 
   return (
     <Modal
@@ -41,37 +102,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
       transparent={true}
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
-        <View style={styles.container}>
-          {/* 閉じるボタン */}
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <MaterialIcons name="close" size={24} color="#333" />
-          </TouchableOpacity>
-
-          <ScrollView contentContainerStyle={styles.scrollContent}>
-            {/* ヘッダー */}
-            <View style={styles.header}>
-              <Text style={styles.eventName}>{event.eventName}</Text>
-            </View>
-
-            {/* イベント詳細 */}
-            <View style={styles.detailsContainer}>
-              <View style={styles.detailRow}>
-                <MaterialIcons name="place" size={20} color="#666" style={styles.icon} />
-                <Text style={styles.detailText}>{event.buildingName}</Text>
-              </View>
-              <View style={styles.detailRow}>
-                <MaterialIcons name="schedule" size={20} color="#666" style={styles.icon} />
-                <Text style={styles.detailText}>{event.time}</Text>
-              </View>
-              <View style={styles.detailRow}>
-                <MaterialIcons name="info-outline" size={20} color="#666" style={styles.icon} />
-                <Text style={styles.descriptionText}>{event.description}</Text>
-              </View>
-            </View>
-          </ScrollView>
-        </View>
-      </View>
+      <View style={styles.overlay}>{modalContent}</View>
     </Modal>
   );
 };
@@ -83,7 +114,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   container: {
-    height: screenHeight * 0.5, // 画面の半分
+    height: '100%',
     backgroundColor: 'white',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -107,7 +138,13 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 20,
-    paddingTop: 60, // 閉じるボタンのスペース
+    paddingTop: 60,
+  },
+  eventImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: 10,
+    marginBottom: 20,
   },
   header: {
     marginBottom: 20,
@@ -122,6 +159,7 @@ const styles = StyleSheet.create({
   },
   detailsContainer: {
     gap: 15,
+    marginBottom: 30,
   },
   detailRow: {
     flexDirection: 'row',
@@ -141,5 +179,19 @@ const styles = StyleSheet.create({
     color: '#333',
     lineHeight: 24,
     flex: 1,
+  },
+  viewLocationButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#007AFF',
+    paddingVertical: 14,
+    borderRadius: 12,
+    gap: 10,
+  },
+  viewLocationButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
