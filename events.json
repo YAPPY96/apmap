@@ -3,18 +3,24 @@
     "buildingName": "2号館",
     "eventName": "オープンキャンパス相談会",
     "time": "13:00 - 15:00",
-    "description": "大学の学習内容や学生生活に関する個別相談会です。お気軽にお越しください。"
+    "description": "大学の学習内容や学生生活に関する個別相談会です。お気軽にお越しください。",
+    "date": "2023-11-15",
+    "image": "event_soudankai.jpg"
   },
   {
     "buildingName": "講堂",
     "eventName": "特別講演会：AIと未来",
     "time": "16:00 - 17:30",
-    "description": "著名な研究者を招き、人工知能が社会に与える影響について講演いただきます。"
+    "description": "著名な研究者を招き、人工知能が社会に与える影響について講演いただきます。",
+    "date": "2023-11-15",
+    "image": "event_kouenkai.jpg"
   },
   {
     "buildingName": "大学会館",
     "eventName": "軽音楽部ライブ",
     "time": "12:00 - 13:00",
-    "description": "お昼休みに大学会館前でライブ演奏を行います。ぜひご覧ください！"
+    "description": "お昼休みに大学会館前でライブ演奏を行います。ぜひご覧ください！",
+    "date": "2023-11-16",
+    "image": "event_live.jpg"
   }
 ]

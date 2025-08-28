@@ -81,3 +81,13 @@ export interface UserLocation {
   coords: LocationCoordinates;
   timestamp: number;
 }
+
+// App-wide event type
+export interface AppEvent {
+  buildingName: string;
+  eventName: string;
+  time: string;
+  description: string;
+  date: string;
+  image: string;
+}

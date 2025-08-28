@@ -12,37 +12,34 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    // Added the provider wrapper here
-    
-      <Tabs
-        screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-          headerShown: false,
-          tabBarButton: HapticTab,
-          tabBarBackground: TabBarBackground,
-          tabBarStyle: Platform.select({
-            ios: {
-              // Use a transparent background on iOS to show the blur effect
-              position: 'absolute',
-            },
-            default: {},
-          }),
-        }}>
-        <Tabs.Screen
-          name="index"
-          options={{
-            title: 'Map',
-            tabBarIcon: ({ color }) => <Entypo name="map" size={24} color="black" />,
-          }}
-        />
-        <Tabs.Screen
-          name="event"
-          options={{
-            title: 'event',
-            tabBarIcon: ({ color }) => <MaterialIcons name="event-note" size={24} color="black" />,
-          }}
-        />
-      </Tabs>
-    
+    <Tabs
+      screenOptions={{
+        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        headerShown: false,
+        tabBarButton: HapticTab,
+        tabBarBackground: TabBarBackground,
+        tabBarStyle: Platform.select({
+          ios: {
+            // Use a transparent background on iOS to show the blur effect
+            position: 'absolute',
+          },
+          default: {},
+        }),
+      }}>
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Map',
+          tabBarIcon: ({ color }) => <Entypo name="map" size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="event"
+        options={{
+          title: 'event',
+          tabBarIcon: ({ color }) => <MaterialIcons name="event-note" size={24} color={color} />,
+        }}
+      />
+    </Tabs>
   );
 }

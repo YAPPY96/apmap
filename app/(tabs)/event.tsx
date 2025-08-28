@@ -1,110 +1,207 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
-import { Collapsible } from '@/components/Collapsible';
-import { ExternalLink } from '@/components/ExternalLink';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
+import { EventDetailModal } from '@/components/map/EventDetailModal';
+import { AppEvent } from '@/components/map/types';
+import allEvents from '@/events.json'; // events.jsonをインポート
 
-export default function TabTwoScreen() {
+// 画像のマッピング
+const imageSources: { [key: string]: any } = {
+  'event_soudankai.jpg': require('../../assets/eventimage/event_soudankai.jpg'),
+  'event_kouenkai.jpg': require('../../assets/eventimage/event_kouenkai.jpg'),
+  'event_live.jpg': require('../../assets/eventimage/event_live.jpg'),
+};
+
+export default function EventScreen() {
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [filteredEvents, setFilteredEvents] = useState<AppEvent[]>([]);
+  const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  // 初期日付を設定
+  useEffect(() => {
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const day = today.getDate();
+
+    if (month === 11 && day === 16) {
+      setSelectedDate('2023-11-16');
+    } else {
+      setSelectedDate('2023-11-15'); // デフォルトは15日
+    }
+  }, []);
+
+  // 選択された日付に基づいてイベントをフィルタリング
+  useEffect(() => {
+    if (selectedDate) {
+      const events = (allEvents as AppEvent[]).filter((event) => event.date === selectedDate);
+      setFilteredEvents(events);
+    }
+  }, [selectedDate]);
+
+  const handleEventPress = (event: AppEvent) => {
+    setSelectedEvent(event);
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setSelectedEvent(null);
+  };
+
+  const renderEventItem = ({ item }: { item: AppEvent }) => (
+    <TouchableOpacity style={styles.eventItem} onPress={() => handleEventPress(item)}>
+      <Image source={imageSources[item.image]} style={styles.eventImage} />
+      <View style={styles.eventDetails}>
+        <Text style={styles.eventName}>{item.eventName}</Text>
+        <Text style={styles.eventTime}>{item.time}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
-      </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image source={require('@/assets/images/react-logo.png')} style={{ alignSelf: 'center' }} />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText> to see how to load{' '}
-          <ThemedText style={{ fontFamily: 'SpaceMono' }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful <ThemedText type="defaultSemiBold">react-native-reanimated</ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Events</Text>
+        <View style={styles.dateSelector}>
+          <TouchableOpacity
+            style={[
+              styles.dateButton,
+              selectedDate === '2023-11-15' && styles.selectedDateButton,
+            ]}
+            onPress={() => setSelectedDate('2023-11-15')}
+          >
+            <Text
+              style={[
+                styles.dateButtonText,
+                selectedDate === '2023-11-15' && styles.selectedDateButtonText,
+              ]}
+            >
+              11/15
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.dateButton,
+              selectedDate === '2023-11-16' && styles.selectedDateButton,
+            ]}
+            onPress={() => setSelectedDate('2023-11-16')}
+          >
+            <Text
+              style={[
+                styles.dateButtonText,
+                selectedDate === '2023-11-16' && styles.selectedDateButtonText,
+              ]}
+            >
+              11/16
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <FlatList
+        data={filteredEvents}
+        renderItem={renderEventItem}
+        keyExtractor={(item) => item.eventName + item.time}
+        contentContainerStyle={styles.listContent}
+        ListEmptyComponent={<Text style={styles.emptyText}>この日のイベントはありません。</Text>}
+      />
+
+      <EventDetailModal
+        visible={isModalVisible}
+        event={selectedEvent}
+        onClose={handleCloseModal}
+        isFullScreen={true} // 全画面で表示
+      />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
   },
-  titleContainer: {
+  header: {
     flexDirection: 'row',
-    gap: 8,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  dateSelector: {
+    flexDirection: 'row',
+    borderWidth: 1,
+    borderColor: '#007AFF',
+    borderRadius: 8,
+  },
+  dateButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+  },
+  selectedDateButton: {
+    backgroundColor: '#007AFF',
+  },
+  dateButtonText: {
+    color: '#007AFF',
+    fontWeight: '600',
+  },
+  selectedDateButtonText: {
+    color: 'white',
+  },
+  listContent: {
+    padding: 16,
+  },
+  eventItem: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  eventImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 8,
+  },
+  eventDetails: {
+    flex: 1,
+    marginLeft: 12,
+    justifyContent: 'center',
+  },
+  eventName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  eventTime: {
+    fontSize: 14,
+    color: '#666',
+  },
+  emptyText: {
+    textAlign: 'center',
+    marginTop: 50,
+    fontSize: 16,
+    color: '#999',
   },
 });
