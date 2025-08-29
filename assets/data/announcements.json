@@ -1,0 +1,19 @@
+{
+  "announcements": [
+    {
+      "id": 1,
+      "message": "おしらせを表示していますlocal",
+      "enabled": true
+    },
+    {
+      "id": 2,
+      "message": "現在オフラインのようです。インターネット接続を確認してください",
+      "enabled": true
+    },
+    {
+      "id": 3,
+      "message": "このメッセージは enabled が false なので表示されません。",
+      "enabled": false
+    }
+  ]
+}

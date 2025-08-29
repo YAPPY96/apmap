@@ -2,16 +2,18 @@ import { Image } from 'expo-image';
 import React, { useEffect, useState } from 'react';
 import {
   FlatList,
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { EventDetailModal } from '@/components/map/EventDetailModal';
 import { AppEvent } from '@/components/map/types';
-import allEvents from '@/events.json'; // events.jsonをインポート
+import { Config } from '@/constants/Config';
+import { useRemoteData } from '@/hooks/useRemoteData';
+import localEventData from '../../assets/data/events.json';
 
 // 画像のマッピング
 const imageSources: { [key: string]: any } = {
@@ -21,10 +23,12 @@ const imageSources: { [key: string]: any } = {
 };
 
 export default function EventScreen() {
+  const { data: allEvents, loading } = useRemoteData(Config.EVENTS_URL, localEventData);
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [filteredEvents, setFilteredEvents] = useState<AppEvent[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
   const [isModalVisible, setModalVisible] = useState(false);
+  const insets = useSafeAreaInsets();
 
   // 初期日付を設定
   useEffect(() => {
@@ -41,11 +45,11 @@ export default function EventScreen() {
 
   // 選択された日付に基づいてイベントをフィルタリング
   useEffect(() => {
-    if (selectedDate) {
+    if (selectedDate && allEvents) {
       const events = (allEvents as AppEvent[]).filter((event) => event.date === selectedDate);
       setFilteredEvents(events);
     }
-  }, [selectedDate]);
+  }, [selectedDate, allEvents]);
 
   const handleEventPress = (event: AppEvent) => {
     setSelectedEvent(event);
@@ -68,7 +72,7 @@ export default function EventScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Events</Text>
         <View style={styles.dateSelector}>
@@ -121,7 +125,7 @@ export default function EventScreen() {
         onClose={handleCloseModal}
         isFullScreen={true} // 全画面で表示
       />
-    </SafeAreaView>
+    </View>
   );
 }
 

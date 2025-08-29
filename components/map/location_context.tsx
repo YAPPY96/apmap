@@ -6,6 +6,10 @@ interface LocationContextType {
   errorMsg: string | null;
   hasPermission: boolean;
   requestLocation: () => Promise<void>;
+  highlightedBuilding: string | null;
+  setHighlightedBuilding: (building: string | null) => void;
+  zoomToUserTrigger: number;
+  triggerZoomToUser: () => void;
 }
 
 const LocationContext = createContext<LocationContextType | undefined>(undefined);
@@ -18,6 +22,12 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({ children }) 
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [hasPermission, setHasPermission] = useState<boolean>(false);
+  const [highlightedBuilding, setHighlightedBuilding] = useState<string | null>(null);
+  const [zoomToUserTrigger, setZoomToUserTrigger] = useState<number>(0);
+
+  const triggerZoomToUser = () => {
+    setZoomToUserTrigger(prev => prev + 1);
+  };
 
   const requestLocation = async () => {
     try {
@@ -46,6 +56,10 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({ children }) 
     errorMsg,
     hasPermission,
     requestLocation,
+    highlightedBuilding,
+    setHighlightedBuilding,
+    zoomToUserTrigger,
+    triggerZoomToUser,
   };
 
   return (

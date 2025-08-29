@@ -9,7 +9,12 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useState } from 'react';
 import { Alert, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import eventData from '../../events.json';
+
+import { Config } from '@/constants/Config';
+import { useRemoteData } from '@/hooks/useRemoteData';
+import { Marquee } from '@/components/ui/Marquee';
+import localAnnouncements from '../../assets/data/announcements.json';
+import localEventData from '../../assets/data/events.json';
 
 // 型定義
 interface BuildingFeature {
@@ -37,6 +42,26 @@ export default function MapScreen() {
     zoomToUserTrigger,
     triggerZoomToUser,
   } = useLocation();
+
+  const { data: eventData } = useRemoteData(Config.EVENTS_URL, localEventData);
+  const { data: announcementData } = useRemoteData(
+    Config.ANNOUNCEMENTS_URL,
+    localAnnouncements
+  );
+  const [zoomToMinTrigger, setZoomToMinTrigger] = useState(0);
+
+  const announcementMessage = announcementData?.announcements
+    ?.filter(item => item.enabled)
+    .map(item => item.message)
+    .join('   ◆   ');
+
+  const handleLocationButtonPress = () => {
+    if (location) {
+      triggerZoomToUser();
+    } else {
+      setZoomToMinTrigger(prev => prev + 1);
+    }
+  };
   
   // Building Modal State
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingFeature | null>(null);
@@ -47,6 +72,7 @@ export default function MapScreen() {
   const [eventModalVisible, setEventModalVisible] = useState(false);
 
   const handleBuildingClick = (buildingData: BuildingFeature) => {
+    if (!eventData) return;
     const buildingName = buildingData.properties.name;
     const eventForBuilding = eventData.find(event => event.buildingName === buildingName);
 
@@ -123,7 +149,7 @@ export default function MapScreen() {
       <View style={styles.header}>
         <View style={styles.headerContent}>
           <ThemedText style={styles.headerTitle}>キャンパスマップ</ThemedText>
-          <TouchableOpacity style={styles.locationButton} onPress={triggerZoomToUser}>
+          <TouchableOpacity style={styles.locationButton} onPress={handleLocationButtonPress}>
             <MaterialIcons 
               name={location ? "my-location" : "location-searching"} 
               size={24} 
@@ -131,16 +157,10 @@ export default function MapScreen() {
             />
           </TouchableOpacity>
         </View>
-        
-        {location && (
-          <View style={styles.locationInfo}>
-            <MaterialIcons name="place" size={16} color="#666" />
-            <ThemedText style={styles.locationText}>
-              {location.coords.latitude.toFixed(6)}, {location.coords.longitude.toFixed(6)}
-            </ThemedText>
-          </View>
-        )}
       </View>
+
+      {/* Announcement Marquee */}
+      {announcementMessage && <Marquee text={announcementMessage} />}
 
       {/* Map */}
       <View style={styles.mapContainer}>
@@ -149,6 +169,7 @@ export default function MapScreen() {
           onBuildingClick={handleBuildingClick}
           highlightedBuilding={highlightedBuilding}
           zoomToUserTrigger={zoomToUserTrigger}
+          zoomToMinTrigger={zoomToMinTrigger}
         />
       </View>
 
