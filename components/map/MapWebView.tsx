@@ -3,27 +3,19 @@ import * as Location from 'expo-location';
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
-
-import { Config } from '@/constants/Config';
-import { useRemoteData } from '@/hooks/useRemoteData';
-import localBuildingsData from '../../assets/data/buildings.json';
+import buildingsData from '../../assets/data/buildings.json';
 
 interface MapWebViewProps {
   userLocation: Location.LocationObject | null;
   onBuildingClick: (buildingData: any) => void;
   highlightedBuilding: string | null;
   zoomToUserTrigger: number;
-  zoomToMinTrigger: number;
 }
 
 const MyWebView = forwardRef<WebView, MapWebViewProps>(
-  (
-    { userLocation, onBuildingClick, highlightedBuilding, zoomToUserTrigger, zoomToMinTrigger },
-    ref
-  ) => {
+  ({ userLocation, onBuildingClick, highlightedBuilding, zoomToUserTrigger }, ref) => {
     const webViewRef = useRef<WebView>(null);
     const [isMapReady, setIsMapReady] = useState(false);
-    const { data: buildingsData } = useRemoteData(Config.BUILDINGS_URL, localBuildingsData);
 
     const handleMessage = (event: any) => {
       try {
@@ -39,11 +31,16 @@ const MyWebView = forwardRef<WebView, MapWebViewProps>(
     };
 
     useEffect(() => {
-      if (isMapReady && buildingsData && webViewRef.current) {
+      if (isMapReady && webViewRef.current) {
         const message = { type: 'loadGeoJson', data: buildingsData };
         webViewRef.current.postMessage(JSON.stringify(message));
+        if (userLocation) {
+          webViewRef.current.postMessage(
+            JSON.stringify({ type: 'updateLocation', ...userLocation.coords })
+          );
+        }
       }
-    }, [isMapReady, buildingsData]);
+    }, [isMapReady]);
 
     useEffect(() => {
       if (isMapReady && userLocation && webViewRef.current) {
@@ -66,12 +63,6 @@ const MyWebView = forwardRef<WebView, MapWebViewProps>(
         webViewRef.current.postMessage(JSON.stringify({ type: 'zoomToUser' }));
       }
     }, [zoomToUserTrigger]);
-
-    useEffect(() => {
-      if (zoomToMinTrigger > 0 && isMapReady && webViewRef.current) {
-        webViewRef.current.postMessage(JSON.stringify({ type: 'zoomToMin' }));
-      }
-    }, [zoomToMinTrigger]);
 
     useImperativeHandle(ref, () => webViewRef.current as WebView);
 
@@ -131,22 +122,20 @@ const MyWebView = forwardRef<WebView, MapWebViewProps>(
         };
 
         window.zoomToUser = function() {
-          if (!userMarker) return;
-
-          const userLatLng = userMarker.getLatLng();
           const maxBounds = map.options.maxBounds;
-
-          if (maxBounds && maxBounds.contains(userLatLng)) {
-            map.flyTo(userLatLng, 18);
-          } else {
-            map.fitBounds(maxBounds);
+          if (userMarker) {
+            const userLatLng = userMarker.getLatLng();
+            // Zoom to user only if they are within the map's bounds
+            if (maxBounds && maxBounds.contains(userLatLng)) {
+              map.flyTo(userLatLng, 18);
+              return;
+            }
           }
-        };
-
-        window.zoomToMin = function() {
-          if (!buildingsLayer) return;
-          const bounds = buildingsLayer.getBounds().pad(0.1);
-          map.flyToBounds(bounds);
+          // If user location is not available, or is outside bounds, zoom to show all buildings
+          if (buildingsLayer) {
+            const bounds = buildingsLayer.getBounds().pad(0.1);
+            map.flyToBounds(bounds);
+          }
         };
 
         window.loadBuildingsGeoJSON = function(geojson) {
@@ -197,9 +186,6 @@ const MyWebView = forwardRef<WebView, MapWebViewProps>(
               break;
             case 'zoomToUser':
               window.zoomToUser();
-              break;
-            case 'zoomToMin':
-              window.zoomToMin();
               break;
           }
         });

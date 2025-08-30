@@ -1,4 +1,3 @@
-import { Image } from 'expo-image';
 import React, { useEffect, useState } from 'react';
 import {
   FlatList,
@@ -7,28 +6,20 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { EventDetailModal } from '@/components/map/EventDetailModal';
 import { AppEvent } from '@/components/map/types';
-import { Config } from '@/constants/Config';
-import { useRemoteData } from '@/hooks/useRemoteData';
-import localEventData from '../../assets/data/events.json';
+import CachedImage from '@/components/ui/CachedImage';
+import allEvents from 'assets/data/events.json'; // events.jsonをインポート
 
-// 画像のマッピング
-const imageSources: { [key: string]: any } = {
-  'event_soudankai.jpg': require('../../assets/eventimage/event_soudankai.jpg'),
-  'event_kouenkai.jpg': require('../../assets/eventimage/event_kouenkai.jpg'),
-  'event_live.jpg': require('../../assets/eventimage/event_live.jpg'),
-};
+const API_BASE_URL = 'https://koudaisai.com/dataforapp/image';
 
 export default function EventScreen() {
-  const { data: allEvents, loading } = useRemoteData(Config.EVENTS_URL, localEventData);
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [filteredEvents, setFilteredEvents] = useState<AppEvent[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
   const [isModalVisible, setModalVisible] = useState(false);
-  const insets = useSafeAreaInsets();
 
   // 初期日付を設定
   useEffect(() => {
@@ -45,11 +36,11 @@ export default function EventScreen() {
 
   // 選択された日付に基づいてイベントをフィルタリング
   useEffect(() => {
-    if (selectedDate && allEvents) {
+    if (selectedDate) {
       const events = (allEvents as AppEvent[]).filter((event) => event.date === selectedDate);
       setFilteredEvents(events);
     }
-  }, [selectedDate, allEvents]);
+  }, [selectedDate]);
 
   const handleEventPress = (event: AppEvent) => {
     setSelectedEvent(event);
@@ -61,18 +52,21 @@ export default function EventScreen() {
     setSelectedEvent(null);
   };
 
-  const renderEventItem = ({ item }: { item: AppEvent }) => (
-    <TouchableOpacity style={styles.eventItem} onPress={() => handleEventPress(item)}>
-      <Image source={imageSources[item.image]} style={styles.eventImage} />
-      <View style={styles.eventDetails}>
-        <Text style={styles.eventName}>{item.eventName}</Text>
-        <Text style={styles.eventTime}>{item.time}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+  const renderEventItem = ({ item }: { item: AppEvent }) => {
+    const imageUrl = `${API_BASE_URL}/${item.image}`;
+    return (
+      <TouchableOpacity style={styles.eventItem} onPress={() => handleEventPress(item)}>
+        <CachedImage source={{ uri: imageUrl }} style={styles.eventImage} />
+        <View style={styles.eventDetails}>
+          <Text style={styles.eventName}>{item.eventName}</Text>
+          <Text style={styles.eventTime}>{item.time}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Events</Text>
         <View style={styles.dateSelector}>
@@ -125,7 +119,7 @@ export default function EventScreen() {
         onClose={handleCloseModal}
         isFullScreen={true} // 全画面で表示
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
