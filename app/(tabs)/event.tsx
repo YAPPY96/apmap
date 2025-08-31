@@ -1,21 +1,28 @@
+import { Image } from 'expo-image';
 import React, { useEffect, useState } from 'react';
 import {
   FlatList,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { EventDetailModal } from '@/components/map/EventDetailModal';
 import { AppEvent } from '@/components/map/types';
-import CachedImage from '@/components/ui/CachedImage';
-import allEvents from 'assets/data/events.json'; // events.jsonをインポート
+import allEvents from '../../assets/data/events.json';
 
-const API_BASE_URL = 'https://koudaisai.com/dataforapp/image';
+// 画像のマッピング
+const imageSources: { [key: string]: any } = {
+  'event_soudankai.jpg': require('../../assets/eventimage/event_soudankai.jpg'),
+  'event_kouenkai.jpg': require('../../assets/eventimage/event_kouenkai.jpg'),
+  'event_live.jpg': require('../../assets/eventimage/event_live.jpg'),
+};
 
 export default function EventScreen() {
+  const insets = useSafeAreaInsets(); // セーフエリアの値を取得
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [filteredEvents, setFilteredEvents] = useState<AppEvent[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
@@ -52,21 +59,20 @@ export default function EventScreen() {
     setSelectedEvent(null);
   };
 
-  const renderEventItem = ({ item }: { item: AppEvent }) => {
-    const imageUrl = `${API_BASE_URL}/${item.image}`;
-    return (
-      <TouchableOpacity style={styles.eventItem} onPress={() => handleEventPress(item)}>
-        <CachedImage source={{ uri: imageUrl }} style={styles.eventImage} />
-        <View style={styles.eventDetails}>
-          <Text style={styles.eventName}>{item.eventName}</Text>
-          <Text style={styles.eventTime}>{item.time}</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
+  const renderEventItem = ({ item }: { item: AppEvent }) => (
+    <TouchableOpacity style={styles.eventItem} onPress={() => handleEventPress(item)}>
+      <Image source={imageSources[item.image]} style={styles.eventImage} />
+      <View style={styles.eventDetails}>
+        <Text style={styles.eventName}>{item.eventName}</Text>
+        <Text style={styles.eventTime}>{item.time}</Text>
+      </View>
+    </TouchableOpacity>
+  );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <StatusBar barStyle="dark-content" />
+      
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Events</Text>
         <View style={styles.dateSelector}>
@@ -117,9 +123,9 @@ export default function EventScreen() {
         visible={isModalVisible}
         event={selectedEvent}
         onClose={handleCloseModal}
-        isFullScreen={true} // 全画面で表示
+        isFullScreen={true}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -133,24 +139,29 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 16,        // パディングを増やしてボタンに余裕を持たせる
     backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
+    minHeight: 60,              // 最小高さを設定してボタンが圧縮されないようにする
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
+    flex: 1,                    // タイトルに余裕を持たせる
   },
   dateSelector: {
     flexDirection: 'row',
     borderWidth: 1,
     borderColor: '#007AFF',
     borderRadius: 8,
+    marginLeft: 16,             // タイトルとの間に余裕を持たせる
   },
   dateButton: {
-    paddingVertical: 8,
+    paddingVertical: 10,        // 縦パディングを増やす
     paddingHorizontal: 16,
+    minWidth: 60,               // 最小幅を設定
+    alignItems: 'center',       // 中央揃え
   },
   selectedDateButton: {
     backgroundColor: '#007AFF',
@@ -158,6 +169,7 @@ const styles = StyleSheet.create({
   dateButtonText: {
     color: '#007AFF',
     fontWeight: '600',
+    fontSize: 14,               // フォントサイズを明示的に設定
   },
   selectedDateButtonText: {
     color: 'white',

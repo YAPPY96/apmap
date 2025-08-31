@@ -1,4 +1,5 @@
 // app/(tabs)/index.tsx
+import { AnnounceBar } from '@/components/AnnounceBar';
 import { BuildingModal } from '@/components/map/BuildingModal';
 import { EventDetailModal } from '@/components/map/EventDetailModal';
 import { useLocation } from '@/components/map/location_context';
@@ -9,12 +10,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useState } from 'react';
 import { Alert, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { Config } from '@/constants/Config';
-import { useRemoteData } from '@/hooks/useRemoteData';
-import { Marquee } from '@/components/ui/Marquee';
-import localAnnouncements from '../../assets/data/announcements.json';
-import localEventData from '../../assets/data/events.json';
+import eventData from '../../assets/data/events.json';
 
 // 型定義
 interface BuildingFeature {
@@ -42,26 +38,6 @@ export default function MapScreen() {
     zoomToUserTrigger,
     triggerZoomToUser,
   } = useLocation();
-
-  const { data: eventData } = useRemoteData(Config.EVENTS_URL, localEventData);
-  const { data: announcementData } = useRemoteData(
-    Config.ANNOUNCEMENTS_URL,
-    localAnnouncements
-  );
-  const [zoomToMinTrigger, setZoomToMinTrigger] = useState(0);
-
-  const announcementMessage = announcementData?.announcements
-    ?.filter(item => item.enabled)
-    .map(item => item.message)
-    .join('   ◆   ');
-
-  const handleLocationButtonPress = () => {
-    if (location) {
-      triggerZoomToUser();
-    } else {
-      setZoomToMinTrigger(prev => prev + 1);
-    }
-  };
   
   // Building Modal State
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingFeature | null>(null);
@@ -71,8 +47,22 @@ export default function MapScreen() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [eventModalVisible, setEventModalVisible] = useState(false);
 
+  // useEffect(() => {
+  //   const [eventData, setEventData] = useState<Event[]>([]);
+  //   const fetchEvents = async () => {
+  //     try {
+  //       // NOTE: Replace with your actual server URL
+  //       const response = await fetch('https://example.com/dataforapp/events.json');
+  //       const data = await response.json();
+  //       setEventData(data);
+  //     } catch (error) {
+  //       console.error("Failed to fetch events.json. Using local data.", error);
+  //     }
+  //   };
+  //   fetchEvents();
+  // }, []);
+
   const handleBuildingClick = (buildingData: BuildingFeature) => {
-    if (!eventData) return;
     const buildingName = buildingData.properties.name;
     const eventForBuilding = eventData.find(event => event.buildingName === buildingName);
 
@@ -149,7 +139,7 @@ export default function MapScreen() {
       <View style={styles.header}>
         <View style={styles.headerContent}>
           <ThemedText style={styles.headerTitle}>キャンパスマップ</ThemedText>
-          <TouchableOpacity style={styles.locationButton} onPress={handleLocationButtonPress}>
+          <TouchableOpacity style={styles.locationButton} onPress={triggerZoomToUser}>
             <MaterialIcons 
               name={location ? "my-location" : "location-searching"} 
               size={24} 
@@ -159,8 +149,7 @@ export default function MapScreen() {
         </View>
       </View>
 
-      {/* Announcement Marquee */}
-      {announcementMessage && <Marquee text={announcementMessage} />}
+      <AnnounceBar />
 
       {/* Map */}
       <View style={styles.mapContainer}>
@@ -169,7 +158,6 @@ export default function MapScreen() {
           onBuildingClick={handleBuildingClick}
           highlightedBuilding={highlightedBuilding}
           zoomToUserTrigger={zoomToUserTrigger}
-          zoomToMinTrigger={zoomToMinTrigger}
         />
       </View>
 
@@ -194,6 +182,7 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#f5f5f5',
   },
   header: {
     paddingTop: 10,

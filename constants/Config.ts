@@ -3,8 +3,8 @@
 // For example: 'https://your-domain.com/path/to/assets'
 // Make sure that the JSON files (announcements.json, buildings.json, events.json)
 // are accessible at this base URL.
-// For example, if your base URL is 'https://example.com/data', the events file
-// should be available at 'https://example.com/data/events.json'.
+// For example, if your base URL is 'https://koudaisai.com/data', the events file
+// should be available at 'https://koudaisai.com/data/events.json'.
 const SERVER_BASE_URL = 'https://koudaisai.com/dataforapp/'; // <-- REPLACE THIS
 
 export const Config = {

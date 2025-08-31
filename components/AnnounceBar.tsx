@@ -1,64 +1,75 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Animated, Easing, StyleSheet, View } from 'react-native';
+
+interface Announcement {
+  message: string;
+}
 
 export const AnnounceBar = () => {
-  const [announce, setAnnounce] = useState<string | null>(null);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [currentAnnounceIndex, setCurrentAnnounceIndex] = useState(0);
   const [error, setError] = useState(false);
-  const [textWidth, setTextWidth] = useState(0);
-
-  const translateX = useRef(new Animated.Value(0)).current;
-  const animation = useRef<Animated.CompositeAnimation | null>(null);
+  const translateX = React.useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    fetch('https://example/announce/api')
-      .then(res => {
-        if (!res.ok) throw new Error('Network error');
-        return res.text();
-      })
-      .then(text => {
-        setAnnounce(text || '');
-        setError(false);
-      })
-      .catch(() => {
-        setAnnounce('お知らせはありません');
+    const fetchAnnouncements = async () => {
+      try {
+        const response = await fetch('https://koudaisai.com/dataforapp/announcement.json');
+        if (!response.ok) throw new Error('Network error');
+        const data = await response.json();
+        if (data && data.length > 0) {
+          setAnnouncements(data);
+          setError(false);
+        } else {
+          setAnnouncements([{ message: 'お知らせはありません' }]);
+          setError(true);
+        }
+      } catch (e) {
+        setAnnouncements([{ message: 'お知らせはありません' }]);
         setError(true);
-      });
+      }
+    };
+    fetchAnnouncements();
   }, []);
 
   useEffect(() => {
-    if (textWidth > 0) {
-      translateX.setValue(0);
-      animation.current = Animated.loop(
-        Animated.timing(translateX, {
-          toValue: -textWidth,
-          duration: textWidth * 25, // Adjust duration to control speed
-          easing: Easing.linear,
-          useNativeDriver: true,
-        })
-      );
-      animation.current.start();
-    }
-    return () => {
-      animation.current?.stop();
-    };
-  }, [textWidth]);
+    if (announcements.length > 0) {
+      const currentAnnouncement = announcements[currentAnnounceIndex];
+      const textWidth = currentAnnouncement.message.length * 14; // Approximate width
+      const screenWidth = 400; // Approximate screen width
+      const duration = (textWidth + screenWidth) * 20;
 
-  const announcementText = announce ? `${announce}      ` : 'お知らせはありません';
+      translateX.setValue(screenWidth); // Start from the right
+
+      const animation = Animated.timing(translateX, {
+        toValue: -textWidth, // Scroll to the left end
+        duration: duration,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      });
+
+      animation.start(({ finished }) => {
+        if (finished) {
+          setCurrentAnnounceIndex((prevIndex) => (prevIndex + 1) % announcements.length);
+        }
+      });
+    }
+  }, [currentAnnounceIndex, announcements]);
+
+  const currentMessage = announcements[currentAnnounceIndex]?.message || '';
 
   return (
     <View style={[styles.bar, error && styles.errorBar]}>
-      <Animated.View style={[styles.animatedContainer, { transform: [{ translateX }] }]}>
-        <Text
-          style={[styles.text, error && styles.errorText]}
-          onLayout={e => !textWidth && setTextWidth(e.nativeEvent.layout.width)}
-          numberOfLines={1}
-        >
-          {announcementText}
-        </Text>
-        <Text style={[styles.text, error && styles.errorText]} numberOfLines={1}>
-          {announcementText}
-        </Text>
-      </Animated.View>
+      <Animated.Text
+        style={[
+          styles.text,
+          error && styles.errorText,
+          { transform: [{ translateX }] },
+        ]}
+        numberOfLines={1}
+      >
+        {currentMessage}
+      </Animated.Text>
     </View>
   );
 };
@@ -70,18 +81,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     justifyContent: 'center',
     overflow: 'hidden',
+    paddingHorizontal: 10,
   },
   errorBar: {
     backgroundColor: '#ffeaea',
-  },
-  animatedContainer: {
-    flexDirection: 'row',
   },
   text: {
     fontSize: 14,
     color: '#333',
     fontWeight: 'bold',
-    // Let the text define its own width for accurate measurement
+    width: 800, // for scrolling
   },
   errorText: {
     color: '#d00',

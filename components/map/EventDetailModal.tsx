@@ -2,13 +2,13 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import {
-  Modal,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Modal,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 
 import CachedImage from '../ui/CachedImage';
@@ -22,7 +22,7 @@ interface EventDetailModalProps {
   isFullScreen: boolean;
 }
 
-const API_BASE_URL = 'https://example.com/dataforapp/image';
+const API_BASE_URL = 'https://koudaisai.com/dataforapp/image';
 
 export const EventDetailModal: React.FC<EventDetailModalProps> = ({
   visible,
