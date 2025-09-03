@@ -1,4 +1,5 @@
 // app/(tabs)/index.tsx
+import { AnnounceBar } from '@/components/AnnounceBar';
 import { BuildingModal } from '@/components/map/BuildingModal';
 import { EventDetailModal } from '@/components/map/EventDetailModal';
 import { useLocation } from '@/components/map/location_context';
@@ -9,7 +10,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useState } from 'react';
 import { Alert, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import eventData from '../../events.json';
+import eventData from '../../assets/data/events.json';
 
 // 型定義
 interface BuildingFeature {
@@ -45,6 +46,21 @@ export default function MapScreen() {
   // Event Modal State
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [eventModalVisible, setEventModalVisible] = useState(false);
+
+  // useEffect(() => {
+  //   const [eventData, setEventData] = useState<Event[]>([]);
+  //   const fetchEvents = async () => {
+  //     try {
+  //       // NOTE: Replace with your actual server URL
+  //       const response = await fetch('https://example.com/dataforapp/events.json');
+  //       const data = await response.json();
+  //       setEventData(data);
+  //     } catch (error) {
+  //       console.error("Failed to fetch events.json. Using local data.", error);
+  //     }
+  //   };
+  //   fetchEvents();
+  // }, []);
 
   const handleBuildingClick = (buildingData: BuildingFeature) => {
     const buildingName = buildingData.properties.name;
@@ -131,16 +147,9 @@ export default function MapScreen() {
             />
           </TouchableOpacity>
         </View>
-        
-        {location && (
-          <View style={styles.locationInfo}>
-            <MaterialIcons name="place" size={16} color="#666" />
-            <ThemedText style={styles.locationText}>
-              {location.coords.latitude.toFixed(6)}, {location.coords.longitude.toFixed(6)}
-            </ThemedText>
-          </View>
-        )}
       </View>
+
+      <AnnounceBar />
 
       {/* Map */}
       <View style={styles.mapContainer}>
@@ -173,6 +182,7 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#f5f5f5',
   },
   header: {
     paddingTop: 10,

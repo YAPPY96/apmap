@@ -1,39 +1,62 @@
 import React, { useEffect, useState } from 'react';
 import { Animated, Easing, StyleSheet, View } from 'react-native';
 
+interface Announcement {
+  message: string;
+}
+
 export const AnnounceBar = () => {
-  const [announce, setAnnounce] = useState<string | null>(null);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [currentAnnounceIndex, setCurrentAnnounceIndex] = useState(0);
   const [error, setError] = useState(false);
-  const [translateX] = useState(new Animated.Value(0));
+  const translateX = React.useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    fetch('https://example/announce/api')
-      .then(res => {
-        if (!res.ok) throw new Error('Network error');
-        return res.text();
-      })
-      .then(text => {
-        setAnnounce(text || '');
-        setError(false);
-      })
-      .catch(() => {
-        setAnnounce('お知らせはありません');
+    const fetchAnnouncements = async () => {
+      try {
+        const response = await fetch('https://koudaisai.com/dataforapp/announcement.json');
+        if (!response.ok) throw new Error('Network error');
+        const data = await response.json();
+        if (data && data.length > 0) {
+          setAnnouncements(data);
+          setError(false);
+        } else {
+          setAnnouncements([{ message: 'お知らせはありません' }]);
+          setError(true);
+        }
+      } catch (e) {
+        setAnnouncements([{ message: 'お知らせはありません' }]);
         setError(true);
-      });
+      }
+    };
+    fetchAnnouncements();
   }, []);
 
   useEffect(() => {
-    if (announce) {
-      Animated.loop(
-        Animated.timing(translateX, {
-          toValue: -400, // adjust based on text length
-          duration: 12000,
-          easing: Easing.linear,
-          useNativeDriver: true,
-        })
-      ).start();
+    if (announcements.length > 0) {
+      const currentAnnouncement = announcements[currentAnnounceIndex];
+      const textWidth = currentAnnouncement.message.length * 14; // Approximate width
+      const screenWidth = 400; // Approximate screen width
+      const duration = (textWidth + screenWidth) * 20;
+
+      translateX.setValue(screenWidth); // Start from the right
+
+      const animation = Animated.timing(translateX, {
+        toValue: -textWidth, // Scroll to the left end
+        duration: duration,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      });
+
+      animation.start(({ finished }) => {
+        if (finished) {
+          setCurrentAnnounceIndex((prevIndex) => (prevIndex + 1) % announcements.length);
+        }
+      });
     }
-  }, [announce]);
+  }, [currentAnnounceIndex, announcements]);
+
+  const currentMessage = announcements[currentAnnounceIndex]?.message || '';
 
   return (
     <View style={[styles.bar, error && styles.errorBar]}>
@@ -45,7 +68,7 @@ export const AnnounceBar = () => {
         ]}
         numberOfLines={1}
       >
-        {announce}
+        {currentMessage}
       </Animated.Text>
     </View>
   );

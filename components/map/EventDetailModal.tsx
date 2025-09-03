@@ -1,17 +1,17 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import {
-  Modal,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Modal,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 
+import CachedImage from '../ui/CachedImage';
 import { useLocation } from './location_context';
 import { AppEvent } from './types';
 
@@ -21,6 +21,8 @@ interface EventDetailModalProps {
   onClose: () => void;
   isFullScreen: boolean;
 }
+
+const API_BASE_URL = 'https://koudaisai.com/dataforapp/image';
 
 export const EventDetailModal: React.FC<EventDetailModalProps> = ({
   visible,
@@ -41,12 +43,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
     }
   };
 
-  const imageSources: { [key: string]: any } = {
-    'event_soudankai.jpg': require('../../assets/eventimage/event_soudankai.jpg'),
-    'event_kouenkai.jpg': require('../../assets/eventimage/event_kouenkai.jpg'),
-    'event_live.jpg': require('../../assets/eventimage/event_live.jpg'),
-  };
-  const imageSource = imageSources[event.image];
+  const imageUrl = `${API_BASE_URL}/${event.image}`;
 
   const modalContent = (
     <View style={styles.container}>
@@ -55,7 +52,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
       </TouchableOpacity>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {imageSource && <Image source={imageSource} style={styles.eventImage} />}
+        <CachedImage source={{ uri: imageUrl }} style={styles.eventImage} />
         <View style={styles.header}>
           <Text style={styles.eventName}>{event.eventName}</Text>
         </View>

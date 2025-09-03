@@ -3,7 +3,6 @@ import * as Location from 'expo-location';
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
-import buildingsData from '../../buildings.json';
 
 interface MapWebViewProps {
   userLocation: Location.LocationObject | null;
@@ -16,6 +15,20 @@ const MyWebView = forwardRef<WebView, MapWebViewProps>(
   ({ userLocation, onBuildingClick, highlightedBuilding, zoomToUserTrigger }, ref) => {
     const webViewRef = useRef<WebView>(null);
     const [isMapReady, setIsMapReady] = useState(false);
+    const [buildingsData, setBuildingsData] = useState(null);
+
+    useEffect(() => {
+      const fetchBuildings = async () => {
+        try {
+          const response = await fetch('https://koudaisai.com/dataforapp/buildings.json');
+          const data = await response.json();
+          setBuildingsData(data);
+        } catch (error) {
+          console.error('Failed to fetch buildings.json', error);
+        }
+      };
+      fetchBuildings();
+    }, []);
 
     const handleMessage = (event: any) => {
       try {
@@ -31,7 +44,7 @@ const MyWebView = forwardRef<WebView, MapWebViewProps>(
     };
 
     useEffect(() => {
-      if (isMapReady && webViewRef.current) {
+      if (isMapReady && webViewRef.current && buildingsData) {
         const message = { type: 'loadGeoJson', data: buildingsData };
         webViewRef.current.postMessage(JSON.stringify(message));
         if (userLocation) {
@@ -40,7 +53,7 @@ const MyWebView = forwardRef<WebView, MapWebViewProps>(
           );
         }
       }
-    }, [isMapReady]);
+    }, [isMapReady, buildingsData]);
 
     useEffect(() => {
       if (isMapReady && userLocation && webViewRef.current) {
