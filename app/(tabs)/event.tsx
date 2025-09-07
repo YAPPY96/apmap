@@ -12,14 +12,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { EventDetailModal } from '@/components/map/EventDetailModal';
 import { AppEvent } from '@/components/map/types';
-import allEvents from '../../assets/data/events.json';
+import { Config } from '@/constants/Config';
+import { useRemoteData } from '@/hooks/useRemoteData';
 
-// 画像のマッピング
-const imageSources: { [key: string]: any } = {
-  'event_soudankai.jpg': require('../../assets/eventimage/event_soudankai.jpg'),
-  'event_kouenkai.jpg': require('../../assets/eventimage/event_kouenkai.jpg'),
-  'event_live.jpg': require('../../assets/eventimage/event_live.jpg'),
-};
+const API_BASE_URL = 'https://koudaisai.com/dataforapp/image';
 
 export default function EventScreen() {
   const insets = useSafeAreaInsets(); // セーフエリアの値を取得
@@ -28,6 +24,8 @@ export default function EventScreen() {
   const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
   const [isModalVisible, setModalVisible] = useState(false);
 
+  const { data: allEvents } = useRemoteData<AppEvent[]>(Config.EVENTS_URL);
+
   // 初期日付を設定
   useEffect(() => {
     const today = new Date();
@@ -35,19 +33,19 @@ export default function EventScreen() {
     const day = today.getDate();
 
     if (month === 11 && day === 16) {
-      setSelectedDate('2023-11-16');
+      setSelectedDate('2025-11-16');
     } else {
-      setSelectedDate('2023-11-15'); // デフォルトは15日
+      setSelectedDate('2025-11-15'); // デフォルトは15日
     }
   }, []);
 
   // 選択された日付に基づいてイベントをフィルタリング
   useEffect(() => {
-    if (selectedDate) {
-      const events = (allEvents as AppEvent[]).filter((event) => event.date === selectedDate);
+    if (selectedDate && allEvents) {
+      const events = allEvents.filter((event) => event.date === selectedDate);
       setFilteredEvents(events);
     }
-  }, [selectedDate]);
+  }, [selectedDate, allEvents]);
 
   const handleEventPress = (event: AppEvent) => {
     setSelectedEvent(event);
@@ -59,15 +57,18 @@ export default function EventScreen() {
     setSelectedEvent(null);
   };
 
-  const renderEventItem = ({ item }: { item: AppEvent }) => (
-    <TouchableOpacity style={styles.eventItem} onPress={() => handleEventPress(item)}>
-      <Image source={imageSources[item.image]} style={styles.eventImage} />
-      <View style={styles.eventDetails}>
-        <Text style={styles.eventName}>{item.eventName}</Text>
-        <Text style={styles.eventTime}>{item.time}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+  const renderEventItem = ({ item }: { item: AppEvent }) => {
+    const imageUrl = `${API_BASE_URL}/${item.image}`;
+    return (
+      <TouchableOpacity style={styles.eventItem} onPress={() => handleEventPress(item)}>
+        <Image source={{ uri: imageUrl }} style={styles.eventImage} />
+        <View style={styles.eventDetails}>
+          <Text style={styles.eventName}>{item.eventName}</Text>
+          <Text style={styles.eventTime}>{item.time}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -79,14 +80,14 @@ export default function EventScreen() {
           <TouchableOpacity
             style={[
               styles.dateButton,
-              selectedDate === '2023-11-15' && styles.selectedDateButton,
+              selectedDate === '2025-11-15' && styles.selectedDateButton,
             ]}
-            onPress={() => setSelectedDate('2023-11-15')}
+            onPress={() => setSelectedDate('2025-11-15')}
           >
             <Text
               style={[
                 styles.dateButtonText,
-                selectedDate === '2023-11-15' && styles.selectedDateButtonText,
+                selectedDate === '2025-11-15' && styles.selectedDateButtonText,
               ]}
             >
               11/15
@@ -95,14 +96,14 @@ export default function EventScreen() {
           <TouchableOpacity
             style={[
               styles.dateButton,
-              selectedDate === '2023-11-16' && styles.selectedDateButton,
+              selectedDate === '2025-11-16' && styles.selectedDateButton,
             ]}
-            onPress={() => setSelectedDate('2023-11-16')}
+            onPress={() => setSelectedDate('2025-11-16')}
           >
             <Text
               style={[
                 styles.dateButtonText,
-                selectedDate === '2023-11-16' && styles.selectedDateButtonText,
+                selectedDate === '2025-11-16' && styles.selectedDateButtonText,
               ]}
             >
               11/16

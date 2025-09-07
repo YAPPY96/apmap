@@ -1,48 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import { Animated, Easing, StyleSheet, View } from 'react-native';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
+
+import { Config } from '@/constants/Config';
+import { useRemoteData } from '@/hooks/useRemoteData';
 
 interface Announcement {
+  id: number;
   message: string;
+  enabled: boolean;
 }
 
 export const AnnounceBar = () => {
+  const { data, loading, error } = useRemoteData<{ announcements: Announcement[] }>(
+    Config.ANNOUNCEMENTS_URL
+  );
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [currentAnnounceIndex, setCurrentAnnounceIndex] = useState(0);
-  const [error, setError] = useState(false);
-  const translateX = React.useRef(new Animated.Value(0)).current;
+  const translateX = useRef(new Animated.Value(0)).current;
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [textWidth, setTextWidth] = useState(0);
 
   useEffect(() => {
-    const fetchAnnouncements = async () => {
-      try {
-        const response = await fetch('https://koudaisai.com/dataforapp/announcement.json');
-        if (!response.ok) throw new Error('Network error');
-        const data = await response.json();
-        if (data && data.length > 0) {
-          setAnnouncements(data);
-          setError(false);
-        } else {
-          setAnnouncements([{ message: 'お知らせはありません' }]);
-          setError(true);
-        }
-      } catch (e) {
-        setAnnouncements([{ message: 'お知らせはありません' }]);
-        setError(true);
-      }
-    };
-    fetchAnnouncements();
-  }, []);
+    if (data?.announcements) {
+      const enabledAnnouncements = data.announcements.filter((a) => a.enabled);
+      setAnnouncements(enabledAnnouncements);
+    }
+  }, [data]);
 
   useEffect(() => {
-    if (announcements.length > 0) {
-      const currentAnnouncement = announcements[currentAnnounceIndex];
-      const textWidth = currentAnnouncement.message.length * 14; // Approximate width
-      const screenWidth = 400; // Approximate screen width
-      const duration = (textWidth + screenWidth) * 20;
-
-      translateX.setValue(screenWidth); // Start from the right
+    if (announcements.length > 0 && containerWidth > 0 && textWidth > 0) {
+      const duration = (textWidth + containerWidth) * 15;
+      translateX.setValue(containerWidth);
 
       const animation = Animated.timing(translateX, {
-        toValue: -textWidth, // Scroll to the left end
+        toValue: -textWidth,
         duration: duration,
         easing: Easing.linear,
         useNativeDriver: true,
@@ -53,23 +45,33 @@ export const AnnounceBar = () => {
           setCurrentAnnounceIndex((prevIndex) => (prevIndex + 1) % announcements.length);
         }
       });
+
+      return () => {
+        animation.stop();
+      };
     }
-  }, [currentAnnounceIndex, announcements]);
+  }, [currentAnnounceIndex, announcements, containerWidth, textWidth]);
+
+  if (loading || error || announcements.length === 0) {
+    return null;
+  }
 
   const currentMessage = announcements[currentAnnounceIndex]?.message || '';
 
   return (
-    <View style={[styles.bar, error && styles.errorBar]}>
-      <Animated.Text
-        style={[
-          styles.text,
-          error && styles.errorText,
-          { transform: [{ translateX }] },
-        ]}
-        numberOfLines={1}
-      >
-        {currentMessage}
-      </Animated.Text>
+    <View style={styles.bar} onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}>
+      <MaterialIcons name="campaign" size={20} color="#333" style={styles.icon} />
+      <View style={styles.textWrapper}>
+        <Animated.View style={[styles.animatedContainer, { transform: [{ translateX }] }]}>
+          <Text
+            onLayout={(e) => setTextWidth(e.nativeEvent.layout.width)}
+            style={styles.text}
+            numberOfLines={1}
+          >
+            {currentMessage}
+          </Text>
+        </Animated.View>
+      </View>
     </View>
   );
 };
@@ -77,22 +79,29 @@ export const AnnounceBar = () => {
 const styles = StyleSheet.create({
   bar: {
     width: '100%',
-    height: 28,
-    backgroundColor: '#f5f5f5',
-    justifyContent: 'center',
+    height: 35,
+    backgroundColor: 'rgba(230, 230, 230, 0.9)',
+    flexDirection: 'row',
+    alignItems: 'center',
     overflow: 'hidden',
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
   },
-  errorBar: {
-    backgroundColor: '#ffeaea',
+  icon: {
+    marginRight: 10,
+  },
+  textWrapper: {
+    flex: 1,
+    overflow: 'hidden',
+    justifyContent: 'center',
+  },
+  animatedContainer: {
+    position: 'absolute',
   },
   text: {
     fontSize: 14,
     color: '#333',
     fontWeight: 'bold',
-    width: 800, // for scrolling
-  },
-  errorText: {
-    color: '#d00',
   },
 });

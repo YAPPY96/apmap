@@ -5,7 +5,7 @@
 // are accessible at this base URL.
 // For example, if your base URL is 'https://koudaisai.com/data', the events file
 // should be available at 'https://koudaisai.com/data/events.json'.
-const SERVER_BASE_URL = 'https://koudaisai.com/dataforapp/'; // <-- REPLACE THIS
+const SERVER_BASE_URL = 'https://koudaisai.com/dataforapp'; // <-- REPLACE THIS
 
 export const Config = {
   SERVER_URL: SERVER_BASE_URL,

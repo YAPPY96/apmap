@@ -6,7 +6,7 @@ interface UseRemoteDataResult<T> {
   error: Error | null;
 }
 
-export function useRemoteData<T>(remoteUrl: string, localFallback: T): UseRemoteDataResult<T> {
+export function useRemoteData<T>(remoteUrl: string): UseRemoteDataResult<T> {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
@@ -23,16 +23,16 @@ export function useRemoteData<T>(remoteUrl: string, localFallback: T): UseRemote
         const remoteData = await response.json();
         setData(remoteData);
       } catch (e) {
-        console.warn(`Failed to fetch remote data from ${remoteUrl}. Falling back to local version.`, e);
+        console.error(`Failed to fetch remote data from ${remoteUrl}.`, e);
         setError(e as Error);
-        setData(localFallback); // Fallback to local data on error
+        setData(null); // Set data to null on error
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [remoteUrl, localFallback]);
+  }, [remoteUrl]);
 
   return { data, loading, error };
 }

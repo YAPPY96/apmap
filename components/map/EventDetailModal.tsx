@@ -2,16 +2,16 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import {
-    Modal,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Modal,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
-import CachedImage from '../ui/CachedImage';
+import { Image } from 'expo-image';
 import { useLocation } from './location_context';
 import { AppEvent } from './types';
 
@@ -52,7 +52,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
       </TouchableOpacity>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <CachedImage source={{ uri: imageUrl }} style={styles.eventImage} />
+        <Image source={{ uri: imageUrl }} style={styles.eventImage} />
         <View style={styles.header}>
           <Text style={styles.eventName}>{event.eventName}</Text>
         </View>

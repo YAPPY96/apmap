@@ -4,13 +4,15 @@ import { BuildingModal } from '@/components/map/BuildingModal';
 import { EventDetailModal } from '@/components/map/EventDetailModal';
 import { useLocation } from '@/components/map/location_context';
 import { MapWebView } from '@/components/map/MapWebView';
+import { AppEvent } from '@/components/map/types';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { Config } from '@/constants/Config';
+import { useRemoteData } from '@/hooks/useRemoteData';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useState } from 'react';
 import { Alert, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import eventData from '../../assets/data/events.json';
 
 // 型定義
 interface BuildingFeature {
@@ -18,13 +20,6 @@ interface BuildingFeature {
     name: string;
     [key: string]: any;
   };
-}
-
-interface Event {
-  buildingName: string;
-  eventName: string;
-  time: string;
-  description: string;
 }
 
 export default function MapScreen() {
@@ -38,37 +33,26 @@ export default function MapScreen() {
     zoomToUserTrigger,
     triggerZoomToUser,
   } = useLocation();
-  
+
+  const { data: eventData } = useRemoteData<AppEvent[]>(Config.EVENTS_URL);
+
   // Building Modal State
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingFeature | null>(null);
   const [buildingModalVisible, setBuildingModalVisible] = useState(false);
 
   // Event Modal State
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
   const [eventModalVisible, setEventModalVisible] = useState(false);
-
-  // useEffect(() => {
-  //   const [eventData, setEventData] = useState<Event[]>([]);
-  //   const fetchEvents = async () => {
-  //     try {
-  //       // NOTE: Replace with your actual server URL
-  //       const response = await fetch('https://example.com/dataforapp/events.json');
-  //       const data = await response.json();
-  //       setEventData(data);
-  //     } catch (error) {
-  //       console.error("Failed to fetch events.json. Using local data.", error);
-  //     }
-  //   };
-  //   fetchEvents();
-  // }, []);
 
   const handleBuildingClick = (buildingData: BuildingFeature) => {
     const buildingName = buildingData.properties.name;
-    const eventForBuilding = eventData.find(event => event.buildingName === buildingName);
+    if (eventData) {
+      const eventForBuilding = eventData.find((event) => event.buildingName === buildingName);
 
-    if (eventForBuilding) {
-      setSelectedEvent(eventForBuilding);
-      setEventModalVisible(true);
+      if (eventForBuilding) {
+        setSelectedEvent(eventForBuilding);
+        setEventModalVisible(true);
+      }
     }
     // イベントがない場合は、地図上のポップアップのみ表示し、モーダルは開かない
   };
