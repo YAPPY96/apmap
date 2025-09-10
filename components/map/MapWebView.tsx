@@ -1,4 +1,6 @@
 // components/map/MapWebView.tsx
+import { Config } from '@/constants/Config';
+import { useRemoteData } from '@/hooks/useRemoteData';
 import * as Location from 'expo-location';
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
@@ -15,20 +17,7 @@ const MyWebView = forwardRef<WebView, MapWebViewProps>(
   ({ userLocation, onBuildingClick, highlightedBuilding, zoomToUserTrigger }, ref) => {
     const webViewRef = useRef<WebView>(null);
     const [isMapReady, setIsMapReady] = useState(false);
-    const [buildingsData, setBuildingsData] = useState(null);
-
-    useEffect(() => {
-      const fetchBuildings = async () => {
-        try {
-          const response = await fetch('https://koudaisai.com/dataforapp/buildings.json');
-          const data = await response.json();
-          setBuildingsData(data);
-        } catch (error) {
-          console.error('Failed to fetch buildings.json', error);
-        }
-      };
-      fetchBuildings();
-    }, []);
+    const { data: buildingsData } = useRemoteData(Config.BUILDINGS_URL);
 
     const handleMessage = (event: any) => {
       try {

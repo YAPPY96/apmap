@@ -43,7 +43,7 @@ export const BuildingModal: React.FC<BuildingModalProps> = ({
   const getBuildingType = () => {
     if (building.properties.building) {
       switch (building.properties.building) {
-        case 'university':
+        case 'Koudaisai':
           return '大学建物';
         case 'school':
           return '学校建物';

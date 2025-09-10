@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "University Map",
+    "name": "Koudaisai Map",
     "slug": "university-map",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    
     "ios": {
       "icon": "./assets/images/icon.png",
       "supportsTablet": true,
@@ -18,7 +18,7 @@
     },
     "android": {
       "icon": "./assets/images/icon.png",
-      "package": "com.yourname.universitymap",
+      "package": "com.yourname.Koudaisaimap",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
