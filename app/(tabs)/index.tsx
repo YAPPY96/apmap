@@ -165,7 +165,7 @@ export default function MapScreen() {
         onClose={closeEventModal}
       />
 
-    </SafeAreaView>
+    </View>
   );
 }
 
