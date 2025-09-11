@@ -5,13 +5,11 @@ import { EventDetailModal } from '@/components/map/EventDetailModal';
 import { useLocation } from '@/components/map/location_context';
 import { MapWebView } from '@/components/map/MapWebView';
 import { AppEvent } from '@/components/map/types';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 import { Config } from '@/constants/Config';
 import { useRemoteData } from '@/hooks/useRemoteData';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useState } from 'react';
-import { Alert, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // 型定義
@@ -88,37 +86,37 @@ export default function MapScreen() {
 
   if (errorMsg) {
     return (
-      <ThemedView style={styles.container}>
+      <View style={styles.container}>
         <StatusBar barStyle="dark-content" />
         <View style={styles.errorContainer}>
           <MaterialIcons name="location-off" size={64} color="#ff6b6b" />
-          <ThemedText style={styles.errorTitle}>位置情報が取得できません</ThemedText>
-          <ThemedText style={styles.errorMessage}>{errorMsg}</ThemedText>
+          <Text style={styles.errorTitle}>位置情報が取得できません</Text>
+          <Text style={styles.errorMessage}>{errorMsg}</Text>
           <TouchableOpacity style={styles.retryButton} onPress={handleLocationRequest}>
             <MaterialIcons name="refresh" size={24} color="white" />
-            <ThemedText style={styles.retryButtonText}>再試行</ThemedText>
+            <Text style={styles.retryButtonText}>再試行</Text>
           </TouchableOpacity>
         </View>
-      </ThemedView>
+      </View>
     );
   }
 
   if (!hasPermission) {
     return (
-      <ThemedView style={styles.container}>
+      <View style={styles.container}>
         <StatusBar barStyle="dark-content" />
         <View style={styles.permissionContainer}>
           <MaterialIcons name="location-searching" size={64} color="#4A90E2" />
-          <ThemedText style={styles.permissionTitle}>位置情報の許可が必要です</ThemedText>
-          <ThemedText style={styles.permissionMessage}>
+          <Text style={styles.permissionTitle}>位置情報の許可が必要です</Text>
+          <Text style={styles.permissionMessage}>
             地図上で現在地を表示するために、位置情報へのアクセスを許可してください。
-          </ThemedText>
+          </Text>
           <TouchableOpacity style={styles.permissionButton} onPress={handleLocationRequest}>
             <MaterialIcons name="location-on" size={24} color="white" />
-            <ThemedText style={styles.permissionButtonText}>位置情報を許可</ThemedText>
+            <Text style={styles.permissionButtonText}>位置情報を許可</Text>
           </TouchableOpacity>
         </View>
-      </ThemedView>
+      </View>
     );
   }
 
@@ -128,12 +126,12 @@ export default function MapScreen() {
       
       {/* Header */}
       <View style={styles.header}>
-        <ThemedText style={styles.headerTitle}>キャンパスマップ</ThemedText>
+        <Text style={styles.headerTitle}>キャンパスマップ</Text>
         <TouchableOpacity style={styles.locationButton} onPress={handleMapReset}>
-          <MaterialIcons
-            name={location ? "my-location" : "location-searching"}
-            size={24}
-            color="#4A90E2"
+          <MaterialIcons 
+            name={location ? "my-location" : "location-searching"} 
+            size={24} 
+            color="#4A90E2" 
           />
         </TouchableOpacity>
       </View>
@@ -165,7 +163,7 @@ export default function MapScreen() {
         onClose={closeEventModal}
       />
 
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -188,7 +186,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
     flex: 1,
   },
   locationButton: {

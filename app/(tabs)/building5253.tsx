@@ -3,12 +3,10 @@ import Building5253InteractiveMap from '@/assets/map/Building5253Map';
 import { AnnounceBar } from '@/components/AnnounceBar';
 import { Building5253EventModal } from '@/components/map/Building5253EventModal';
 import { AppEvent } from '@/components/map/types';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 import { Config } from '@/constants/Config';
 import { useRemoteData } from '@/hooks/useRemoteData';
 import { useState } from 'react';
-import { Dimensions, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Dimensions, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function Building5253Screen() {
@@ -43,26 +41,26 @@ export default function Building5253Screen() {
 
   if (isLoading) {
     return (
-      <ThemedView style={styles.container}>
+      <View style={styles.container}>
         <StatusBar barStyle="dark-content" />
         <View style={styles.loadingContainer}>
-          <ThemedText style={styles.loadingText}>Loading...</ThemedText>
+          <Text style={styles.loadingText}>Loading...</Text>
         </View>
-      </ThemedView>
+      </View>
     );
   }
 
   if (error) {
     return (
-      <ThemedView style={styles.container}>
+      <View style={styles.container}>
         <StatusBar barStyle="dark-content" />
         <View style={styles.errorContainer}>
-          <ThemedText style={styles.errorText}>データの読み込みに失敗しました。</ThemedText>
-          <ThemedText style={styles.errorSubText}>
+          <Text style={styles.errorText}>データの読み込みに失敗しました。</Text>
+          <Text style={styles.errorSubText}>
             インターネット接続を確認してください。
-          </ThemedText>
+          </Text>
         </View>
-      </ThemedView>
+      </View>
     );
   }
 
@@ -71,7 +69,7 @@ export default function Building5253Screen() {
       <StatusBar barStyle="dark-content" />
       
       <View style={styles.header}>
-        <ThemedText style={styles.headerTitle}>52, 53号館</ThemedText>
+        <Text style={styles.headerTitle}>52, 53号館</Text>
       </View>
 
       <AnnounceBar />
@@ -88,9 +86,9 @@ export default function Building5253Screen() {
                 ]}
                 onPress={() => setCurrentFloor(floor)}
               >
-                <ThemedText style={[styles.floorButtonText, currentFloor === floor && styles.floorButtonTextActive]}>
+                <Text style={[styles.floorButtonText, currentFloor === floor && styles.floorButtonTextActive]}>
                   {floor}F
-                </ThemedText>
+                </Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -106,23 +104,23 @@ export default function Building5253Screen() {
           
           {/* 凡例 */}
           <View style={styles.legend}>
-            <ThemedText style={styles.legendTitle}>凡例</ThemedText>
+            <Text style={styles.legendTitle}>凡例</Text>
             <View style={styles.legendItems}>
               <View style={styles.legendItem}>
                 <View style={[styles.legendColor, { backgroundColor: '#ff0000' }]} />
-                <ThemedText style={styles.legendText}>女性用トイレ</ThemedText>
+                <Text style={styles.legendText}>女性用トイレ</Text>
               </View>
               <View style={styles.legendItem}>
                 <View style={[styles.legendColor, { backgroundColor: '#0000ff' }]} />
-                <ThemedText style={styles.legendText}>男性用トイレ</ThemedText>
+                <Text style={styles.legendText}>男性用トイレ</Text>
               </View>
               <View style={styles.legendItem}>
                 <View style={[styles.legendColor, { backgroundColor: 'gold' }]} />
-                <ThemedText style={styles.legendText}>エレベーター</ThemedText>
+                <Text style={styles.legendText}>エレベーター</Text>
               </View>
               <View style={styles.legendItem}>
                 <View style={[styles.legendColor, { backgroundColor: 'gray' }]} />
-                <ThemedText style={styles.legendText}>階段</ThemedText>
+                <Text style={styles.legendText}>階段</Text>
               </View>
             </View>
           </View>
@@ -134,7 +132,7 @@ export default function Building5253Screen() {
         event={selectedEvent}
         onClose={closeEventModal}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -181,17 +179,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingVertical: 10,
     backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
-    minHeight: 60,
+    minHeight: 2000,
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
     flex: 1,
+  },
+  headerSpacer: {
+    width: 1, // 右側に余白を確保するためのスペーサー
   },
   scrollContainer: {
     flex: 1,
@@ -201,12 +201,12 @@ const styles = StyleSheet.create({
   },
   mapContainer: {
     flex: 1,
-    padding: 10,
+    padding: 20,
   },
   mapWrapper: {
     backgroundColor: 'white',
     borderRadius: 10,
-    padding: 10,
+    padding: 12,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
