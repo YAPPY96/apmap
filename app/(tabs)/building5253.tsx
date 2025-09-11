@@ -134,7 +134,7 @@ export default function Building5253Screen() {
         event={selectedEvent}
         onClose={closeEventModal}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
