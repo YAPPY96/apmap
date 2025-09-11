@@ -39,7 +39,7 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="Floor2"
-     style="display:inline"
+     style="display:none"
      sodipodi:insensitive="true"
      transform="translate(-42.696099,-5.7252132)"><rect
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.322803;stroke-dasharray:none;stroke-opacity:1"
@@ -142,6 +142,7 @@
      id="layer4"
      inkscape:label="Floor3"
      sodipodi:insensitive="true"
+     style="display:inline"
      transform="translate(-42.696099,-5.7252132)"><use
        x="0"
        y="0"

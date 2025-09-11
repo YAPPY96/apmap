@@ -8,7 +8,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { Config } from '@/constants/Config';
 import { useRemoteData } from '@/hooks/useRemoteData';
 import { useState } from 'react';
-import { Dimensions, ScrollView, StatusBar, StyleSheet, View } from 'react-native';
+import { Dimensions, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Building5253Screen() {
@@ -16,6 +16,7 @@ export default function Building5253Screen() {
 
   const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
   const [eventModalVisible, setEventModalVisible] = useState(false);
+  const [currentFloor, setCurrentFloor] = useState(1);
 
   const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
   
@@ -76,11 +77,29 @@ export default function Building5253Screen() {
 
       <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}>
         <View style={styles.mapContainer}>
+          <View style={styles.floorSelector}>
+            {[1, 2, 3].map((floor) => (
+              <TouchableOpacity
+                key={floor}
+                style={[
+                  styles.floorButton,
+                  currentFloor === floor && styles.floorButtonActive,
+                ]}
+                onPress={() => setCurrentFloor(floor)}
+              >
+                <ThemedText style={[styles.floorButtonText, currentFloor === floor && styles.floorButtonTextActive]}>
+                  {floor}F
+                </ThemedText>
+              </TouchableOpacity>
+            ))}
+          </View>
+
           <View style={styles.mapWrapper}>
             <Building5253InteractiveMap
               onRoomClick={handleRoomClick}
               width={mapWidth}
               height={mapHeight}
+              floor={currentFloor}
             />
           </View>
           
@@ -122,6 +141,39 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
+  },
+  floorSelector: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 10,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  floorButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    backgroundColor: '#f0f0f0',
+  },
+  floorButtonActive: {
+    backgroundColor: '#3498db',
+  },
+  floorButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  floorButtonTextActive: {
+    color: 'white',
   },
   header: {
     paddingTop: 10,
