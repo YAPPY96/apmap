@@ -1,0 +1,32 @@
+{
+  "room5216": {
+    "buildingName": "52, 53号館",
+    "eventName": "AI喫茶",
+    "time": "10:00 - 17:00",
+    "description": "AIがあなたにぴったりのコーヒーを淹れます。最先端の技術をご体験ください。",
+    "date": "10月26日(土)・27日(日)",
+    "image": "cafe_image.jpg",
+    "groupName": "人工知能研究会",
+    "snsLink": "https://twitter.com/ai_club_example"
+  },
+  "room02": {
+    "buildingName": "52, 53号館",
+    "eventName": "VRゲーム体験会",
+    "time": "11:00 - 18:00",
+    "description": "最新のVRゲームで未知の世界へ!友人や家族と一緒に楽しめます。",
+    "date": "10月26日(土)・27日(日)",
+    "image": "vr_game.png",
+    "groupName": "ゲーム開発サークル",
+    "snsLink": "https://twitter.com/game_dev_example"
+  },
+  "room03": {
+    "buildingName": "52, 53号館",
+    "eventName": "手作りアクセサリー販売",
+    "time": "9:00 - 16:00",
+    "description": "部員が心を込めて作った一点物のかわいいアクセサリーです。お土産にどうぞ。",
+    "date": "10月26日(土)",
+    "image": "accessory.jpg",
+    "groupName": "ハンドメイド部",
+    "snsLink": "https://www.instagram.com/handmade_club_example"
+  }
+}

@@ -34,6 +34,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="building5253"
+        options={{
+          title: '52,53号館',
+          tabBarIcon: ({ color }) => <MaterialIcons name="business" size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="event"
         options={{
           title: 'event',

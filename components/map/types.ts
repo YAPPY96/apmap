@@ -90,4 +90,6 @@ export interface AppEvent {
   description: string;
   date: string;
   image: string;
+  groupName: string;
+  snsLink: string;
 }
