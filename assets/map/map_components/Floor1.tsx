@@ -1,20 +1,20 @@
 import React from 'react';
-import { Defs, G, Path, Rect, Text, Use } from 'react-native-svg';
+import { Defs, G, Path, Rect, Use } from 'react-native-svg';
 
 interface Floor1Props {
   onRoomClick: (roomId: string) => void;
 }
 
 const rooms = {
-  room5215: { rectId: 'rect40', transform: 'rotate(7.2102665)', name: '5215' },
-  room5214: { rectId: 'rect41', transform: 'matrix(0.99022253,0.13949672,-0.14414243,0.98955695,0,0)', name: '5214' },
-  room5216: { rectId: 'rect42', transform: 'matrix(0.99473062,0.1025231,-0.09362505,0.99560753,0,0)', name: '5216' },
-  room5217: { rectId: 'rect43', transform: 'matrix(0.99381649,0.11103508,-0.10214486,0.99476953,0,0)', name: '5217' },
-  room5218: { rectId: 'room5218', transform: 'matrix(0.99473062,0.1025231,-0.09362505,0.99560753,0,0)', name: '5218' },
-  roomYUME: { rectId: 'rect44', transform: 'matrix(0.99141744,0.13073434,-0.16354992,0.98653506,0,0)', name: 'YUME' },
-  toiletW: { rectId: 'rect45', transform: 'rotate(4.4352277)', name: 'W' },
-  toiletM: { rectId: 'rect46', transform: 'rotate(4.4352277)', name: 'M' },
-  scienceExperiment: { rectId: 'rect47', transform: 'matrix(0.99518102,0.09805476,-0.10148965,0.9948366,0,0)', name: 'Science\nExperiment' },
+  room5215: { rectId: 'rect40', transform: 'rotate(7.2102665)' },
+  room5214: { rectId: 'rect41', transform: 'matrix(0.99022253,0.13949672,-0.14414243,0.98955695,0,0)' },
+  room5216: { rectId: 'rect42', transform: 'matrix(0.99473062,0.1025231,-0.09362505,0.99560753,0,0)' },
+  room5217: { rectId: 'rect43', transform: 'matrix(0.99381649,0.11103508,-0.10214486,0.99476953,0,0)' },
+  room5218: { rectId: 'room5218', transform: 'matrix(0.99473062,0.1025231,-0.09362505,0.99560753,0,0)' },
+  roomYUME: { rectId: 'rect44', transform: 'matrix(0.99141744,0.13073434,-0.16354992,0.98653506,0,0)' },
+  toiletW: { rectId: 'rect45', transform: 'rotate(4.4352277)' },
+  toiletM: { rectId: 'rect46', transform: 'rotate(4.4352277)' },
+  scienceExperiment: { rectId: 'rect47', transform: 'matrix(0.99518102,0.09805476,-0.10148965,0.9948366,0,0)' },
 };
 
 const rects: { [id: string]: { x: number, y: number, width: number, height: number } } = {
@@ -42,29 +42,11 @@ const Floor1: React.FC<Floor1Props> = ({ onRoomClick }) => (
         <Rect id="rect46" {...rects.rect46} style={{ fill: '#0000ff', stroke: '#000000', strokeWidth: 0.264999, strokeDasharray: 'none', strokeOpacity: 1 }} />
         <Rect id="rect47" {...rects.rect47} style={{ fill: 'none', stroke: '#000000', strokeWidth: 0.423691, strokeDasharray: 'none', strokeOpacity: 1 }} />
     </Defs>
-    <G transform="translate(0.25545977,-0.24633621)">
+    <G transform="translate(-42.44064,-5.7395811)">
         {Object.entries(rooms).map(([roomId, room]) => {
-            const rect = rects[room.rectId];
-            if (!rect) return null;
-            const centerX = rect.x + rect.width / 2;
-            const centerY = rect.y + rect.height / 2;
-            const lines = room.name.split('\n');
-
             return (
                 <G key={roomId} transform={room.transform} onPress={() => onRoomClick(roomId)}>
                     <Use href={`#${room.rectId}`} />
-                    {lines.map((line, index) => (
-                        <Text
-                            key={index}
-                            x={centerX}
-                            y={centerY + (index - (lines.length - 1) / 2) * 5}
-                            fontSize="5"
-                            textAnchor="middle"
-                            dominantBaseline="middle"
-                        >
-                            {line}
-                        </Text>
-                    ))}
                 </G>
             );
         })}
