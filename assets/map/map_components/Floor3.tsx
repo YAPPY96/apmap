@@ -1,78 +1,52 @@
 import React from 'react';
-import { Defs, G, Path, Rect, Use } from 'react-native-svg';
+import {
+  Svg,
+  G,
+  Rect,
+  Circle,
+  Ellipse,
+  Line,
+  Polyline,
+  Polygon,
+  Path,
+  Text,
+  TSpan,
+  Defs,
+  Use,
+} from 'react-native-svg';
 
 interface Floor3Props {
   onRoomClick: (roomId: string) => void;
 }
 
-const rooms = {
-  room5235: { rectId: 'rect6', transform: 'translate(0.25545977,-0.24633621) rotate(7.2102665)' },
-  toiletM: { rectId: 'rect12', transform: 'translate(0.25545977,-0.24633621) rotate(4.4352277)' },
-  toiletW: { rectId: 'rect11', transform: 'translate(0.25545977,-0.24633621) rotate(4.4352277)' },
-  room5237: { rectId: 'rect9', transform: 'translate(0.25545977,-0.24633621) matrix(0.99381649,0.11103508,-0.10214486,0.99476954,0,0)' },
-  room5238: { rectId: 'rect10', transform: 'translate(0.25545977,-0.24633621) matrix(0.99473062,0.1025231,-0.09362505,0.99560753,0,0)' },
-  room5234: { rectId: 'rect7', transform: 'translate(0.25545977,-0.24633621) matrix(0.99022252,0.13949672,-0.14414243,0.98955696,0,0)' },
-  room5236: { rectId: 'rect8', transform: 'translate(0.25545977,-0.24633621) matrix(0.99473062,0.1025231,-0.09362505,0.99560753,0,0)' },
-  room5233: { rectId: 'rect13', transform: 'matrix(0.69978863,-0.08660498,-0.01254251,1.0015721,38.318488,11.940915)' },
-  room5231: { rectId: 'rect13-6', transform: 'matrix(0.6468559,-0.04928736,0.00183406,1.0014473,81.211165,9.6169607)' },
-  geographicalExperiment: { rectId: 'rect13-60', transform: 'translate(0.25545977,-0.24633621) rotate(6.6771334)' },
-  temporaryRestroom: { rectId: 'rect14', transform: 'translate(0.25545977,-0.24633621)' },
-  room5232: { rectId: 'rect13-6', transform: 'matrix(0.6468559,-0.04928736,0.00183406,1.0014473,47.01605,6.1956245)' },
-};
-
-const rects: { [id: string]: { x: number, y: number, width: number, height: number } } = {
-  rect6: { x: 75.874702, y: 87.31913, width: 25.12409, height: 38.642792 },
-  rect12: { x: 71.834183, y: 60.721615, width: 19.085226, height: 11.398121 },
-  rect11: { x: 71.834183, y: 72.384811, width: 19.085226, height: 11.398121 },
-  rect9: { x: 104.03499, y: 91.198982, width: 25.742666, height: 37.186043 },
-  rect10: { x: 103.3269, y: 55.171337, width: 25.743, height: 37.186043 },
-  rect7: { x: 69.423828, y: 124.9901, width: 34.247494, height: 56.43816 },
-  rect8: { x: 102.62242, y: 129.79166, width: 25.742666, height: 37.186043 },
-  rect13: { x: 130.27162, y: -12.427628, width: 46.010616, height: 29.032822 },
-  'rect13-6': { x: 176.19325, y: -8.7486019, width: 53.637047, height: 29.068729 },
-  'rect13-60': { x: 230.16882, y: -9.1982479, width: 53.289318, height: 29.0669 },
-  rect14: { x: 44.565151, y: 40.63969, width: 25.596256, height: 23.486427 },
-};
-
 const Floor3: React.FC<Floor3Props> = ({ onRoomClick }) => (
-  <G>
-    <Defs>
-      <Rect id="rect6" {...rects.rect6} style={{ display: 'inline', fill: 'none', stroke: '#000000', strokeWidth: 0.322803, strokeDasharray: 'none', strokeOpacity: 1 }} />
-      <Rect id="rect12" {...rects.rect12} style={{ display: 'inline', fill: '#0000ff', stroke: '#000000', strokeWidth: 0.264999, strokeDasharray: 'none', strokeOpacity: 1 }} />
-      <Rect id="rect11" {...rects.rect11} style={{ display: 'inline', fill: '#ff0000', stroke: '#000000', strokeWidth: 0.264999, strokeDasharray: 'none', strokeOpacity: 1 }} />
-      <Path d="m 71.118616,84.145256 c 0.06615,-0.768334 -0.722443,-1.444274 -1.758941,-1.507673 -1.036495,-0.0634 -1.932604,0.509497 -1.998753,1.27783 -0.06615,0.768334 0.722443,1.444274 1.758939,1.507672 1.036498,0.0634 1.932606,-0.509495 1.998755,-1.277829 z m -3.131411,-0.191535 c 0.04407,-0.511836 0.642026,-0.89412 1.332501,-0.851886 0.690476,0.04223 1.216693,0.493278 1.172627,1.005113 -0.04407,0.511837 -0.642027,0.89412 -1.332503,0.851887 -0.690476,-0.04223 -1.216691,-0.493279 -1.172625,-1.005114 z m 9.598274,-1.795392 0.09483,-1.101434 -4.858232,1.053925 c -0.365674,0.07914 -0.684609,0.236975 -0.92086,0.458205 -0.236153,0.22007 -0.373931,0.485826 -0.398312,0.769019 l -0.142291,1.65273 c -0.02438,0.283193 0.06644,0.562931 0.262417,0.809433 0.195983,0.246501 0.484542,0.441495 0.83273,0.565465 l 4.626811,1.634084 0.09483,-1.101433 1.834381,0.631399 0.128601,-1.493725 3.757692,0.229841 0.239815,-2.7855 -3.757693,-0.229842 0.128601,-1.493725 z m 1.128461,1.51811 3.789007,0.231758 -0.05995,0.696375 -3.789007,-0.231757 -0.03997,0.46425 3.789007,0.231757 -0.05995,0.696374 -3.789007,-0.231756 -0.111215,1.291776 -5.200192,-1.756661 -0.03958,0.459608 3.393529,1.168959 -0.05286,0.61397 -3.826732,-1.365799 c -0.470445,-0.16645 -0.763002,-0.534366 -0.730127,-0.916212 l 0.142189,-1.651569 c 0.03288,-0.381846 0.387051,-0.71137 0.879416,-0.817764 l 4.020582,-0.885813 -0.05286,0.613971 -3.558201,0.743752 -0.03957,0.459607 5.446602,-1.105441 z" id="path13" style={{ display: 'inline', strokeWidth: 0.0135158 }} />
-      <Path d="m 71.854361,72.524062 c 0.06924,-0.901449 -0.678934,-1.686651 -1.66879,-1.751377 -0.989856,-0.06473 -1.850572,0.61527 -1.919812,1.516719 -0.06924,0.90145 0.678934,1.686651 1.66879,1.751377 0.989856,0.06473 1.850572,-0.615269 1.919812,-1.516719 z M 68.86386,72.328514 c 0.04613,-0.600512 0.620468,-1.054264 1.279874,-1.011146 0.659405,0.04312 1.158651,0.567072 1.112526,1.167585 -0.04613,0.600513 -0.620469,1.054264 -1.279874,1.011146 -0.659406,-0.04312 -1.158652,-0.567072 -1.112526,-1.167585 z m 3.394144,-1.146603 -0.209185,2.723413 c -0.06924,0.901449 0.678935,1.68665 1.668791,1.751377 l 4.784803,0.312877 0.08367,-1.089365 4.485753,0.293323 0.29286,-3.812779 -4.485754,-0.293323 0.08367,-1.089364 -4.784803,-0.312878 c -0.989856,-0.06473 -1.850572,0.615269 -1.919813,1.516719 z m 6.094585,-0.696314 -0.04184,0.544683 -3.917559,-0.256168 -0.04184,0.544682 8.403312,0.549492 -0.08367,1.089364 -4.515659,-0.295277 -0.04183,0.544682 4.515658,0.295278 -0.08367,1.089365 -8.403312,-0.54949 -0.04184,0.544683 3.917559,0.256167 -0.04184,0.544683 -4.216609,-0.275723 c -0.659405,-0.04312 -1.158651,-0.567072 -1.112526,-1.167584 l 0.209185,-2.723414 c 0.04613,-0.600511 0.620469,-1.054265 1.279875,-1.011146 z" id="path12" style={{ display: 'inline', strokeWidth: 0.0143049 }} />
-      <Rect id="rect9" {...rects.rect9} style={{ display: 'inline', fill: 'none', stroke: '#000000', strokeWidth: 0.256059, strokeDasharray: 'none', strokeOpacity: 1 }} />
-      <Rect id="rect10" {...rects.rect10} style={{ display: 'inline', fill: 'none', stroke: '#000000', strokeWidth: 0.256059, strokeDasharray: 'none', strokeOpacity: 1 }} />
-      <Rect id="rect7" {...rects.rect7} style={{ display: 'inline', fill: 'none', stroke: '#000000', strokeWidth: 0.269559, strokeDasharray: 'none', strokeOpacity: 1 }} />
-      <Rect id="rect8" {...rects.rect8} style={{ display: 'inline', fill: 'none', stroke: '#000000', strokeWidth: 0.256059, strokeDasharray: 'none', strokeOpacity: 1 }} />
-      <Rect id="rect13" {...rects.rect13} style={{ fill: 'none', stroke: '#000000', strokeWidth: 0.237736, strokeDasharray: 'none', strokeOpacity: 1 }} />
-      <Rect id="rect13-6" {...rects['rect13-6']} style={{ display: 'inline', fill: 'none', stroke: '#000000', strokeWidth: 0.256842, strokeDasharray: 'none', strokeOpacity: 1 }} />
-      <Rect id="rect13-60" {...rects['rect13-60']} style={{ display: 'inline', fill: 'none', stroke: '#000000', strokeWidth: 0.256, strokeDasharray: 'none', strokeOpacity: 1 }} />
-      <Rect id="rect14" {...rects.rect14} style={{ fill: '#e6e6e6', stroke: '#000000', strokeWidth: 0.246687, strokeDasharray: 'none', strokeOpacity: 1 }} ry="0" />
-    </Defs>
-    <G transform="translate(-42.696099,-5.7252132)">
-      {Object.entries(rooms).map(([roomId, room]) => {
-        return (
-          <G key={roomId} transform={room.transform} onPress={() => onRoomClick(roomId)}>
-            <Use href={`#${room.rectId}`} />
-          </G>
-        );
-      })}
-      <Use href="#path13" transform="translate(0.25545977,-0.24633621)" onPress={() => onRoomClick('toiletW')} />
-      <Use href="#path12" transform="translate(0.25545977,-0.24633621)" onPress={() => onRoomClick('toiletM')} />
-      <Rect
-       style={{ fill: '#fefefe', fillOpacity: 1, stroke: '#000000', strokeWidth: 0.256, strokeDasharray: 'none', strokeOpacity: 1 }}
-       id="rect27"
-       width="72.075996"
-       height="114.95689"
-       x="216.98555"
-       y="60.598282"
-       transform="rotate(5.738345)"
-       onPress={() => onRoomClick('blank')}
-      />
-    </G>
-  </G>
+  <Svg width="240.39067mm" height="204.95511mm" viewBox="0 0 240.39067 204.95511" version="1.1" id="svg1" xmlSpace="preserve">
+    {/* 自動生成: Floor3.svg から変換 */}
+    <Defs id="defs1">
+<Rect x="558" y="308" width="106" height="55" id="rect23" /></Defs>
+<G id="layer3" style={{"display":"none"}} transform="translate(-31.555749,-37.405587)">
+<Rect style={{"display":"inline","fill":"none","stroke":"#000000","strokeWidth":0.322803,"strokeDasharray":"none","strokeOpacity":1}} id="rect6" width="25.12409" height="38.642792" x="68.151611" y="120.57999" transform="rotate(7.2102665)" /><Rect style={{"display":"inline","fill":"#0000ff","stroke":"#000000","strokeWidth":0.264999,"strokeDasharray":"none","strokeOpacity":1}} id="rect12" width="19.085226" height="11.398121" x="62.509834" y="93.569565" transform="rotate(4.4352277)" /><Rect style={{"display":"inline","fill":"#ff0000","stroke":"#000000","strokeWidth":0.264999,"strokeDasharray":"none","strokeOpacity":1}} id="rect11" width="19.085226" height="11.398121" x="62.509834" y="105.23276" transform="rotate(4.4352277)" /><Path d="m 59.281993,116.17376 c 0.06615,-0.76833 -0.722443,-1.44427 -1.758941,-1.50767 -1.036495,-0.0634 -1.932604,0.5095 -1.998753,1.27783 -0.06615,0.76834 0.722443,1.44428 1.758939,1.50767 1.036498,0.0634 1.932606,-0.50949 1.998755,-1.27783 z m -3.131411,-0.19153 c 0.04407,-0.51184 0.642026,-0.89412 1.332501,-0.85189 0.690476,0.0422 1.216693,0.49328 1.172627,1.00512 -0.04407,0.51183 -0.642027,0.89412 -1.332503,0.85188 -0.690476,-0.0422 -1.216691,-0.49328 -1.172625,-1.00511 z m 9.598274,-1.79539 0.09483,-1.10144 -4.858232,1.05393 c -0.365674,0.0791 -0.684609,0.23697 -0.92086,0.4582 -0.236153,0.22007 -0.373931,0.48583 -0.398312,0.76902 l -0.142291,1.65273 c -0.02438,0.2832 0.06644,0.56293 0.262417,0.80944 0.195983,0.2465 0.484542,0.44149 0.83273,0.56546 l 4.626811,1.63408 0.09483,-1.10143 1.834381,0.6314 0.128601,-1.49372 3.757692,0.22984 0.239815,-2.7855 -3.757693,-0.22985 0.128601,-1.49372 z m 1.128461,1.51811 3.789007,0.23176 -0.05995,0.69637 -3.789007,-0.23176 -0.03997,0.46425 3.789007,0.23176 -0.05995,0.69637 -3.789007,-0.23175 -0.111215,1.29177 -5.200192,-1.75666 -0.03958,0.45961 3.393529,1.16896 -0.05286,0.61397 -3.826732,-1.3658 c -0.470445,-0.16645 -0.763002,-0.53436 -0.730127,-0.91621 l 0.142189,-1.65157 c 0.03288,-0.38185 0.387051,-0.71137 0.879416,-0.81776 l 4.020582,-0.88582 -0.05286,0.61397 -3.558201,0.74376 -0.03957,0.4596 5.446602,-1.10544 z" id="path13" style={{"display":"inline","strokeWidth":0.0135158}} /><Path d="m 60.017738,104.55257 c 0.06924,-0.90145 -0.678934,-1.68665 -1.66879,-1.75138 -0.989856,-0.0647 -1.850572,0.61527 -1.919812,1.51672 -0.06924,0.90145 0.678934,1.68665 1.66879,1.75138 0.989856,0.0647 1.850572,-0.61527 1.919812,-1.51672 z m -2.990501,-0.19555 c 0.04613,-0.60051 0.620468,-1.05426 1.279874,-1.01114 0.659405,0.0431 1.158651,0.56707 1.112526,1.16758 -0.04613,0.60051 -0.620469,1.05427 -1.279874,1.01115 -0.659406,-0.0431 -1.158652,-0.56707 -1.112526,-1.16759 z m 3.394144,-1.1466 -0.209185,2.72341 c -0.06924,0.90145 0.678935,1.68665 1.668791,1.75138 l 4.784803,0.31288 0.08367,-1.08937 4.485753,0.29332 0.29286,-3.81277 -4.485754,-0.29333 0.08367,-1.08936 -4.784803,-0.31288 c -0.989856,-0.0647 -1.850572,0.61527 -1.919813,1.51672 z m 6.094585,-0.69631 -0.04184,0.54468 -3.917559,-0.25617 -0.04184,0.54468 8.403312,0.54949 -0.08367,1.08937 -4.515659,-0.29528 -0.04183,0.54468 4.515658,0.29528 -0.08367,1.08937 -8.403312,-0.54949 -0.04184,0.54468 3.917559,0.25617 -0.04184,0.54468 -4.216609,-0.27572 c -0.659405,-0.0431 -1.158651,-0.56708 -1.112526,-1.16759 l 0.209185,-2.72341 c 0.04613,-0.60051 0.620469,-1.05427 1.279875,-1.01115 z" id="path12" style={{"display":"inline","strokeWidth":0.0143049}} /><Rect style={{"display":"inline","fill":"none","stroke":"#000000","strokeWidth":0.256059,"strokeDasharray":"none","strokeOpacity":1}} id="rect9" width="25.742666" height="37.186043" x="95.531487" y="124.34505" transform="matrix(0.99381649,0.11103508,-0.10214486,0.99476953,0,0)" /><Rect style={{"display":"inline","fill":"none","stroke":"#000000","strokeWidth":0.256059,"strokeDasharray":"none","strokeOpacity":1}} id="rect10" width="25.743" height="37.186043" x="94.540588" y="88.245926" transform="matrix(0.99473062,0.1025231,-0.09362505,0.99560753,0,0)" /><Rect style={{"display":"inline","fill":"none","stroke":"#000000","strokeWidth":0.269559,"strokeDasharray":"none","strokeOpacity":1}} id="rect7" width="34.247494" height="56.43816" x="62.327404" y="158.35698" transform="matrix(0.99022253,0.13949672,-0.14414243,0.98955695,0,0)" /><Rect style={{"display":"inline","fill":"none","stroke":"#000000","strokeWidth":0.256059,"strokeDasharray":"none","strokeOpacity":1}} id="rect8" width="25.742666" height="37.186043" x="93.836113" y="162.86624" transform="matrix(0.99473062,0.1025231,-0.09362505,0.99560753,0,0)" /><Rect style={{"fill":"none","stroke":"#000000","strokeWidth":0.237736,"strokeDasharray":"none","strokeOpacity":1}} id="rect13" width="46.010616" height="29.032822" x="121.70112" y="20.923824" transform="matrix(0.99088008,0.13474664,-0.10027397,0.99495986,0,0)" /><Rect style={{"display":"inline","fill":"none","stroke":"#000000","strokeWidth":0.256842,"strokeDasharray":"none","strokeOpacity":1}} id="rect13-6" width="53.637047" height="29.068729" x="168.18646" y="24.432865" transform="matrix(0.99330546,0.11551741,-0.11703613,0.99312766,0,0)" /><Rect style={{"display":"inline","fill":"none","stroke":"#000000","strokeWidth":0.256,"strokeDasharray":"none","strokeOpacity":1}} id="rect13-60" width="53.289318" height="29.0669" x="222.13658" y="23.989311" transform="rotate(6.6771334)" /><Rect style={{"fill":"#e6e6e6","stroke":"#000000","strokeWidth":0.234001,"strokeDasharray":"none","strokeOpacity":1}} id="rect14" width="21.431311" height="25.239794" x="35.159134" y="71.965584" ry="0" /></G>
+<G id="layer4" style={{"display":"inline"}} transform="translate(-31.555749,-37.405587)">
+<Use x="0" y="0" href="#rect6" id="use14" style={{"display":"inline"}} transform="translate(0.95173212,-0.59447219)" /><Use x="0" y="0" href="#rect12" id="use15" style={{"display":"inline"}} transform="translate(0.95173212,-0.59447219)" /><Use x="0" y="0" href="#rect11" id="use16" style={{"display":"inline"}} transform="translate(0.95173212,-0.59447219)" /><Use x="0" y="0" href="#path13" id="use17" style={{"display":"inline"}} transform="translate(0.95173212,-0.59447219)" /><Use x="0" y="0" href="#path12" id="use18" style={{"display":"inline"}} transform="translate(0.95173212,-0.59447219)" /><Use x="0" y="0" href="#rect9" id="use19" style={{"display":"inline"}} transform="translate(0.95173212,-0.59447219)" /><Use x="0" y="0" href="#rect10" id="use20" style={{"display":"inline"}} transform="translate(0.95173212,-0.59447219)" /><Use x="0" y="0" href="#rect7" id="use21" style={{"display":"inline"}} transform="translate(0.95173212,-0.59447219)" /><Use x="0" y="0" href="#rect8" id="use22" style={{"display":"inline"}} transform="translate(0.95173212,-0.59447219)" /><Use x="0" y="0" href="#rect13" id="use24" style={{"display":"inline"}} transform="matrix(0.69978863,-0.08660498,-0.01254251,1.0015721,35.862989,10.517317)" /><Use x="0" y="0" href="#rect13-6" id="use25" style={{"display":"inline"}} transform="matrix(0.6468559,-0.04928736,0.00183406,1.0014473,77.668661,8.6390738)" /><Use x="0" y="0" href="#rect13-60" id="use26" style={{"display":"inline"}} transform="matrix(0.96041083,-0.05079426,0.04964647,0.98261497,6.6918111,10.515778)" /><Use x="0" y="0" href="#rect14" id="use27" style={{"display":"inline"}} transform="translate(0.25546035,0.44993577)" /><Rect style={{"fill":"#fefefe","fillOpacity":1,"stroke":"#000000","strokeWidth":0.256,"strokeDasharray":"none","strokeOpacity":1}} id="rect27" width="72.075996" height="114.95689" x="211.15034" y="100.02237" transform="rotate(5.738345)" /><Use x="0" y="0" href="#rect13-6" id="use25-0" style={{"display":"inline"}} transform="matrix(0.6468559,-0.04928736,0.00183406,1.0014473,43.473546,5.2177378)" /><Text xmlSpace="preserve" transform="matrix(0.26458333,0,0,0.26458333,40.188816,-19.38421)" id="text23" style={{"fontSize":"40px","lineHeight":0,"textAlign":"start","writingMode":"lr-tb","direction":"ltr","whiteSpace":"pre","shapeInside":"url(#rect23)","display":"inline","fill":"#000000","fillOpacity":1,"stroke":"#000000","strokeWidth":0.990236,"strokeDasharray":"none"}}>
+<TSpan x="558" y="319.49321" id="tspan1">
+</TSpan></Text><Text xmlSpace="preserve" style={{"fontSize":"10.5833px","lineHeight":0,"textAlign":"start","writingMode":"lr-tb","direction":"ltr","textAnchor":"start","fill":"#000000","fillOpacity":1,"stroke":"#000000","strokeWidth":0.262,"strokeDasharray":"none"}} x="150.78465" y="60.784534" id="text25">
+<TSpan id="tspan25" style={{"strokeWidth":0.262}} x="150.78465" y="60.784534">
+</TSpan></Text><Text xmlSpace="preserve" style={{"fontSize":"10.5833px","lineHeight":0,"textAlign":"start","writingMode":"lr-tb","direction":"ltr","textAnchor":"start","fill":"#000000","fillOpacity":1,"stroke":"#000000","strokeWidth":0.262,"strokeDasharray":"none"}} x="120.62215" y="57.609539" id="text26">
+<TSpan id="tspan26" style={{"strokeWidth":0.262}} x="120.62215" y="57.609539">
+</TSpan></Text><Text xmlSpace="preserve" style={{"fontSize":"10.5833px","lineHeight":0,"textAlign":"start","writingMode":"lr-tb","direction":"ltr","textAnchor":"start","fill":"#000000","fillOpacity":1,"stroke":"#000000","strokeWidth":0.262,"strokeDasharray":"none"}} x="37.542988" y="199.69078" id="text27">
+<TSpan id="tspan27" style={{"strokeWidth":0.262}} x="37.542988" y="199.69078">
+</TSpan></Text><Text xmlSpace="preserve" style={{"fontSize":"10.5833px","lineHeight":0,"textAlign":"start","writingMode":"lr-tb","direction":"ltr","textAnchor":"start","fill":"#000000","fillOpacity":1,"stroke":"#000000","strokeWidth":0.262,"strokeDasharray":"none"}} x="50.507572" y="154.44704" id="text28">
+<TSpan id="tspan28" style={{"strokeWidth":0.262}} x="50.507572" y="154.44704">
+</TSpan></Text><Text xmlSpace="preserve" style={{"fontSize":"9.64344px","lineHeight":0,"textAlign":"start","writingMode":"lr-tb","direction":"ltr","textAnchor":"start","fill":"#000000","fillOpacity":1,"stroke":"#000000","strokeWidth":0.238733,"strokeDasharray":"none"}} x="79.780739" y="189.09039" id="text29" transform="scale(0.97258289,1.02819)">
+<TSpan id="tspan29" style={{"strokeWidth":0.238733}} x="79.780739" y="189.09039">
+</TSpan></Text><Text xmlSpace="preserve" style={{"fontSize":"10.083px","lineHeight":0,"textAlign":"start","writingMode":"lr-tb","direction":"ltr","textAnchor":"start","fill":"#000000","fillOpacity":1,"stroke":"#000000","strokeWidth":0.249615,"strokeDasharray":"none"}} x="85.726418" y="151.70709" id="text30" transform="scale(0.95126063,1.0512366)">
+<TSpan id="tspan30" style={{"strokeWidth":0.249615}} x="85.726418" y="151.70709">
+</TSpan></Text><Text xmlSpace="preserve" style={{"fontSize":"10.344px","lineHeight":0,"textAlign":"start","writingMode":"lr-tb","direction":"ltr","textAnchor":"start","fill":"#000000","fillOpacity":1,"stroke":"#000000","strokeWidth":0.256076,"strokeDasharray":"none"}} x="92.751205" y="110.982" id="text31" transform="scale(0.91644312,1.0911752)">
+<TSpan id="tspan31" style={{"strokeWidth":0.256076}} x="92.751205" y="110.982">
+</TSpan></Text><Text xmlSpace="preserve" style={{"fontSize":"10.5833px","lineHeight":0,"textAlign":"start","writingMode":"lr-tb","direction":"ltr","textAnchor":"start","fill":"#000000","fillOpacity":1,"stroke":"#000000","strokeWidth":0.262,"strokeDasharray":"none"}} x="217.45964" y="66.869957" id="text32">
+<TSpan id="tspan32" style={{"strokeWidth":0.262}} x="217.45964" y="66.869957">
+</TSpan></Text></G>
+  </Svg>
 );
 
 export default Floor3;

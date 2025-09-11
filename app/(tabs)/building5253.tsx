@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
-    minHeight: 2000,
+    minHeight: 74,
   },
   headerTitle: {
     fontSize: 24,

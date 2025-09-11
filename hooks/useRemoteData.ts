@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 interface UseRemoteDataResult<T> {
   data: T | null;
   loading: boolean;
   error: Error | null;
+  refetch: () => Promise<void>;
 }
 
 export function useRemoteData<T>(remoteUrl: string): UseRemoteDataResult<T> {
@@ -11,28 +12,28 @@ export function useRemoteData<T>(remoteUrl: string): UseRemoteDataResult<T> {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await fetch(remoteUrl);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const remoteData = await response.json();
-        setData(remoteData);
-      } catch (e) {
-        console.error(`Failed to fetch remote data from ${remoteUrl}.`, e);
-        setError(e as Error);
-        setData(null); // Set data to null on error
-      } finally {
-        setLoading(false);
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(remoteUrl, { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
-
-    fetchData();
+      const remoteData = await response.json();
+      setData(remoteData);
+    } catch (e) {
+      console.error(`Failed to fetch remote data from ${remoteUrl}.`, e);
+      setError(e as Error);
+      setData(null);
+    } finally {
+      setLoading(false);
+    }
   }, [remoteUrl]);
 
-  return { data, loading, error };
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  return { data, loading, error, refetch: fetchData };
 }
