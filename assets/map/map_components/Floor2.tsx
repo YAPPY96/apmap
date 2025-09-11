@@ -1,23 +1,23 @@
 import React from 'react';
-import { Defs, G, Path, Rect, Text, Use } from 'react-native-svg';
+import { Defs, G, Path, Rect, Use } from 'react-native-svg';
 
 interface Floor2Props {
   onRoomClick: (roomId: string) => void;
 }
 
 const rooms = {
-  room5225: { rectId: 'rect6', transform: 'rotate(7.2102665)', name: '5225' },
-  toiletM: { rectId: 'rect12', transform: 'rotate(4.4352277)', name: 'M' },
-  toiletW: { rectId: 'rect11', transform: 'rotate(4.4352277)', name: 'W' },
-  room5227: { rectId: 'rect9', transform: 'matrix(0.99381649,0.11103508,-0.10214486,0.99476954,0,0)', name: '5227' },
-  room5228: { rectId: 'rect10', transform: 'matrix(0.99473062,0.1025231,-0.09362505,0.99560753,0,0)', name: '5228' },
-  room5224: { rectId: 'rect7', transform: 'matrix(0.99022252,0.13949672,-0.14414243,0.98955696,0,0)', name: '5224' },
-  room5226: { rectId: 'rect8', transform: 'matrix(0.99473062,0.1025231,-0.09362505,0.99560753,0,0)', name: '5226' },
-  physicalExperiment: { rectId: 'rect5', transform: 'matrix(0.99518102,0.09805476,-0.10148965,0.9948366,0,0)', name: 'Physical\nExperiment' },
-  room5223: { rectId: 'rect13', transform: 'matrix(0.99088008,0.13474664,-0.10027397,0.99495986,0,0)', name: '5223' },
-  room5222: { rectId: 'rect13-6', transform: 'matrix(0.99330546,0.11551741,-0.11703613,0.99312766,0,0)', name: '5222' },
-  room5221: { rectId: 'rect13-60', transform: 'rotate(6.6771334)', name: '5221' },
-  temporaryRestroom: { rectId: 'rect14', transform: '', name: 'Temp\nRest' },
+  room5225: { rectId: 'rect6', transform: 'rotate(7.2102665)' },
+  toiletM: { rectId: 'rect12', transform: 'rotate(4.4352277)' },
+  toiletW: { rectId: 'rect11', transform: 'rotate(4.4352277)' },
+  room5227: { rectId: 'rect9', transform: 'matrix(0.99381649,0.11103508,-0.10214486,0.99476954,0,0)' },
+  room5228: { rectId: 'rect10', transform: 'matrix(0.99473062,0.1025231,-0.09362505,0.99560753,0,0)' },
+  room5224: { rectId: 'rect7', transform: 'matrix(0.99022252,0.13949672,-0.14414243,0.98955696,0,0)' },
+  room5226: { rectId: 'rect8', transform: 'matrix(0.99473062,0.1025231,-0.09362505,0.99560753,0,0)' },
+  physicalExperiment: { rectId: 'rect5', transform: 'matrix(0.99518102,0.09805476,-0.10148965,0.9948366,0,0)' },
+  room5223: { rectId: 'rect13', transform: 'matrix(0.99088008,0.13474664,-0.10027397,0.99495986,0,0)' },
+  room5222: { rectId: 'rect13-6', transform: 'matrix(0.99330546,0.11551741,-0.11703613,0.99312766,0,0)' },
+  room5221: { rectId: 'rect13-60', transform: 'rotate(6.6771334)' },
+  temporaryRestroom: { rectId: 'rect14', transform: '' },
 };
 
 const rects: { [id: string]: { x: number, y: number, width: number, height: number } } = {
@@ -53,29 +53,11 @@ const Floor2: React.FC<Floor2Props> = ({ onRoomClick }) => (
       <Rect id="rect13-60" {...rects['rect13-60']} style={{ display: 'inline', fill: 'none', stroke: '#000000', strokeWidth: 0.256, strokeDasharray: 'none', strokeOpacity: 1 }} />
       <Rect id="rect14" {...rects.rect14} style={{ fill: '#e6e6e6', stroke: '#000000', strokeWidth: 0.246687, strokeDasharray: 'none', strokeOpacity: 1 }} ry="0" />
     </Defs>
-    <G transform="translate(0.25545977,-0.24633621)">
+    <G transform="translate(-42.440639,-5.0543868)">
       {Object.entries(rooms).map(([roomId, room]) => {
-        const rect = rects[room.rectId];
-        if (!rect) return null;
-        const centerX = rect.x + rect.width / 2;
-        const centerY = rect.y + rect.height / 2;
-        const lines = room.name.split('\n');
-
         return (
           <G key={roomId} transform={room.transform} onPress={() => onRoomClick(roomId)}>
             <Use href={`#${room.rectId}`} />
-            {lines.map((line, index) => (
-              <Text
-                key={index}
-                x={centerX}
-                y={centerY + (index - (lines.length - 1) / 2) * 5}
-                fontSize="5"
-                textAnchor="middle"
-                dominantBaseline="middle"
-              >
-                {line}
-              </Text>
-            ))}
           </G>
         );
       })}

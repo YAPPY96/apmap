@@ -1,23 +1,23 @@
 import React from 'react';
-import { Defs, G, Path, Rect, Text, Use } from 'react-native-svg';
+import { Defs, G, Path, Rect, Use } from 'react-native-svg';
 
 interface Floor3Props {
   onRoomClick: (roomId: string) => void;
 }
 
 const rooms = {
-  room5235: { rectId: 'rect6', transform: 'rotate(7.2102665)', name: '5235' },
-  toiletM: { rectId: 'rect12', transform: 'rotate(4.4352277)', name: 'M' },
-  toiletW: { rectId: 'rect11', transform: 'rotate(4.4352277)', name: 'W' },
-  room5237: { rectId: 'rect9', transform: 'matrix(0.99381649,0.11103508,-0.10214486,0.99476954,0,0)', name: '5237' },
-  room5238: { rectId: 'rect10', transform: 'matrix(0.99473062,0.1025231,-0.09362505,0.99560753,0,0)', name: '5238' },
-  room5234: { rectId: 'rect7', transform: 'matrix(0.99022252,0.13949672,-0.14414243,0.98955696,0,0)', name: '5234' },
-  room5236: { rectId: 'rect8', transform: 'matrix(0.99473062,0.1025231,-0.09362505,0.99560753,0,0)', name: '5236' },
-  room5233: { rectId: 'rect13', transform: 'matrix(0.69978863,-0.08660498,-0.01254251,1.0015721,38.318488,11.940915)', name: '5233' },
-  room5231: { rectId: 'rect13-6', transform: 'matrix(0.6468559,-0.04928736,0.00183406,1.0014473,81.211165,9.6169607)', name: '5231' },
-  geographicalExperiment: { rectId: 'rect13-60', transform: 'rotate(6.6771334)', name: 'Geo\nExp' },
-  temporaryRestroom: { rectId: 'rect14', transform: '', name: 'Temp\nRest' },
-  room5232: { rectId: 'rect13-6', transform: 'matrix(0.6468559,-0.04928736,0.00183406,1.0014473,47.01605,6.1956245)', name: '5232' },
+  room5235: { rectId: 'rect6', transform: 'translate(0.25545977,-0.24633621) rotate(7.2102665)' },
+  toiletM: { rectId: 'rect12', transform: 'translate(0.25545977,-0.24633621) rotate(4.4352277)' },
+  toiletW: { rectId: 'rect11', transform: 'translate(0.25545977,-0.24633621) rotate(4.4352277)' },
+  room5237: { rectId: 'rect9', transform: 'translate(0.25545977,-0.24633621) matrix(0.99381649,0.11103508,-0.10214486,0.99476954,0,0)' },
+  room5238: { rectId: 'rect10', transform: 'translate(0.25545977,-0.24633621) matrix(0.99473062,0.1025231,-0.09362505,0.99560753,0,0)' },
+  room5234: { rectId: 'rect7', transform: 'translate(0.25545977,-0.24633621) matrix(0.99022252,0.13949672,-0.14414243,0.98955696,0,0)' },
+  room5236: { rectId: 'rect8', transform: 'translate(0.25545977,-0.24633621) matrix(0.99473062,0.1025231,-0.09362505,0.99560753,0,0)' },
+  room5233: { rectId: 'rect13', transform: 'matrix(0.69978863,-0.08660498,-0.01254251,1.0015721,38.318488,11.940915)' },
+  room5231: { rectId: 'rect13-6', transform: 'matrix(0.6468559,-0.04928736,0.00183406,1.0014473,81.211165,9.6169607)' },
+  geographicalExperiment: { rectId: 'rect13-60', transform: 'translate(0.25545977,-0.24633621) rotate(6.6771334)' },
+  temporaryRestroom: { rectId: 'rect14', transform: 'translate(0.25545977,-0.24633621)' },
+  room5232: { rectId: 'rect13-6', transform: 'matrix(0.6468559,-0.04928736,0.00183406,1.0014473,47.01605,6.1956245)' },
 };
 
 const rects: { [id: string]: { x: number, y: number, width: number, height: number } } = {
@@ -51,34 +51,16 @@ const Floor3: React.FC<Floor3Props> = ({ onRoomClick }) => (
       <Rect id="rect13-60" {...rects['rect13-60']} style={{ display: 'inline', fill: 'none', stroke: '#000000', strokeWidth: 0.256, strokeDasharray: 'none', strokeOpacity: 1 }} />
       <Rect id="rect14" {...rects.rect14} style={{ fill: '#e6e6e6', stroke: '#000000', strokeWidth: 0.246687, strokeDasharray: 'none', strokeOpacity: 1 }} ry="0" />
     </Defs>
-    <G transform="translate(0.25545977,-0.24633621)">
+    <G transform="translate(-42.696099,-5.7252132)">
       {Object.entries(rooms).map(([roomId, room]) => {
-        const rect = rects[room.rectId];
-        if (!rect) return null;
-        const centerX = rect.x + rect.width / 2;
-        const centerY = rect.y + rect.height / 2;
-        const lines = room.name.split('\n');
-
         return (
           <G key={roomId} transform={room.transform} onPress={() => onRoomClick(roomId)}>
             <Use href={`#${room.rectId}`} />
-            {lines.map((line, index) => (
-              <Text
-                key={index}
-                x={centerX}
-                y={centerY + (index - (lines.length - 1) / 2) * 5}
-                fontSize="5"
-                textAnchor="middle"
-                dominantBaseline="middle"
-              >
-                {line}
-              </Text>
-            ))}
           </G>
         );
       })}
-      <Use href="#path13" onPress={() => onRoomClick('toiletW')} />
-      <Use href="#path12" onPress={() => onRoomClick('toiletM')} />
+      <Use href="#path13" transform="translate(0.25545977,-0.24633621)" onPress={() => onRoomClick('toiletW')} />
+      <Use href="#path12" transform="translate(0.25545977,-0.24633621)" onPress={() => onRoomClick('toiletM')} />
       <Rect
        style={{ fill: '#fefefe', fillOpacity: 1, stroke: '#000000', strokeWidth: 0.256, strokeDasharray: 'none', strokeOpacity: 1 }}
        id="rect27"
