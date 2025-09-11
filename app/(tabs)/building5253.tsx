@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
+    flex: 1,
   },
   scrollContainer: {
     flex: 1,

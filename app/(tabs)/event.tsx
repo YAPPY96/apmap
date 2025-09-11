@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { AnnounceBar } from '@/components/AnnounceBar';
 import { EventDetailModal } from '@/components/map/EventDetailModal';
 import { AppEvent } from '@/components/map/types';
 import { Config } from '@/constants/Config';
@@ -111,6 +112,8 @@ export default function EventScreen() {
           </TouchableOpacity>
         </View>
       </View>
+
+      <AnnounceBar />
 
       <FlatList
         data={filteredEvents}
