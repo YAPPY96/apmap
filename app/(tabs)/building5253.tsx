@@ -9,9 +9,10 @@ import { Config } from '@/constants/Config';
 import { useRemoteData } from '@/hooks/useRemoteData';
 import { useState } from 'react';
 import { Dimensions, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function Building5253Screen() {
+  const insets = useSafeAreaInsets();
   const { data: eventData, isLoading, error } = useRemoteData<Record<string, AppEvent>>(Config.BUILDING_5253_URL);
 
   const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
@@ -66,7 +67,7 @@ export default function Building5253Screen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       <StatusBar barStyle="dark-content" />
       
       <View style={styles.header}>
@@ -176,12 +177,15 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   header: {
-    paddingTop: 10,
-    paddingHorizontal: 20,
-    paddingBottom: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
+    minHeight: 60,
   },
   headerTitle: {
     fontSize: 24,

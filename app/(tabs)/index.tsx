@@ -12,7 +12,7 @@ import { useRemoteData } from '@/hooks/useRemoteData';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useState } from 'react';
 import { Alert, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // 型定義
 interface BuildingFeature {
@@ -23,6 +23,7 @@ interface BuildingFeature {
 }
 
 export default function MapScreen() {
+  const insets = useSafeAreaInsets();
   const {
     location,
     errorMsg,
@@ -43,6 +44,12 @@ export default function MapScreen() {
   // Event Modal State
   const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
   const [eventModalVisible, setEventModalVisible] = useState(false);
+  const [mapKey, setMapKey] = useState(0);
+
+  const handleMapReset = () => {
+    setMapKey(prevKey => prevKey + 1);
+    triggerZoomToUser();
+  };
 
   const handleBuildingClick = (buildingData: BuildingFeature) => {
     const buildingName = buildingData.properties.name;
@@ -116,21 +123,19 @@ export default function MapScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       <StatusBar barStyle="dark-content" />
       
       {/* Header */}
       <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <ThemedText style={styles.headerTitle}>キャンパスマップ</ThemedText>
-          <TouchableOpacity style={styles.locationButton} onPress={triggerZoomToUser}>
-            <MaterialIcons 
-              name={location ? "my-location" : "location-searching"} 
-              size={24} 
-              color="#4A90E2" 
-            />
-          </TouchableOpacity>
-        </View>
+        <ThemedText style={styles.headerTitle}>キャンパスマップ</ThemedText>
+        <TouchableOpacity style={styles.locationButton} onPress={handleMapReset}>
+          <MaterialIcons
+            name={location ? "my-location" : "location-searching"}
+            size={24}
+            color="#4A90E2"
+          />
+        </TouchableOpacity>
       </View>
 
       <AnnounceBar />
@@ -138,6 +143,7 @@ export default function MapScreen() {
       {/* Map */}
       <View style={styles.mapContainer}>
         <MapWebView 
+          key={mapKey}
           userLocation={location} 
           onBuildingClick={handleBuildingClick}
           highlightedBuilding={highlightedBuilding}
@@ -169,18 +175,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   header: {
-    paddingTop: 10,
-    paddingHorizontal: 20,
-    paddingBottom: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  headerContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+    minHeight: 60,
   },
   headerTitle: {
     fontSize: 24,
