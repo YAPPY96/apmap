@@ -3,11 +3,11 @@ import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Entypo from '@expo/vector-icons/Entypo';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
-
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
@@ -38,6 +38,13 @@ export default function TabLayout() {
         options={{
           title: '52,53号館',
           tabBarIcon: ({ color }) => <MaterialIcons name="business" size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="stage"
+        options={{
+          title: 'Stage',
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="spotlight-beam" size={24} color={color} />
         }}
       />
       <Tabs.Screen

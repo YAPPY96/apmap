@@ -92,4 +92,6 @@ export interface AppEvent {
   image: string;
   groupName: string;
   snsLink: string;
+  caution?: string;
+  others?: string;
 }

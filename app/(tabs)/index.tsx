@@ -8,6 +8,7 @@ import { AppEvent } from '@/components/map/types';
 import { Config } from '@/constants/Config';
 import { useRemoteData } from '@/hooks/useRemoteData';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -34,6 +35,8 @@ export default function MapScreen() {
   } = useLocation();
 
   const { data: eventData } = useRemoteData<AppEvent[]>(Config.EVENTS_URL);
+  const { data: stageData } = useRemoteData<AppEvent[]>(Config.STAGE_URL);
+  const router = useRouter();
 
   // Building Modal State
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingFeature | null>(null);
@@ -51,6 +54,20 @@ export default function MapScreen() {
 
   const handleBuildingClick = (buildingData: BuildingFeature) => {
     const buildingName = buildingData.properties.name;
+
+    if (buildingName === '52・53号館') {
+      router.push('/building5253');
+      return;
+    }
+
+    if (stageData) {
+      const stageForBuilding = stageData.find((stage) => stage.buildingName === buildingName);
+      if (stageForBuilding) {
+        router.push('/stage');
+        return;
+      }
+    }
+
     if (eventData) {
       const eventForBuilding = eventData.find((event) => event.buildingName === buildingName);
 
@@ -161,6 +178,8 @@ export default function MapScreen() {
         visible={eventModalVisible}
         event={selectedEvent}
         onClose={closeEventModal}
+        isFullScreen={false}
+        showViewLocationButton={false}
       />
 
     </View>

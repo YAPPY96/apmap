@@ -13,4 +13,5 @@ export const Config = {
   BUILDINGS_URL: `${SERVER_BASE_URL}/buildings.json`,
   EVENTS_URL: `${SERVER_BASE_URL}/events.json`,
   BUILDING_5253_URL: `${SERVER_BASE_URL}/5253.json`,
+  STAGE_URL: `${SERVER_BASE_URL}/stage.json`,
 };

@@ -20,6 +20,7 @@ interface EventDetailModalProps {
   event: AppEvent | null;
   onClose: () => void;
   isFullScreen: boolean;
+  showViewLocationButton?: boolean;
 }
 
 const API_BASE_URL = 'https://koudaisai.com/dataforapp/image';
@@ -29,6 +30,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
   event,
   onClose,
   isFullScreen,
+  showViewLocationButton,
 }) => {
   const router = useRouter();
   const { setHighlightedBuilding } = useLocation();
@@ -62,6 +64,17 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
             <Text style={styles.detailText}>{event.buildingName}</Text>
           </View>
           <View style={styles.detailRow}>
+            <MaterialIcons name="calendar-today" size={20} color="#666" style={styles.icon} />
+            <Text style={styles.detailText}>
+              {event.date.includes(',')
+                ? '両日'
+                : new Date(event.date).toLocaleDateString('ja-JP', {
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+            </Text>
+          </View>
+          <View style={styles.detailRow}>
             <MaterialIcons name="schedule" size={20} color="#666" style={styles.icon} />
             <Text style={styles.detailText}>{event.time}</Text>
           </View>
@@ -69,12 +82,32 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
             <MaterialIcons name="info-outline" size={20} color="#666" style={styles.icon} />
             <Text style={styles.descriptionText}>{event.description}</Text>
           </View>
+          {event.caution && (
+            <View style={styles.detailRow}>
+              <MaterialIcons name="warning" size={20} color="#FF9500" style={styles.icon} />
+              <Text style={styles.descriptionText}>
+                <Text style={styles.labelText}>注意事項: </Text>
+                {event.caution}
+              </Text>
+            </View>
+          )}
+          {event.others && (
+            <View style={styles.detailRow}>
+              <MaterialIcons name="info" size={20} color="#007AFF" style={styles.icon} />
+              <Text style={styles.descriptionText}>
+                <Text style={styles.labelText}>その他: </Text>
+                {event.others}
+              </Text>
+            </View>
+          )}
         </View>
 
-        <TouchableOpacity style={styles.viewLocationButton} onPress={handleViewLocation}>
-          <MaterialIcons name="map" size={20} color="white" />
-          <Text style={styles.viewLocationButtonText}>場所を見る</Text>
-        </TouchableOpacity>
+        {showViewLocationButton && (
+          <TouchableOpacity style={styles.viewLocationButton} onPress={handleViewLocation}>
+            <MaterialIcons name="map" size={20} color="white" />
+            <Text style={styles.viewLocationButtonText}>場所を見る</Text>
+          </TouchableOpacity>
+        )}
       </ScrollView>
     </View>
   );
@@ -176,6 +209,9 @@ const styles = StyleSheet.create({
     color: '#333',
     lineHeight: 24,
     flex: 1,
+  },
+  labelText: {
+    fontWeight: 'bold',
   },
   viewLocationButton: {
     flexDirection: 'row',

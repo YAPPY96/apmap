@@ -18,14 +18,14 @@ import { useRemoteData } from '@/hooks/useRemoteData';
 
 const API_BASE_URL = 'https://koudaisai.com/dataforapp/image';
 
-export default function EventScreen() {
+export default function StageScreen() {
   const insets = useSafeAreaInsets(); // セーフエリアの値を取得
   const [selectedDate, setSelectedDate] = useState<string>('');
-  const [filteredEvents, setFilteredEvents] = useState<AppEvent[]>([]);
-  const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
+  const [filteredStages, setFilteredStages] = useState<AppEvent[]>([]);
+  const [selectedStage, setSelectedStage] = useState<AppEvent | null>(null);
   const [isModalVisible, setModalVisible] = useState(false);
 
-  const { data: allEvents } = useRemoteData<AppEvent[]>(Config.EVENTS_URL);
+  const { data: allStages } = useRemoteData<AppEvent[]>(Config.STAGE_URL);
 
   // 初期日付を設定
   useEffect(() => {
@@ -42,26 +42,26 @@ export default function EventScreen() {
 
   // 選択された日付に基づいてイベントをフィルタリング
   useEffect(() => {
-    if (selectedDate && allEvents) {
-      const events = allEvents.filter((event) => event.date.includes(selectedDate));
-      setFilteredEvents(events);
+    if (selectedDate && allStages) {
+      const stages = allStages.filter((stage) => stage.date.includes(selectedDate));
+      setFilteredStages(stages);
     }
-  }, [selectedDate, allEvents]);
+  }, [selectedDate, allStages]);
 
-  const handleEventPress = (event: AppEvent) => {
-    setSelectedEvent(event);
+  const handleStagePress = (stage: AppEvent) => {
+    setSelectedStage(stage);
     setModalVisible(true);
   };
 
   const handleCloseModal = () => {
     setModalVisible(false);
-    setSelectedEvent(null);
+    setSelectedStage(null);
   };
 
-  const renderEventItem = ({ item }: { item: AppEvent }) => {
+  const renderStageItem = ({ item }: { item: AppEvent }) => {
     const imageUrl = `${API_BASE_URL}/${item.image}`;
     return (
-      <TouchableOpacity style={styles.eventItem} onPress={() => handleEventPress(item)}>
+      <TouchableOpacity style={styles.eventItem} onPress={() => handleStagePress(item)}>
         <Image source={{ uri: imageUrl }} style={styles.eventImage} />
         <View style={styles.eventDetails}>
           <Text style={styles.eventName}>{item.eventName}</Text>
@@ -76,7 +76,7 @@ export default function EventScreen() {
       <StatusBar barStyle="dark-content" />
       
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Events</Text>
+        <Text style={styles.headerTitle}>Stage</Text>
         <View style={styles.dateSelector}>
           <TouchableOpacity
             style={[
@@ -116,16 +116,16 @@ export default function EventScreen() {
       <AnnounceBar />
 
       <FlatList
-        data={filteredEvents}
-        renderItem={renderEventItem}
+        data={filteredStages}
+        renderItem={renderStageItem}
         keyExtractor={(item) => item.eventName + item.time}
         contentContainerStyle={styles.listContent}
-        ListEmptyComponent={<Text style={styles.emptyText}>この日のイベントはありません。</Text>}
+        ListEmptyComponent={<Text style={styles.emptyText}>この日のステージはありません。</Text>}
       />
 
       <EventDetailModal
         visible={isModalVisible}
-        event={selectedEvent}
+        event={selectedStage}
         onClose={handleCloseModal}
         isFullScreen={true}
         showViewLocationButton={true}
