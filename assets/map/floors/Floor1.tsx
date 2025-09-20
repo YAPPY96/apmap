@@ -1,5 +1,5 @@
 import React from 'react';
-import { G, Path, Rect, Ellipse, Text } from 'react-native-svg';
+import { Ellipse, G, Path, Rect, Text } from 'react-native-svg';
 
 interface Props {
   onRoomClick: (roomId: string) => void;
@@ -13,12 +13,13 @@ export const Floor1 = ({ onRoomClick }: Props) => (
       strokeWidth="0.307063"
       strokeDasharray="none"
       strokeOpacity="1"
-      id="rect44"
+      id="yume-room"
       width="83.281769"
       height="35.823227"
       x="132.9021"
       y="21.551216"
       transform="matrix(0.99141744,0.13073434,-0.16354992,0.98653506,0,0)"
+      onPress={() => onRoomClick('yume-room')}
     />
     <Rect
       fill="none"
@@ -26,12 +27,13 @@ export const Floor1 = ({ onRoomClick }: Props) => (
       strokeWidth="0.423761"
       strokeDasharray="none"
       strokeOpacity="1"
-      id="rect47"
+      id="science-lab"
       width="53.658237"
       height="89.021782"
       x="224.72281"
       y="103.418"
       transform="matrix(0.98915098,0.14690247,-0.12129198,0.99261687,0,0)"
+      onPress={() => onRoomClick('science-lab')}
     />
     <Text
       xmlSpace="preserve"
@@ -271,12 +273,13 @@ export const Floor1 = ({ onRoomClick }: Props) => (
       fill="none"
       stroke="#000000"
       strokeWidth="0.204121"
-      id="rect8-11"
+      id="room5218"
       width="37.322193"
       height="29.387085"
       x="79.948952"
       y="-121.81734"
       transform="matrix(-0.10388011,0.99458983,-0.99388592,-0.11041188,0,0)"
+      onPress={() => onRoomClick('room5218')}
     />
     <Rect
       fill="none"
@@ -294,23 +297,25 @@ export const Floor1 = ({ onRoomClick }: Props) => (
       fill="none"
       stroke="#000000"
       strokeWidth="0.204121"
-      id="rect8-1-8"
+      id="room5217"
       width="37.322193"
       height="29.387085"
       x="117.50832"
       y="-121.81734"
       transform="matrix(-0.10388011,0.99458983,-0.99388592,-0.11041188,0,0)"
+      onPress={() => onRoomClick('room5217')}
     />
     <Rect
       fill="none"
       stroke="#000000"
       strokeWidth="0.450243"
-      id="rect12"
+      id="room5214"
       width="34.469261"
       height="54.078918"
       x="61.624931"
       y="159.04204"
       transform="matrix(0.9874081,0.15819367,-0.13736474,0.99052053,0,0)"
+      onPress={() => onRoomClick('room5214')}
     />
     <Rect
       fill="none"

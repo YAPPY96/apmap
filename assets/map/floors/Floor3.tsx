@@ -10,7 +10,7 @@ export const Floor3 = ({ onRoomClick }: Props) => (
     <G id="layer2" transform="translate(-30.734127,-32.670969)">
       <Rect
         id="rect8-11"
-        style={{ display: 'inline', fill: 'none', stroke: '#000000', strokeWidth: 0.204121 }}
+        style={{ fill: '#f0f0f0', stroke: '#000000', strokeWidth: 0.450243 }}
         width="37.322193"
         height="29.387085"
         x="79.948952"
@@ -19,7 +19,7 @@ export const Floor3 = ({ onRoomClick }: Props) => (
       />
       <Rect
         id="rect8-1-8"
-        style={{ display: 'inline', fill: 'none', stroke: '#000000', strokeWidth: 0.204121 }}
+        style={{ fill: '#f0f0f0', stroke: '#000000', strokeWidth: 0.450243 }}
         width="37.322193"
         height="29.387085"
         x="117.50832"
@@ -35,13 +35,12 @@ export const Floor3 = ({ onRoomClick }: Props) => (
         y="159.04204"
         transform="matrix(0.9874081,0.15819367,-0.13736474,0.99052053,0,0)"
       />
+      
     </G>
     <G id="layer4" style={{ display: 'inline' }} transform="translate(-30.734127, -32.670969)">
       <Use id="room5238" href="#rect8-11" transform="translate(0.03779761,0.22678572)" onPress={() => onRoomClick('room5238')} />
-      <Use id="use14-0" href="#rect8-7-3" transform="translate(0.03779761,0.22678572)" />
-      <Use id="use15-2" href="#rect8-1-8" transform="translate(0.03779761,0.22678572)" />
+      <Use id="room5233" href="#rect8-1-8" transform="translate(0.03779761,0.22678572)" onPress={() => onRoomClick('room5233')} />
       <Use id="room5234" href="#rect12" transform="translate(0.03779761,0.22678572)" onPress={() => onRoomClick('room5234')} />
-      <Use id="use17-6" href="#rect13" transform="translate(0.03779761,0.22678572)" />
       <Use
         id="use20-4"
         href="#use15-2"

@@ -14,6 +14,7 @@ import { AnnounceBar } from '@/components/AnnounceBar';
 import { EventDetailModal } from '@/components/map/EventDetailModal';
 import { AppEvent } from '@/components/map/types';
 import { Config } from '@/constants/Config';
+import DiamondBackground from '@/constants/DiamondBackground';
 import { useRemoteData } from '@/hooks/useRemoteData';
 
 const API_BASE_URL = 'https://koudaisai.com/dataforapp/image';
@@ -64,6 +65,7 @@ export default function EventScreen() {
       <TouchableOpacity style={styles.eventItem} onPress={() => handleEventPress(item)}>
         <Image source={{ uri: imageUrl }} style={styles.eventImage} />
         <View style={styles.eventDetails}>
+          
           <Text style={styles.eventName}>{item.eventName}</Text>
           <Text style={styles.eventTime}>{item.time}</Text>
         </View>
@@ -73,6 +75,9 @@ export default function EventScreen() {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
+      <View style={StyleSheet.absoluteFill}>
+        <DiamondBackground />
+      </View>
       <StatusBar barStyle="dark-content" />
       
       <View style={styles.header}>
@@ -137,7 +142,6 @@ export default function EventScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   header: {
     flexDirection: 'row',

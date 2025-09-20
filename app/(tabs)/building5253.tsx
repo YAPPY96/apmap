@@ -1,14 +1,14 @@
 // app/(tabs)/building5253.tsx
-import Building5253InteractiveMap from '@/assets/map/Building5253Map';
+import Building5253Map from '@/assets/map/Building5253Map';
 import { AnnounceBar } from '@/components/AnnounceBar';
 import { Building5253EventModal } from '@/components/map/Building5253EventModal';
 import { AppEvent } from '@/components/map/types';
 import { Config } from '@/constants/Config';
+import DiamondBackground from '@/constants/DiamondBackground';
 import { useRemoteData } from '@/hooks/useRemoteData';
 import { useState } from 'react';
 import { Dimensions, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
 export default function Building5253Screen() {
   const insets = useSafeAreaInsets();
   const { data: eventData, isLoading, error } = useRemoteData<Record<string, AppEvent>>(Config.BUILDING_5253_URL);
@@ -54,6 +54,9 @@ export default function Building5253Screen() {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="dark-content" />
+        <View style={StyleSheet.absoluteFill}>
+                <DiamondBackground />
+              </View>
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>データの読み込みに失敗しました。</Text>
           <Text style={styles.errorSubText}>
@@ -67,7 +70,9 @@ export default function Building5253Screen() {
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <StatusBar barStyle="dark-content" />
-      
+      <View style={StyleSheet.absoluteFill}>
+                <DiamondBackground />
+              </View>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>52, 53号館</Text>
       </View>
@@ -94,7 +99,7 @@ export default function Building5253Screen() {
           </View>
 
           <View style={styles.mapWrapper}>
-            <Building5253InteractiveMap
+            <Building5253Map
               onRoomClick={handleRoomClick}
               width={mapWidth}
               height={mapHeight}

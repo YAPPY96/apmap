@@ -6,13 +6,13 @@ import { useLocation } from '@/components/map/location_context';
 import { MapWebView } from '@/components/map/MapWebView';
 import { AppEvent } from '@/components/map/types';
 import { Config } from '@/constants/Config';
+import DiamondBackground from '@/constants/DiamondBackground';
 import { useRemoteData } from '@/hooks/useRemoteData';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
 // 型定義
 interface BuildingFeature {
   properties: {
@@ -60,12 +60,9 @@ export default function MapScreen() {
       return;
     }
 
-    if (stageData) {
-      const stageForBuilding = stageData.find((stage) => stage.buildingName === buildingName);
-      if (stageForBuilding) {
-        router.push('/stage');
-        return;
-      }
+    if (buildingName === 'Stage') {
+      router.push('/stage');
+      return;
     }
 
     if (eventData) {
@@ -140,7 +137,9 @@ export default function MapScreen() {
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <StatusBar barStyle="dark-content" />
-      
+      <View style={StyleSheet.absoluteFill}>
+              <DiamondBackground />
+            </View>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>キャンパスマップ</Text>

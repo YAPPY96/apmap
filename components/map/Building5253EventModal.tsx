@@ -3,14 +3,14 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Image } from 'expo-image';
 import React from 'react';
 import {
-    Linking,
-    Modal,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Linking,
+  Modal,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 interface Building5253EventModalProps {
@@ -118,9 +118,10 @@ const styles = StyleSheet.create({
   },
   eventImage: {
     width: '100%',
-    height: 200,
+    height: 300,
     borderRadius: 10,
     marginBottom: 20,
+    resizeMode: 'contain',
   },
   header: {
     marginBottom: 20,
