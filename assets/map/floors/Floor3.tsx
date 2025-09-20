@@ -1,281 +1,274 @@
 import React from 'react';
-import { G, Rect, Text, Use } from 'react-native-svg';
+import { G, Path, Text, TSpan } from 'react-native-svg';
 
 interface Props {
   onRoomClick: (roomId: string) => void;
 }
 
 export const Floor3 = ({ onRoomClick }: Props) => (
-  <>
-    <G id="layer2" transform="translate(-30.734127,-32.670969)">
-      <Rect
-        id="rect8-11"
-        style={{ fill: '#f0f0f0', stroke: '#000000', strokeWidth: 0.450243 }}
-        width="37.322193"
-        height="29.387085"
-        x="79.948952"
-        y="-121.81734"
-        transform="matrix(-0.10388011,0.99458983,-0.99388592,-0.11041188,0,0)"
-      />
-      <Rect
-        id="rect8-1-8"
-        style={{ fill: '#f0f0f0', stroke: '#000000', strokeWidth: 0.450243 }}
-        width="37.322193"
-        height="29.387085"
-        x="117.50832"
-        y="-121.81734"
-        transform="matrix(-0.10388011,0.99458983,-0.99388592,-0.11041188,0,0)"
-      />
-      <Rect
-        id="rect12"
-        style={{ fill: '#f0f0f0', stroke: '#000000', strokeWidth: 0.450243 }}
-        width="34.469261"
-        height="54.078918"
-        x="61.624931"
-        y="159.04204"
-        transform="matrix(0.9874081,0.15819367,-0.13736474,0.99052053,0,0)"
-      />
-      
-    </G>
-    <G id="layer4" style={{ display: 'inline' }} transform="translate(-30.734127, -32.670969)">
-      <Use id="room5238" href="#rect8-11" transform="translate(0.03779761,0.22678572)" onPress={() => onRoomClick('room5238')} />
-      <Use id="room5233" href="#rect8-1-8" transform="translate(0.03779761,0.22678572)" onPress={() => onRoomClick('room5233')} />
-      <Use id="room5234" href="#rect12" transform="translate(0.03779761,0.22678572)" onPress={() => onRoomClick('room5234')} />
-      <Use
-        id="use20-4"
-        href="#use15-2"
-        transform="matrix(-0.01136759,-0.99556715,1.0231724,0.03090695,-14.130773,141.89223)"
-      />
-      <Use id="room5232" href="#use20-4" transform="translate(38.285682,4.7163511)" onPress={() => onRoomClick('room5232')} />
-      <Use id="room5231" href="#use20-4" transform="translate(76.571361,9.4327016)" onPress={() => onRoomClick('room5231')} />
-      <Use id="roomGeographycal" href="#use20-4" transform="translate(114.85704,14.149051)" onPress={() => onRoomClick('roomGeographycal')} />
-      <Rect
-        id="rect21"
-        style={{ fill: 'none', fillOpacity: 1, stroke: 'none', strokeWidth: 0.0 }}
-        width="67.034912"
-        height="123.94749"
-        x="208.83447"
-        y="98.623817"
-        transform="matrix(0.99287917,0.11912581,-0.07334671,0.9973065,0,0)"
-      />
-      <Text
-        xmlSpace="preserve"
-        style={{
-          fontSize: '10.5833px',
-          lineHeight: 0,
-          textAlign: 'start',
-          writingMode: 'lr-tb',
-          direction: 'ltr',
-          textAnchor: 'start',
-          fill: '#000000',
-          fillOpacity: 0.942675,
-          stroke: '#000000',
-          strokeWidth: 0.262,
-          strokeOpacity: 1,
-        }}
-        x="200.16234"
-        y="68.524033"
-        id="text29"
-      >
-        <Text id="tspan29" style={{ strokeWidth: 0.262 }} x="200.16234" y="68.524033">
-          5231
-        </Text>
-        <Text style={{ strokeWidth: 0.262 }} x="200.16234" y="68.524033" id="tspan30" />
-      </Text>
-      <Text
-        xmlSpace="preserve"
-        style={{
-          fontSize: '10.5833px',
-          lineHeight: 0,
-          textAlign: 'start',
-          writingMode: 'lr-tb',
-          direction: 'ltr',
-          textAnchor: 'start',
-          fill: '#000000',
-          fillOpacity: 0.942675,
-          stroke: '#000000',
-          strokeWidth: 0.262,
-          strokeOpacity: 1,
-        }}
-        x="158.98779"
-        y="65.218056"
-        id="text31"
-      >
-        <Text id="tspan31" style={{ strokeWidth: 0.262 }} x="158.98779" y="65.218056">
-          5232
-        </Text>
-      </Text>
-      <Text
-        xmlSpace="preserve"
-        style={{
-          fontSize: '10.5833px',
-          lineHeight: 0,
-          textAlign: 'start',
-          writingMode: 'lr-tb',
-          direction: 'ltr',
-          textAnchor: 'start',
-          fill: '#000000',
-          fillOpacity: 0.942675,
-          stroke: '#000000',
-          strokeWidth: 0.262,
-          strokeOpacity: 1,
-        }}
-        x="122.62196"
-        y="61.310978"
-        id="text32"
-      >
-        <Text id="tspan32" style={{ strokeWidth: 0.262 }} x="122.62196" y="61.310978">
-          5233
-        </Text>
-      </Text>
-      <Text
-        xmlSpace="preserve"
-        style={{
-          fontSize: '15.246px',
-          lineHeight: 0,
-          textAlign: 'start',
-          writingMode: 'lr-tb',
-          direction: 'ltr',
-          textAnchor: 'start',
-          fill: '#000000',
-          fillOpacity: 0.942675,
-          stroke: '#000000',
-          strokeWidth: 0.377427,
-          strokeOpacity: 1,
-        }}
-        x="46.072609"
-        y="160.85521"
-        id="text36"
-        transform="scale(0.77762834,1.2859614)"
-      >
-        <Text id="tspan36" style={{ strokeWidth: 0.377427 }} x="46.072609" y="160.85521">
-          5234
-        </Text>
-      </Text>
-      <Text
-        xmlSpace="preserve"
-        style={{
-          fontSize: '11.4668px',
-          lineHeight: 0,
-          textAlign: 'start',
-          writingMode: 'lr-tb',
-          direction: 'ltr',
-          textAnchor: 'start',
-          fill: '#000000',
-          fillOpacity: 0.942675,
-          stroke: '#000000',
-          strokeWidth: 0.283871,
-          strokeOpacity: 1,
-        }}
-        x="76.01535"
-        y="107.46097"
-        id="text37"
-        transform="scale(0.67645493,1.4782951)"
-      >
-        <Text id="tspan37" style={{ strokeWidth: 0.283871 }} x="76.01535" y="107.46097">
-          5235
-        </Text>
-      </Text>
-      <Text
-        xmlSpace="preserve"
-        style={{
-          fontSize: '10.5833px',
-          lineHeight: 0,
-          textAlign: 'start',
-          writingMode: 'lr-tb',
-          direction: 'ltr',
-          textAnchor: 'start',
-          fill: '#000000',
-          fillOpacity: 0.942675,
-          stroke: '#000000',
-          strokeWidth: 0.262,
-          strokeOpacity: 1,
-        }}
-        x="75.136017"
-        y="189.94383"
-        id="text38"
-      >
-        <Text id="tspan38" style={{ strokeWidth: 0.262 }} x="75.136017" y="189.94383">
-          5236
-        </Text>
-      </Text>
-      <Text
-        xmlSpace="preserve"
-        style={{
-          fontSize: '10.5833px',
-          lineHeight: 0,
-          textAlign: 'start',
-          writingMode: 'lr-tb',
-          direction: 'ltr',
-          textAnchor: 'start',
-          fill: '#000000',
-          fillOpacity: 0.942675,
-          stroke: '#000000',
-          strokeWidth: 0.262,
-          strokeOpacity: 1,
-        }}
-        x="79.343636"
-        y="150.87311"
-        id="text39"
-      >
-        <Text id="tspan39" style={{ strokeWidth: 0.262 }} x="79.343636" y="150.87311">
-          5237
-        </Text>
-      </Text>
-      <Text
-        xmlSpace="preserve"
-        style={{
-          fontSize: '10.5833px',
-          lineHeight: 0,
-          textAlign: 'start',
-          writingMode: 'lr-tb',
-          direction: 'ltr',
-          textAnchor: 'start',
-          fill: '#000000',
-          fillOpacity: 0.942675,
-          stroke: '#000000',
-          strokeWidth: 0.262,
-          strokeOpacity: 1,
-        }}
-        x="83.250694"
-        y="114.20673"
-        id="text40"
-      >
-        <Text id="tspan40" style={{ strokeWidth: 0.262 }} x="83.250694" y="114.20673">
-          5238
-        </Text>
-      </Text>
-      <Text
-        xmlSpace="preserve"
-        style={{
-          fontSize: '9.93855px',
-          lineHeight: 0,
-          textAlign: 'start',
-          writingMode: 'lr-tb',
-          direction: 'ltr',
-          textAnchor: 'start',
-          fill: '#000000',
-          fillOpacity: 0.942675,
-          stroke: '#000000',
-          strokeWidth: 0.246039,
-          strokeOpacity: 1,
-        }}
-        x="309.2374"
-        y="55.708508"
-        id="text41"
-        transform="scale(0.7498534,1.333594)"
-      >
-        <Text id="tspan41" style={{ strokeWidth: 0.246039 }} x="309.2374" y="55.708508">
-          地学実験室
-        </Text>
-      </Text>
-      <Use id="room5236" href="#rect8-1-8" transform="translate(-3.8692749,37.494247)" onPress={() => onRoomClick('room5236')} />
-      <Use
-        id="room5235"
-        href="#rect8-1-8"
-        transform="matrix(0.81490416,0,0,0.9683104,-13.115931,8.5662419)"
-        onPress={() => onRoomClick('room5235')}
-      />
-    </G>
-  </>
+  <G id="layer8" style={{
+    display: "inline"
+  }} transform="translate(-1.3636903,11.663753)"><Path id="path62" d="m180.762 89.899 53.435 5.336" style={{
+      fill: "#000",
+      fillOpacity: 0,
+      stroke: "#000",
+      strokeWidth: 0.209,
+      strokeDasharray: "none",
+      strokeOpacity: 1
+    }} /><Path id="path64" d="m180.738 16.057 61.31 6.66" style={{
+      display: "inline",
+      fill: "#f0f0f0",
+      fillOpacity: 1,
+      stroke: "#000",
+      strokeWidth: 0.209,
+      strokeDasharray: "none",
+      strokeOpacity: 1
+    }} /><Path id="room5238" onPress={() => onRoomClick('room5238')} d="M61.952 51.83h26.866v36.98H61.952z" style={{
+      display: "inline",
+      fill: "#000",
+      fillOpacity: 0,
+      stroke: "#000",
+      strokeWidth: 0.209001,
+      strokeOpacity: 1
+    }} transform="matrix(.99476 .10222 -.10724 .99423 0 0)" /><Path id="room5236" onPress={() => onRoomClick('room5236')} d="M61.952 126.209h26.866v36.98H61.952z" style={{
+      display: "inline",
+      fill: "#000",
+      fillOpacity: 0,
+      stroke: "#000",
+      strokeWidth: 0.209001,
+      strokeOpacity: 1
+    }} transform="matrix(.99476 .10222 -.10724 .99423 0 0)" /><Path id="room5237" onPress={() => onRoomClick('room5237')} d="M61.952 89.02h26.866V126H61.952z" style={{
+      display: "inline",
+      fill: "#000",
+      fillOpacity: 0,
+      stroke: "#000",
+      strokeWidth: 0.209001,
+      strokeOpacity: 1
+    }} transform="matrix(.99476 .10222 -.10724 .99423 0 0)" /><Path id="room5234" onPress={() => onRoomClick('room5234')} d="M21.337 131.304h37.218v56.749H21.337z" style={{
+      display: "inline",
+      fill: "#000",
+      fillOpacity: 0,
+      stroke: "#000",
+      strokeWidth: 0.209001,
+      strokeDasharray: "none",
+      strokeOpacity: 1
+    }} transform="matrix(.9942 .10762 -.10397 .99458 0 0)" /><Path id="room5235" onPress={() => onRoomClick('room5235')} d="M31.243 94.691h26.88v36.96h-26.88z" style={{
+      display: "inline",
+      fill: "#000",
+      fillOpacity: 0,
+      stroke: "#000",
+      strokeWidth: 0.209,
+      strokeOpacity: 1
+    }} transform="rotate(5.864)" /><Path id="rect60" d="M187.83 71.499h56.562v104.115H187.83z" style={{
+      display: "inline",
+      fill: "#f0f0f0",
+      fillOpacity: 1,
+      stroke: "#000",
+      strokeWidth: 0.209006,
+      strokeDasharray: "none",
+      strokeOpacity: 0
+    }} transform="matrix(.995 .0998 -.11056 .99387 0 0)" /><Path id="rect64" d="M181.117-30.205h75.986v26.55h-75.986z" style={{
+      fill: "#f0f0f0",
+      fillOpacity: 1,
+      stroke: "none",
+      strokeWidth: 0.209611,
+      strokeDasharray: "none",
+      strokeOpacity: 1
+    }} transform="skewY(6.186)scale(.99418 1)" /><Path id="room5233" onPress={() => onRoomClick('room5233')} d="M87.2-3.656h38.647v17.093H87.2z" style={{
+      fill: "none",
+      fillOpacity: 1,
+      stroke: "#000",
+      strokeWidth: 0.214729,
+      strokeDasharray: "none",
+      strokeOpacity: 1
+    }} transform="matrix(.9941 .10844 -.10344 .99464 0 0)" /><Path id="room5232" onPress={() => onRoomClick('room5232')} d="M126.224-3.656h38.647v17.093h-38.647z" style={{
+      fill: "none",
+      fillOpacity: 1,
+      stroke: "#000",
+      strokeWidth: 0.214729,
+      strokeDasharray: "none",
+      strokeOpacity: 1
+    }} transform="matrix(.9941 .10844 -.10344 .99464 0 0)" /><Path id="room5231" onPress={() => onRoomClick('room5231')} d="M165.247-3.656h38.647v17.093h-38.647z" style={{
+      fill: "none",
+      fillOpacity: 1,
+      stroke: "#000",
+      strokeWidth: 0.214729,
+      strokeDasharray: "none",
+      strokeOpacity: 1
+    }} transform="matrix(.9941 .10844 -.10344 .99464 0 0)" /><Path id="rect72" d="M204.271-3.656h38.647v17.093h-38.647z" style={{
+      fill: "none",
+      fillOpacity: 1,
+      stroke: "#000",
+      strokeWidth: 0.214729,
+      strokeDasharray: "none",
+      strokeOpacity: 1
+    }} transform="matrix(.9941 .10844 -.10344 .99464 0 0)" /><Text xmlSpace="preserve" id="text114" x={45.918} y={157.214} style={{
+      fontSize: "10.5833px",
+      lineHeight: 0,
+      textAlign: "start",
+      writingMode: "lr-tb",
+      direction: "ltr",
+      textAnchor: "start",
+      display: "inline",
+      fill: "#000",
+      fillOpacity: 1,
+      stroke: "#000",
+      strokeWidth: 0.3,
+      strokeDasharray: "none",
+      strokeOpacity: 1
+    }}><TSpan id="tspan112" x={45.918} y={157.214} style={{
+        fill: "#000",
+        fillOpacity: 1,
+        stroke: "#000",
+        strokeWidth: 0.3,
+        strokeDasharray: "none",
+        strokeOpacity: 1
+      }}>{"5236"}</TSpan></Text><Text xmlSpace="preserve" id="text117" x={50.015} y={118.294} style={{
+      fontSize: "10.5833px",
+      lineHeight: 0,
+      textAlign: "start",
+      writingMode: "lr-tb",
+      direction: "ltr",
+      textAnchor: "start",
+      display: "inline",
+      fill: "#000",
+      fillOpacity: 1,
+      stroke: "#000",
+      strokeWidth: 0.3,
+      strokeDasharray: "none",
+      strokeOpacity: 1
+    }}><TSpan id="tspan115" x={50.015} y={118.294} style={{
+        fill: "#000",
+        fillOpacity: 1,
+        stroke: "#000",
+        strokeWidth: 0.3,
+        strokeDasharray: "none",
+        strokeOpacity: 1
+      }}>{"5237"}</TSpan></Text><Text xmlSpace="preserve" id="text119" x={10.242} y={166.261} style={{
+      fontSize: "10.5833px",
+      lineHeight: 0,
+      textAlign: "start",
+      writingMode: "lr-tb",
+      direction: "ltr",
+      textAnchor: "start",
+      display: "inline",
+      fill: "#000",
+      fillOpacity: 1,
+      stroke: "#000",
+      strokeWidth: 0.3,
+      strokeDasharray: "none",
+      strokeOpacity: 1
+    }}><TSpan id="tspan118" x={10.242} y={166.261} style={{
+        fill: "#000",
+        fillOpacity: 1,
+        stroke: "#000",
+        strokeWidth: 0.3,
+        strokeDasharray: "none",
+        strokeOpacity: 1
+      }}>{"5234"}</TSpan></Text><Text xmlSpace="preserve" id="text122" x={53.77} y={80.57} style={{
+      fontSize: "10.5833px",
+      lineHeight: 0,
+      textAlign: "start",
+      writingMode: "lr-tb",
+      direction: "ltr",
+      textAnchor: "start",
+      display: "inline",
+      fill: "#000",
+      fillOpacity: 1,
+      stroke: "#000",
+      strokeWidth: 0.3,
+      strokeDasharray: "none",
+      strokeOpacity: 1
+    }}><TSpan id="tspan120" x={53.77} y={80.57} style={{
+        fill: "#000",
+        fillOpacity: 1,
+        stroke: "#000",
+        strokeWidth: 0.3,
+        strokeDasharray: "none",
+        strokeOpacity: 1
+      }}>{"5238"}</TSpan></Text><Text xmlSpace="preserve" id="text126" x={19.118} y={121.026} style={{
+      fontSize: "10.5833px",
+      lineHeight: 0,
+      textAlign: "start",
+      writingMode: "lr-tb",
+      direction: "ltr",
+      textAnchor: "start",
+      display: "inline",
+      fill: "#000",
+      fillOpacity: 1,
+      stroke: "#000",
+      strokeWidth: 0.3,
+      strokeDasharray: "none",
+      strokeOpacity: 1
+    }}><TSpan id="tspan123" x={19.118} y={121.026} style={{
+        fill: "#000",
+        fillOpacity: 1,
+        stroke: "#000",
+        strokeWidth: 0.3,
+        strokeDasharray: "none",
+        strokeOpacity: 1
+      }}>{"5235"}</TSpan></Text><Text xmlSpace="preserve" id="text153" x={93.202} y={20.484} style={{
+      fontSize: "10.5833px",
+      lineHeight: 0,
+      textAlign: "start",
+      writingMode: "lr-tb",
+      direction: "ltr",
+      textAnchor: "start",
+      display: "inline",
+      fill: "#000",
+      fillOpacity: 1,
+      stroke: "#000",
+      strokeWidth: 0.3,
+      strokeDasharray: "none",
+      strokeOpacity: 1
+    }}><TSpan id="tspan151" x={93.202} y={20.484} style={{
+        fill: "#000",
+        fillOpacity: 1,
+        stroke: "#000",
+        strokeWidth: 0.3,
+        strokeDasharray: "none",
+        strokeOpacity: 1
+      }}>{"5233"}</TSpan></Text><Text xmlSpace="preserve" id="text156" x={170.358} y={28.507} style={{
+      fontSize: "10.5833px",
+      lineHeight: 0,
+      textAlign: "start",
+      writingMode: "lr-tb",
+      direction: "ltr",
+      textAnchor: "start",
+      display: "inline",
+      fill: "#000",
+      fillOpacity: 1,
+      stroke: "#000",
+      strokeWidth: 0.3,
+      strokeDasharray: "none",
+      strokeOpacity: 1
+    }}><TSpan id="tspan154" x={170.358} y={28.507} style={{
+        fill: "#000",
+        fillOpacity: 1,
+        stroke: "#000",
+        strokeWidth: 0.3,
+        strokeDasharray: "none",
+        strokeOpacity: 1
+      }}>{"5231"}</TSpan></Text><Text xmlSpace="preserve" id="text159" x={132.292} y={24.581} style={{
+      fontSize: "10.5833px",
+      lineHeight: 0,
+      textAlign: "start",
+      writingMode: "lr-tb",
+      direction: "ltr",
+      textAnchor: "start",
+      display: "inline",
+      fill: "#000",
+      fillOpacity: 1,
+      stroke: "#000",
+      strokeWidth: 0.3,
+      strokeDasharray: "none",
+      strokeOpacity: 1
+    }}><TSpan id="tspan157" x={132.292} y={24.581} style={{
+        fill: "#000",
+        fillOpacity: 1,
+        stroke: "#000",
+        strokeWidth: 0.3,
+        strokeDasharray: "none",
+        strokeOpacity: 1
+      }}>{"5232"}</TSpan></Text></G>
 );

@@ -34,7 +34,7 @@ const Building5253InteractiveMap: React.FC<Building5253InteractiveMapProps> = ({
 
   return (
     <View style={{ width, height, backgroundColor: '#f0f0f0' }}>
-      <Svg width={width} height={height} viewBox="0 0 256.27295 199.79301">
+      <Svg width={width} height={height} viewBox="0 0 248.13735 208.6505">
         {/* ベースマップのレイヤーを常に表示 */}
         <BaseMap />
 
