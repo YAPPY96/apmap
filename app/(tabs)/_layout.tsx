@@ -55,6 +55,13 @@ export default function TabLayout() {
             tabBarIcon: ({ color }) => <MaterialIcons name="event-note" size={24} color={color} />,
           }}
         />
+        <Tabs.Screen
+          name="others"
+          options={{
+            title: 'その他',
+            tabBarIcon: ({ color }) => <MaterialIcons name="category" size={24} color={color} />,
+          }}
+        />
       </Tabs>
     </View>
   );

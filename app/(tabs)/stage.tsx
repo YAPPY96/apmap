@@ -130,7 +130,7 @@ export default function StageScreen() {
         event={selectedStage}
         onClose={handleCloseModal}
         isFullScreen={true}
-        showViewLocationButton={true}
+        showViewLocationButton={false}
       />
     </View>
   );

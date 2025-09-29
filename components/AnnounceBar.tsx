@@ -5,15 +5,13 @@ import { useEffect, useRef, useState } from 'react';
 import { Animated, Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface Announcement {
-  id: number;
+  id: string;
   message: string;
   enabled: boolean;
 }
 
 export const AnnounceBar = () => {
-  const { data, loading, error } = useRemoteData<{ announcements: Announcement[] }>(
-    Config.ANNOUNCEMENTS_URL
-  );
+  const { data, loading, error } = useRemoteData<Announcement[]>(Config.ANNOUNCEMENTS_URL);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -25,8 +23,8 @@ export const AnnounceBar = () => {
 
   // お知らせデータの設定
   useEffect(() => {
-    if (data?.announcements) {
-      const enabledAnnouncements = data.announcements.filter((a) => a.enabled);
+    if (data) {
+      const enabledAnnouncements = data.filter((a) => a.enabled);
       setAnnouncements(enabledAnnouncements);
       setCurrentIndex(0);
     }

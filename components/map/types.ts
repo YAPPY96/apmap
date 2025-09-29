@@ -83,7 +83,13 @@ export interface UserLocation {
 }
 
 // App-wide event type
+export interface ReservationSlot {
+  time: string;
+  status: 'available' | 'few_left' | 'full';
+}
+
 export interface AppEvent {
+  id?: string;
   buildingName: string;
   eventName: string;
   time: string;
@@ -94,4 +100,6 @@ export interface AppEvent {
   snsLink: string;
   caution?: string;
   others?: string;
+  reservation?: boolean;
+  reservationSlots?: ReservationSlot[];
 }

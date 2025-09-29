@@ -44,7 +44,9 @@ export default function EventScreen() {
   // 選択された日付に基づいてイベントをフィルタリング
   useEffect(() => {
     if (selectedDate && allEvents) {
-      const events = allEvents.filter((event) => event.date.includes(selectedDate));
+      const events = allEvents
+        .filter((event) => event.date.includes(selectedDate))
+        .map((event, index) => ({ ...event, id: `${selectedDate}-${index}` }));
       setFilteredEvents(events);
     }
   }, [selectedDate, allEvents]);
@@ -123,7 +125,7 @@ export default function EventScreen() {
       <FlatList
         data={filteredEvents}
         renderItem={renderEventItem}
-        keyExtractor={(item) => item.eventName + item.time}
+        keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
         ListEmptyComponent={<Text style={styles.emptyText}>この日のイベントはありません。</Text>}
       />

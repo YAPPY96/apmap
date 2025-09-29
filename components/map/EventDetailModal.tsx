@@ -42,7 +42,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
   const handleViewLocation = () => {
     if (event) {
       setHighlightedBuilding(event.buildingName);
-      router.push('/(tabs)/'); // Navigate to Map tab
+      router.push('/(tabs)'); // Navigate to Map tab
       onClose(); // Close the modal
     }
   };
@@ -109,6 +109,44 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
                   {event.others}
                 </Text>
               </View>
+            )}
+            {event.reservation && event.reservationSlots && (
+              <>
+                <View style={styles.separator} />
+                <View style={styles.detailRow}>
+                  <MaterialIcons name="event-available" size={20} color="#666" style={styles.icon} />
+                  <Text style={styles.labelText}>予約状況</Text>
+                </View>
+                <View style={styles.reservationContainer}>
+                  {event.reservationSlots.map((slot, index) => (
+                    <View key={index} style={styles.slotRow}>
+                      <Text style={styles.slotTime}>{slot.time}</Text>
+                      <View
+                        style={[
+                          styles.statusBadge,
+                          styles[
+                            slot.status === 'available'
+                              ? 'statusAvailable'
+                              : slot.status === 'few_left'
+                              ? 'statusFew_left'
+                              : 'statusFull'
+                          ],
+                        ]}
+                      >
+                        <Text style={styles.statusText}>
+                          {
+                            {
+                              available: '空きあり',
+                              few_left: '残りわずか',
+                              full: '満席',
+                            }[slot.status]
+                          }
+                        </Text>
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              </>
             )}
           </View>
 
@@ -244,5 +282,48 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#eee',
+    marginVertical: 15,
+  },
+  reservationContainer: {
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderRadius: 8,
+    padding: 10,
+  },
+  slotRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  slotTime: {
+    fontSize: 16,
+    color: '#333',
+  },
+  statusBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 12,
+  },
+  statusAvailable: {
+    backgroundColor: '#d4edda', // Green
+  },
+  statusFew_left: {
+    backgroundColor: '#fff3cd', // Yellow
+  },
+  statusFull: {
+    backgroundColor: '#f8d7da', // Red
+  },
+  statusText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#333',
   },
 });

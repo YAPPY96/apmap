@@ -79,6 +79,15 @@ const MyWebView = forwardRef<WebView, MapWebViewProps>(
       <style>
         html, body, #map { height: 100%; margin: 0; padding: 0; background-color: #F0F0F0; }
         body { -webkit-touch-callout: none; -webkit-user-select: none; }
+        .building-label {
+          background-color: transparent;
+          border: none;
+          box-shadow: none;
+          font-weight: bold;
+          font-size: 12px;
+          color: black;
+          text-shadow: 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 3px white;
+        }
       </style>
     </head>
     <body>
@@ -144,8 +153,12 @@ const MyWebView = forwardRef<WebView, MapWebViewProps>(
             style: originalStyle,
             onEachFeature: (feature, layer) => {
               if (feature.properties && feature.properties.name) {
-                layer.bindPopup(feature.properties.name);
                 layer.on('click', () => postMessage('buildingClick', feature));
+                layer.bindTooltip(feature.properties.name, {
+                  permanent: true,
+                  direction: 'center',
+                  className: 'building-label'
+                }).openTooltip();
               }
             },
             filter: feature => feature.properties && feature.properties.name
