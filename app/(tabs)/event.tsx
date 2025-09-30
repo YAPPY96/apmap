@@ -65,7 +65,7 @@ export default function EventScreen() {
     const imageUrl = `${API_BASE_URL}/${item.image}`;
     return (
       <TouchableOpacity style={styles.eventItem} onPress={() => handleEventPress(item)}>
-        <Image source={{ uri: imageUrl }} style={styles.eventImage} />
+        <Image source={{ uri: imageUrl }} style={styles.eventImage} contentFit="cover" />
         <View style={styles.eventDetails}>
           
           <Text style={styles.eventName}>{item.eventName}</Text>

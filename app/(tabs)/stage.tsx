@@ -43,7 +43,9 @@ export default function StageScreen() {
   // 選択された日付に基づいてイベントをフィルタリング
   useEffect(() => {
     if (selectedDate && allStages) {
-      const stages = allStages.filter((stage) => stage.date.includes(selectedDate));
+      const stages = allStages
+        .filter((stage) => stage.date.includes(selectedDate))
+        .map((stage, index) => ({ ...stage, id: `${selectedDate}-${index}` }));
       setFilteredStages(stages);
     }
   }, [selectedDate, allStages]);
@@ -62,7 +64,7 @@ export default function StageScreen() {
     const imageUrl = `${API_BASE_URL}/${item.image}`;
     return (
       <TouchableOpacity style={styles.eventItem} onPress={() => handleStagePress(item)}>
-        <Image source={{ uri: imageUrl }} style={styles.eventImage} />
+        <Image source={{ uri: imageUrl }} style={styles.eventImage} contentFit="cover" />
         <View style={styles.eventDetails}>
           <Text style={styles.eventName}>{item.eventName}</Text>
           <Text style={styles.eventTime}>{item.time}</Text>
@@ -120,7 +122,7 @@ export default function StageScreen() {
       <FlatList
         data={filteredStages}
         renderItem={renderStageItem}
-        keyExtractor={(item) => item.eventName + item.time}
+        keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
         ListEmptyComponent={<Text style={styles.emptyText}>この日のステージはありません。</Text>}
       />
@@ -129,7 +131,7 @@ export default function StageScreen() {
         visible={isModalVisible}
         event={selectedStage}
         onClose={handleCloseModal}
-        isFullScreen={true}
+        isFullScreen={false}
         showViewLocationButton={false}
       />
     </View>

@@ -41,7 +41,10 @@ export default function Building5253Screen() {
 
   const eventList = useMemo(() => {
     if (!eventData) return [];
-    return Object.values(eventData);
+    return Object.entries(eventData).map(([id, event]) => ({
+      ...event,
+      id,
+    }));
   }, [eventData]);
 
   const handleRoomClick = (roomId: string) => {
@@ -73,7 +76,7 @@ export default function Building5253Screen() {
     const imageUrl = `${API_BASE_URL}/${item.image}`;
     return (
       <TouchableOpacity style={styles.eventItem} onPress={() => handleEventPress(item)}>
-        <Image source={{ uri: imageUrl }} style={styles.eventImage} />
+        <Image source={{ uri: imageUrl }} style={styles.eventImage} contentFit="cover" />
         <View style={styles.eventInfo}>
           <Text style={styles.eventName} numberOfLines={2}>{item.eventName}</Text>
           <Text style={styles.eventGroup} numberOfLines={1}>{item.groupName}</Text>

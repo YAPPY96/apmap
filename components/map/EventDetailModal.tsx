@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import {
   Linking,
   Modal,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import ImageViewing from 'react-native-image-viewing';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Image } from 'expo-image';
 import { useLocation } from './location_context';
@@ -88,17 +88,19 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
               <MaterialIcons name="place" size={20} color="#666" style={styles.icon} />
               <Text style={styles.detailText}>{event.buildingName}</Text>
             </View>
-            <View style={styles.detailRow}>
-              <MaterialIcons name="calendar-today" size={20} color="#666" style={styles.icon} />
-              <Text style={styles.detailText}>
-                {event.date.includes(',')
-                  ? '両日'
-                  : new Date(event.date).toLocaleDateString('ja-JP', {
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-              </Text>
-            </View>
+            {event.date && (
+              <View style={styles.detailRow}>
+                <MaterialIcons name="calendar-today" size={20} color="#666" style={styles.icon} />
+                <Text style={styles.detailText}>
+                  {event.date.includes(',')
+                    ? '両日'
+                    : new Date(event.date).toLocaleDateString('ja-JP', {
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                </Text>
+              </View>
+            )}
             <View style={styles.detailRow}>
               <MaterialIcons name="schedule" size={20} color="#666" style={styles.icon} />
               <Text style={styles.detailText}>{event.time}</Text>
