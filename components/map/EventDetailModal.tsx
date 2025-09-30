@@ -2,6 +2,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
+  Linking,
   Modal,
   SafeAreaView,
   ScrollView,
@@ -47,6 +48,14 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
     }
   };
 
+  const handleSnsLinkPress = () => {
+    if (event.snsLink) {
+      Linking.openURL(event.snsLink).catch((err) =>
+        console.error('An error occurred', err)
+      );
+    }
+  };
+
   const imageUrl = `${API_BASE_URL}/${event.image}`;
   const images = [{ uri: imageUrl }];
 
@@ -69,6 +78,12 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
             <Text style={styles.eventName}>{event.eventName}</Text>
           </View>
           <View style={styles.detailsContainer}>
+            {event.groupName && (
+              <View style={styles.detailRow}>
+                <MaterialIcons name="business" size={20} color="#666" style={styles.icon} />
+                <Text style={styles.detailText}>{event.groupName}</Text>
+              </View>
+            )}
             <View style={styles.detailRow}>
               <MaterialIcons name="place" size={20} color="#666" style={styles.icon} />
               <Text style={styles.detailText}>{event.buildingName}</Text>
@@ -92,6 +107,14 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
               <MaterialIcons name="info-outline" size={20} color="#666" style={styles.icon} />
               <Text style={styles.descriptionText}>{event.description}</Text>
             </View>
+            {event.snsLink && (
+              <View style={styles.detailRow}>
+                <MaterialIcons name="link" size={20} color="#666" style={styles.icon} />
+                <TouchableOpacity onPress={handleSnsLinkPress}>
+                  <Text style={[styles.detailText, styles.linkText]}>{event.snsLink}</Text>
+                </TouchableOpacity>
+              </View>
+            )}
             {event.caution && (
               <View style={styles.detailRow}>
                 <MaterialIcons name="warning" size={20} color="#FF9500" style={styles.icon} />
@@ -199,7 +222,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   container: {
-    height: '100%',
+    height: '90%',
     backgroundColor: 'white',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -259,6 +282,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
     flex: 1,
+  },
+  linkText: {
+    color: '#007AFF',
+    textDecorationLine: 'underline',
   },
   descriptionText: {
     fontSize: 16,

@@ -1,5 +1,5 @@
 import { AnnounceBar } from '@/components/AnnounceBar';
-import { OtherEventDetailModal } from '@/components/map/OtherEventDetailModal';
+import { EventDetailModal } from '@/components/map/EventDetailModal';
 import { AppEvent } from '@/components/map/types';
 import { Config } from '@/constants/Config';
 import DiamondBackground from '@/constants/DiamondBackground';
@@ -7,12 +7,12 @@ import { useRemoteData } from '@/hooks/useRemoteData';
 import { Image } from 'expo-image';
 import { useMemo, useState } from 'react';
 import {
-    FlatList,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  FlatList,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -111,10 +111,12 @@ export default function OthersScreen() {
         columnWrapperStyle={styles.columnWrapper}
       />
 
-      <OtherEventDetailModal
+      <EventDetailModal
         visible={eventModalVisible}
         event={selectedEvent}
         onClose={closeEventModal}
+        isFullScreen={false}
+        showViewLocationButton={false}
       />
     </View>
   );

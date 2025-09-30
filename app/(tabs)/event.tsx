@@ -134,7 +134,7 @@ export default function EventScreen() {
         visible={isModalVisible}
         event={selectedEvent}
         onClose={handleCloseModal}
-        isFullScreen={true}
+        isFullScreen={false}
         showViewLocationButton={true}
       />
     </View>

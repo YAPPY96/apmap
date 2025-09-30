@@ -136,7 +136,7 @@ export const Floor1 = ({ onRoomClick }: Props) => (
       strokeWidth: 0.3,
       strokeDasharray: "none",
       strokeOpacity: 1
-    }}><TSpan id="tspan89" x={45.918} y={157.214} style={{
+    }} onPress={() => onRoomClick('room5216')}><TSpan id="tspan89" x={45.918} y={157.214} style={{
         fill: "#000",
         fillOpacity: 1,
         stroke: "#000",
@@ -157,7 +157,7 @@ export const Floor1 = ({ onRoomClick }: Props) => (
       strokeWidth: 0.3,
       strokeDasharray: "none",
       strokeOpacity: 1
-    }}><TSpan id="tspan92" x={50.015} y={118.294} style={{
+    }} onPress={() => onRoomClick('room5217')}><TSpan id="tspan92" x={50.015} y={118.294} style={{
         fill: "#000",
         fillOpacity: 1,
         stroke: "#000",
@@ -178,7 +178,7 @@ export const Floor1 = ({ onRoomClick }: Props) => (
       strokeWidth: 0.3,
       strokeDasharray: "none",
       strokeOpacity: 1
-    }}><TSpan id="tspan80" x={10.242} y={166.261} style={{
+    }} onPress={() => onRoomClick('room5214')}><TSpan id="tspan80" x={10.242} y={166.261} style={{
         fill: "#000",
         fillOpacity: 1,
         stroke: "#000",
@@ -199,7 +199,7 @@ export const Floor1 = ({ onRoomClick }: Props) => (
       strokeWidth: 0.3,
       strokeDasharray: "none",
       strokeOpacity: 1
-    }}><TSpan id="tspan95" x={53.77} y={80.57} style={{
+    }} onPress={() => onRoomClick('room5218')}><TSpan id="tspan95" x={53.77} y={80.57} style={{
         fill: "#000",
         fillOpacity: 1,
         stroke: "#000",
@@ -268,7 +268,7 @@ export const Floor1 = ({ onRoomClick }: Props) => (
       strokeWidth: 0.3,
       strokeDasharray: "none",
       strokeOpacity: 1
-    }}><TSpan id="tspan108" x={19.118} y={121.026} style={{
+    }} onPress={() => onRoomClick('room5215')}><TSpan id="tspan108" x={19.118} y={121.026} style={{
         fill: "#000",
         fillOpacity: 1,
         stroke: "#000",
@@ -294,9 +294,10 @@ export const Floor1 = ({ onRoomClick }: Props) => (
        }}
        d="m 220.48783,51.230247 2.73618,-50.0888044 c 20.65136,2.279793 27.33081,5.2068317 52.85957,30.8461914 l -40.84537,26.797711 z"
        id="path10"
+       // The onPress handler for room5211 correctly calls onRoomClick with 'room5211'
        onPress={() => onRoomClick('room5211')}
        transform="translate(1, -49)" /><Text
-       transform="translate(0, 0)"><TSpan
+       transform="translate(0, 0)" onPress={() => onRoomClick('room5211')}><TSpan
            id="tspan13"
            style={{
              fill: '#000000',
@@ -308,7 +309,7 @@ export const Floor1 = ({ onRoomClick }: Props) => (
            }}
            x="230.879"
            y="-13.384197">5211</TSpan></Text><Text
-       transform="translate(0, 0)"><TSpan
+       transform="translate(0, 0)" onPress={() => onRoomClick('room5212')}><TSpan
              id="tspan10"
              style={{
                fill: '#000000',

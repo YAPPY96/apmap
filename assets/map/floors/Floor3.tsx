@@ -116,7 +116,7 @@ export const Floor3 = ({ onRoomClick }: Props) => (
       strokeWidth: 0.3,
       strokeDasharray: "none",
       strokeOpacity: 1
-    }}><TSpan id="tspan112" x={45.918} y={157.214} style={{
+    }} onPress={() => onRoomClick('room5236')}><TSpan id="tspan112" x={45.918} y={157.214} style={{
         fill: "#000",
         fillOpacity: 1,
         stroke: "#000",
@@ -137,7 +137,7 @@ export const Floor3 = ({ onRoomClick }: Props) => (
       strokeWidth: 0.3,
       strokeDasharray: "none",
       strokeOpacity: 1
-    }}><TSpan id="tspan115" x={50.015} y={118.294} style={{
+    }} onPress={() => onRoomClick('room5237')}><TSpan id="tspan115" x={50.015} y={118.294} style={{
         fill: "#000",
         fillOpacity: 1,
         stroke: "#000",
@@ -158,7 +158,7 @@ export const Floor3 = ({ onRoomClick }: Props) => (
       strokeWidth: 0.3,
       strokeDasharray: "none",
       strokeOpacity: 1
-    }}><TSpan id="tspan118" x={10.242} y={166.261} style={{
+    }} onPress={() => onRoomClick('room5234')}><TSpan id="tspan118" x={10.242} y={166.261} style={{
         fill: "#000",
         fillOpacity: 1,
         stroke: "#000",
@@ -179,7 +179,7 @@ export const Floor3 = ({ onRoomClick }: Props) => (
       strokeWidth: 0.3,
       strokeDasharray: "none",
       strokeOpacity: 1
-    }}><TSpan id="tspan120" x={53.77} y={80.57} style={{
+    }} onPress={() => onRoomClick('room5238')}><TSpan id="tspan120" x={53.77} y={80.57} style={{
         fill: "#000",
         fillOpacity: 1,
         stroke: "#000",
@@ -200,7 +200,7 @@ export const Floor3 = ({ onRoomClick }: Props) => (
       strokeWidth: 0.3,
       strokeDasharray: "none",
       strokeOpacity: 1
-    }}><TSpan id="tspan123" x={19.118} y={121.026} style={{
+    }} onPress={() => onRoomClick('room5235')}><TSpan id="tspan123" x={19.118} y={121.026} style={{
         fill: "#000",
         fillOpacity: 1,
         stroke: "#000",
@@ -221,7 +221,7 @@ export const Floor3 = ({ onRoomClick }: Props) => (
       strokeWidth: 0.3,
       strokeDasharray: "none",
       strokeOpacity: 1
-    }}><TSpan id="tspan151" x={93.202} y={20.484} style={{
+    }} onPress={() => onRoomClick('room5233')}><TSpan id="tspan151" x={93.202} y={20.484} style={{
         fill: "#000",
         fillOpacity: 1,
         stroke: "#000",
@@ -242,7 +242,7 @@ export const Floor3 = ({ onRoomClick }: Props) => (
       strokeWidth: 0.3,
       strokeDasharray: "none",
       strokeOpacity: 1
-    }}><TSpan id="tspan154" x={170.358} y={28.507} style={{
+    }} onPress={() => onRoomClick('room5231')}><TSpan id="tspan154" x={170.358} y={28.507} style={{
         fill: "#000",
         fillOpacity: 1,
         stroke: "#000",
@@ -263,7 +263,7 @@ export const Floor3 = ({ onRoomClick }: Props) => (
       strokeWidth: 0.3,
       strokeDasharray: "none",
       strokeOpacity: 1
-    }}><TSpan id="tspan157" x={132.292} y={24.581} style={{
+    }} onPress={() => onRoomClick('room5232')}><TSpan id="tspan157" x={132.292} y={24.581} style={{
         fill: "#000",
         fillOpacity: 1,
         stroke: "#000",
