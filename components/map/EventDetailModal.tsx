@@ -56,6 +56,22 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
     }
   };
 
+  const handleXLinkPress = () => {
+    if (event.X) {
+      Linking.openURL(`https://x.com/${event.X}`).catch((err) =>
+        console.error('An error occurred', err)
+      );
+    }
+  };
+
+  const handleInstagramLinkPress = () => {
+    if (event.instagram) {
+      Linking.openURL(`https://www.instagram.com/${event.instagram}`).catch(
+        (err) => console.error('An error occurred', err)
+      );
+    }
+  };
+
   const imageUrl = `${API_BASE_URL}/${event.image}`;
   const images = [{ uri: imageUrl }];
 
@@ -80,7 +96,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
           <View style={styles.detailsContainer}>
             {event.groupName && (
               <View style={styles.detailRow}>
-                <MaterialIcons name="business" size={20} color="#666" style={styles.icon} />
+                <MaterialIcons name="groups" size={20} color="#666" style={styles.icon} />
                 <Text style={styles.detailText}>{event.groupName}</Text>
               </View>
             )}
@@ -114,6 +130,24 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
                 <MaterialIcons name="link" size={20} color="#666" style={styles.icon} />
                 <TouchableOpacity onPress={handleSnsLinkPress}>
                   <Text style={[styles.detailText, styles.linkText]}>{event.snsLink}</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            {event.X && (
+              <View style={styles.detailRow}>
+                <MaterialIcons name="link" size={20} color="#666" style={styles.icon} />
+                <TouchableOpacity onPress={handleXLinkPress}>
+                  <Text style={[styles.detailText, styles.linkText]}>X: @{event.X}</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            {event.instagram && (
+              <View style={styles.detailRow}>
+                <MaterialIcons name="link" size={20} color="#666" style={styles.icon} />
+                <TouchableOpacity onPress={handleInstagramLinkPress}>
+                  <Text style={[styles.detailText, styles.linkText]}>
+                    Instagram: @{event.instagram}
+                  </Text>
                 </TouchableOpacity>
               </View>
             )}

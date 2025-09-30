@@ -13,6 +13,8 @@ export interface EventData {
   description: string;
   imageUri: string;
   position: EventPosition;
+  X?: string;
+  instagram?: string;
 }
 
 export interface BuildingProperties {
@@ -42,6 +44,8 @@ export interface BuildingProperties {
   name?: string;
   building_id?: string | null;
   [key: string]: any;
+  X?: string;
+  instagram?: string;
 }
 
 export interface BuildingGeometry {
@@ -98,6 +102,8 @@ export interface AppEvent {
   image: string;
   groupName: string;
   snsLink: string;
+  X?: string;
+  instagram?: string;
   caution?: string;
   others?: string;
   reservation?: boolean;

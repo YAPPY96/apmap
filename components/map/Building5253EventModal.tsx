@@ -38,6 +38,22 @@ export const Building5253EventModal: React.FC<Building5253EventModalProps> = ({
     }
   };
 
+  const handleXLinkPress = () => {
+    if (event.X) {
+      Linking.openURL(`https://x.com/${event.X}`).catch((err) =>
+        console.error('An error occurred', err)
+      );
+    }
+  };
+
+  const handleInstagramLinkPress = () => {
+    if (event.instagram) {
+      Linking.openURL(`https://www.instagram.com/${event.instagram}`).catch(
+        (err) => console.error('An error occurred', err)
+      );
+    }
+  };
+
   return (
     <Modal
       visible={visible}
@@ -58,19 +74,46 @@ export const Building5253EventModal: React.FC<Building5253EventModalProps> = ({
             </View>
             <View style={styles.detailsContainer}>
               <View style={styles.detailRow}>
-                <MaterialIcons name="business" size={20} color="#666" style={styles.icon} />
+                <MaterialIcons name="groups" size={20} color="#666" style={styles.icon} />
                 <Text style={styles.detailText}>{event.groupName}</Text>
               </View>
+              {event.id && (
+                <View style={styles.detailRow}>
+                <MaterialIcons name="meeting-room" size={20} color="#666" style={styles.icon} />
+                <Text style={styles.detailText}> {event.id.replace('room', '')}</Text>
+              </View>
+
+              )}
               <View style={styles.detailRow}>
                 <MaterialIcons name="schedule" size={20} color="#666" style={styles.icon} />
                 <Text style={styles.detailText}>{event.time}</Text>
               </View>
-              <View style={styles.detailRow}>
-                <MaterialIcons name="link" size={20} color="#666" style={styles.icon} />
-                <TouchableOpacity onPress={handleSnsLinkPress}>
-                  <Text style={[styles.detailText, styles.linkText]}>{event.snsLink}</Text>
-                </TouchableOpacity>
-              </View>
+              {event.snsLink && (
+                <View style={styles.detailRow}>
+                  <MaterialIcons name="link" size={20} color="#666" style={styles.icon} />
+                  <TouchableOpacity onPress={handleSnsLinkPress}>
+                    <Text style={[styles.detailText, styles.linkText]}>{event.snsLink}</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              {event.X && (
+                <View style={styles.detailRow}>
+                  <MaterialIcons name="link" size={20} color="#666" style={styles.icon} />
+                  <TouchableOpacity onPress={handleXLinkPress}>
+                    <Text style={[styles.detailText, styles.linkText]}>X: @{event.X}</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              {event.instagram && (
+                <View style={styles.detailRow}>
+                  <MaterialIcons name="link" size={20} color="#666" style={styles.icon} />
+                  <TouchableOpacity onPress={handleInstagramLinkPress}>
+                    <Text style={[styles.detailText, styles.linkText]}>
+                      Instagram: @{event.instagram}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
               <View style={styles.detailRow}>
                 <MaterialIcons name="info-outline" size={20} color="#666" style={styles.icon} />
                 <Text style={styles.descriptionText}>{event.description}</Text>
