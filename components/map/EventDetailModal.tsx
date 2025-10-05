@@ -1,3 +1,5 @@
+import { FontAwesome6 } from '@expo/vector-icons';
+import Entypo from '@expo/vector-icons/Entypo';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
@@ -125,32 +127,46 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
               <MaterialIcons name="info-outline" size={20} color="#666" style={styles.icon} />
               <Text style={styles.descriptionText}>{event.description}</Text>
             </View>
-            {event.snsLink && (
-              <View style={styles.detailRow}>
-                <MaterialIcons name="link" size={20} color="#666" style={styles.icon} />
-                <TouchableOpacity onPress={handleSnsLinkPress}>
-                  <Text style={[styles.detailText, styles.linkText]}>{event.snsLink}</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            {event.X && (
-              <View style={styles.detailRow}>
-                <MaterialIcons name="link" size={20} color="#666" style={styles.icon} />
-                <TouchableOpacity onPress={handleXLinkPress}>
-                  <Text style={[styles.detailText, styles.linkText]}>X: @{event.X}</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            {event.instagram && (
-              <View style={styles.detailRow}>
-                <MaterialIcons name="link" size={20} color="#666" style={styles.icon} />
-                <TouchableOpacity onPress={handleInstagramLinkPress}>
-                  <Text style={[styles.detailText, styles.linkText]}>
-                    Instagram: @{event.instagram}
+                          {event.snsLink && (
+                <View style={styles.detailRow}>
+                  <MaterialIcons name="web" size={20} color="#666" style={styles.icon} />
+                  <TouchableOpacity onPress={handleSnsLinkPress}>
+                    <Text style={[styles.detailText, styles.linkText]}>{event.snsLink}</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+ {event.X && (
+  <View style={styles.detailRow}>
+    <FontAwesome6 name="square-x-twitter" size={20} color="#666" style={styles.icon} />
+    <TouchableOpacity
+      onPress={() =>
+        Linking.openURL(event.X).catch(err =>
+          console.error("URL open error:", err)
+        )
+      }
+    >
+                    <Text style={[styles.detailText, styles.linkText]}>
+                  公式X
                   </Text>
-                </TouchableOpacity>
+                  </TouchableOpacity>
               </View>
-            )}
+             )}
+              {event.instagram && (
+  <View style={styles.detailRow}>
+    <Entypo name="instagram" size={20} color="#666" style={styles.icon} />
+    <TouchableOpacity
+      onPress={() =>
+        Linking.openURL(event.instagram).catch(err =>
+          console.error("URL open error:", err)
+        )
+      }
+    >
+                    <Text style={[styles.detailText, styles.linkText]}>
+                  公式Instagram
+                  </Text>
+                  </TouchableOpacity>
+              </View>
+             )}
             {event.caution && (
               <View style={styles.detailRow}>
                 <MaterialIcons name="warning" size={20} color="#FF9500" style={styles.icon} />
