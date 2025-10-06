@@ -124,7 +124,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
               <Text style={styles.detailText}>{event.time}</Text>
             </View>
             <View style={styles.detailRow}>
-              <MaterialIcons name="info-outline" size={20} color="#666" style={styles.icon} />
+              <MaterialIcons name="info" size={20} color="#007AFF" style={styles.icon} />
               <Text style={styles.descriptionText}>{event.description}</Text>
             </View>
                           {event.snsLink && (
@@ -178,7 +178,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
             )}
             {event.others && (
               <View style={styles.detailRow}>
-                <MaterialIcons name="info" size={20} color="#007AFF" style={styles.icon} />
+                <MaterialIcons name="announcement" size={20} color="#007AFF" style={styles.icon} />
                 <Text style={styles.descriptionText}>
                   <Text style={styles.labelText}>その他: </Text>
                   {event.others}

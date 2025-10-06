@@ -100,7 +100,7 @@ export const Building5253EventModal: React.FC<Building5253EventModalProps> = ({
               )}
  {event.X && (
   <View style={styles.detailRow}>
-    <FontAwesome6 name="square-x-twitter" size={20} color="#666" style={styles.icon} />
+    <FontAwesome6 name="square-x-twitter" size={20} color="#000" style={styles.icon} />
     <TouchableOpacity
       onPress={() =>
         Linking.openURL(event.X).catch(err =>
@@ -116,7 +116,7 @@ export const Building5253EventModal: React.FC<Building5253EventModalProps> = ({
              )}
               {event.instagram && (
   <View style={styles.detailRow}>
-    <Entypo name="instagram" size={20} color="#666" style={styles.icon} />
+    <Entypo name="instagram" size={20} color="#e12596ff" style={styles.icon} />
     <TouchableOpacity
       onPress={() =>
         Linking.openURL(event.instagram).catch(err =>
@@ -131,7 +131,7 @@ export const Building5253EventModal: React.FC<Building5253EventModalProps> = ({
               </View>
              )}
               <View style={styles.detailRow}>
-                <MaterialIcons name="info-outline" size={20} color="#666" style={styles.icon} />
+                <MaterialIcons name="info" size={20} color="#007AFF" style={styles.icon} />
                 <Text style={styles.descriptionText}>{event.description}</Text>
               </View>
             </View>
