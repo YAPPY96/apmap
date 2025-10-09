@@ -1,3 +1,4 @@
+import { Config } from '@/constants/Config';
 import { FontAwesome6 } from '@expo/vector-icons';
 import Entypo from '@expo/vector-icons/Entypo';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -27,7 +28,6 @@ interface EventDetailModalProps {
   showViewLocationButton?: boolean;
 }
 
-const API_BASE_URL = 'https://koudaisai.com/dataforapp/image';
 
 export const EventDetailModal: React.FC<EventDetailModalProps> = ({
   visible,
@@ -58,23 +58,8 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
     }
   };
 
-  const handleXLinkPress = () => {
-    if (event.X) {
-      Linking.openURL(`https://x.com/${event.X}`).catch((err) =>
-        console.error('An error occurred', err)
-      );
-    }
-  };
 
-  const handleInstagramLinkPress = () => {
-    if (event.instagram) {
-      Linking.openURL(`https://www.instagram.com/${event.instagram}`).catch(
-        (err) => console.error('An error occurred', err)
-      );
-    }
-  };
-
-  const imageUrl = `${API_BASE_URL}/${event.image}`;
+  const imageUrl = `${Config.IMAGE_BASE_URL}/${event.image}`;
   const images = [{ uri: imageUrl }];
 
   const modalContent = (
@@ -153,7 +138,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
              )}
               {event.instagram && (
   <View style={styles.detailRow}>
-    <Entypo name="instagram" size={20} color="#666" style={styles.icon} />
+    <Entypo name="instagram" size={20} color="#e12596ff" style={styles.icon} />
     <TouchableOpacity
       onPress={() =>
         Linking.openURL(event.instagram).catch(err =>
@@ -190,36 +175,35 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
                 <View style={styles.separator} />
                 <View style={styles.detailRow}>
                   <MaterialIcons name="event-available" size={20} color="#666" style={styles.icon} />
-                  <Text style={styles.labelText}>予約状況</Text>
-                </View>
                 <View style={styles.reservationContainer}>
-                  {event.reservationSlots.map((slot, index) => (
-                    <View key={index} style={styles.slotRow}>
-                      <Text style={styles.slotTime}>{slot.time}</Text>
-                      <View
-                        style={[
-                          styles.statusBadge,
-                          styles[
-                            slot.status === 'available'
-                              ? 'statusAvailable'
-                              : slot.status === 'few_left'
-                              ? 'statusFew_left'
-                              : 'statusFull'
-                          ],
-                        ]}
-                      >
-                        <Text style={styles.statusText}>
-                          {
-                            {
-                              available: '空きあり',
-                              few_left: '残りわずか',
-                              full: '満席',
-                            }[slot.status]
-                          }
-                        </Text>
-                      </View>
-                    </View>
-                  ))}
+  {event.reservationSlots.map((slot, index) => {
+    const statusStyles = {
+      available: styles.statusAvailable,
+      few_left: styles.statusFew_left,
+      closed: styles.statusClosed,
+      full: styles.statusFull,
+    };
+
+    const statusLabels = {
+      available: '空きあり',
+      few_left: '残りわずか',
+      closed: '受付終了',
+      full: '満席',
+    };
+
+    return (
+      <View key={index} style={styles.slotRow}>
+        <Text style={styles.slotTime}>{slot.time}</Text>
+        <View style={[styles.statusBadge, statusStyles[slot.status]]}>
+          <Text style={styles.statusText}>
+            {statusLabels[slot.status] ?? '不明'}
+          </Text>
+        </View>
+      </View>
+    );
+  })}
+</View>
+
                 </View>
               </>
             )}
@@ -399,6 +383,9 @@ const styles = StyleSheet.create({
   },
   statusFull: {
     backgroundColor: '#f8d7da', // Red
+  },
+  statusClosed:{
+    backgroundColor: '#929292ff', // Red
   },
   statusText: {
     fontSize: 14,

@@ -5,6 +5,7 @@ import { Config } from '@/constants/Config';
 import DiamondBackground from '@/constants/DiamondBackground';
 import { useRemoteData } from '@/hooks/useRemoteData';
 import { Image } from 'expo-image';
+import { Link } from 'expo-router';
 import { useMemo, useState } from 'react';
 import {
   FlatList,
@@ -16,13 +17,14 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const API_BASE_URL = 'https://koudaisai.com/dataforapp/image';
+const API_BASE_URL = Config.IMAGE_BASE_URL;
+
 
 export default function OthersScreen() {
   const insets = useSafeAreaInsets();
   const {
     data: eventData,
-    isLoading,
+    loading,
     error,
   } = useRemoteData<AppEvent[]>(Config.OTHERS_URL);
 
@@ -66,7 +68,7 @@ export default function OthersScreen() {
     </>
   );
 
-  if (isLoading) {
+  if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <StatusBar barStyle="dark-content" />
@@ -99,6 +101,13 @@ export default function OthersScreen() {
 
       <View style={styles.header}>
         <Text style={styles.headerTitle}>その他</Text>
+        <Link href="https://www.koudaisai.com/admin/" asChild>
+          <TouchableOpacity>
+            <View style={styles.editButton}>
+              <Text style={styles.editButtonText}>大祭委員用</Text>
+            </View>
+          </TouchableOpacity>
+        </Link>
       </View>
       <AnnounceBar />
       <FlatList
@@ -128,6 +137,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 16,
     backgroundColor: 'white',
@@ -136,6 +148,16 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 24,
+    fontWeight: 'bold',
+  },
+  editButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: '#007BFF',
+    borderRadius: 5,
+  },
+  editButtonText: {
+    color: 'white',
     fontWeight: 'bold',
   },
   listTitle: {

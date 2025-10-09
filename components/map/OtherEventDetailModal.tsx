@@ -1,3 +1,4 @@
+import { Config } from '@/constants/Config';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import React, { useState } from 'react';
 import {
@@ -21,7 +22,6 @@ interface OtherEventDetailModalProps {
   onClose: () => void;
 }
 
-const API_BASE_URL = 'https://koudaisai.com/dataforapp/image';
 
 export const OtherEventDetailModal: React.FC<OtherEventDetailModalProps> = ({
   visible,
@@ -56,7 +56,7 @@ export const OtherEventDetailModal: React.FC<OtherEventDetailModalProps> = ({
     }
   };
 
-  const imageUrl = `${API_BASE_URL}/${event.image}`;
+  const imageUrl = `${Config.IMAGE_BASE_URL}/${event.image}`;
   const images = [{ uri: imageUrl }];
 
   const modalContent = (

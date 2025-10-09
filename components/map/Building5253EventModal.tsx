@@ -1,4 +1,5 @@
 import { AppEvent } from '@/components/map/types';
+import { Config } from '@/constants/Config';
 import { FontAwesome6 } from '@expo/vector-icons';
 import Entypo from '@expo/vector-icons/Entypo';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -21,7 +22,6 @@ interface Building5253EventModalProps {
   onClose: () => void;
 }
 
-const API_BASE_URL = 'https://koudaisai.com/dataforapp/image';
 
 export const Building5253EventModal: React.FC<Building5253EventModalProps> = ({
   visible,
@@ -30,7 +30,7 @@ export const Building5253EventModal: React.FC<Building5253EventModalProps> = ({
 }) => {
   if (!event) return null;
 
-  const imageUrl = `${API_BASE_URL}/${event.image}`;
+  const imageUrl = `${Config.IMAGE_BASE_URL}/${event.image}`;
 
   const handleSnsLinkPress = () => {
     if (event.snsLink) {
