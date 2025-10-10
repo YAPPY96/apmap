@@ -14,6 +14,13 @@
         "buildType": "apk"
       }
     },
+    "production": {
+          "autoIncrement": true, // buildNumberを自動インクリメント
+          "ios": {
+            "simulator": false // 実機/ストア提出用のビルドを指示
+          }
+
+        },
     "production-apk": {
       "autoIncrement": true,
       "android": {

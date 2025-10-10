@@ -2,7 +2,7 @@
   "expo": {
     "name": "Koudaisai Map",
     "slug": "university-map",
-    "version": "1.0.0",
+    "version": "1.10.10",
     "orientation": "portrait",
     "icon": "./assets/image/icon.png",
     "scheme": "myapp",
@@ -27,7 +27,7 @@
         },
         "ITSAppUsesNonExemptEncryption": false
       },
-      "bundleIdentifier": "com.KoudaisaiExecutiveCommittee.Koudaisaimap"
+      "bundleIdentifier": "com.NITKEC2025.Koudaisaimap"
     },
     "packagerOpts": {
       "config": "metro_config.js",
@@ -47,7 +47,7 @@
     },
     "android": {
       "icon": "./assets/image/icon.png",
-      "package": "com.KoudaisaiExecutiveCommittee.Koudaisaimap",
+      "package": "com.NITKEC2025.Koudaisaimap",
       "adaptiveIcon": {
         "foregroundImage": "./assets/image/adaptive-icon.png",
         "backgroundColor": "#ffffff"
