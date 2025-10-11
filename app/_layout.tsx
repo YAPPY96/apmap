@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'; // 👈 追加
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -9,28 +10,64 @@ import 'react-native-reanimated';
 import { LocationProvider } from '@/components/map/location_context';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
+// 起動状態を保存するためのキー
+const HAS_LAUNCHED_KEY = '@has_launched';
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
+
+  // isFirstLaunch: 初回起動かどうか
+  // isReady: データのロードが完了したか
+  const [isFirstLaunch, setIsFirstLaunch] = useState(false); 
+  const [isReady, setIsReady] = useState(false); // 👈 追加: AsyncStorageの読み込み完了状態
   const [isAnimationFinished, setAnimationFinished] = useState(false);
 
   useEffect(() => {
-    if (loaded) {
+    async function checkFirstLaunch() {
+      // 1. AsyncStorageから起動履歴をチェック
+      const hasLaunched = await AsyncStorage.getItem(HAS_LAUNCHED_KEY);
+      
+      if (hasLaunched === null) {
+        // 初回起動の場合
+        setIsFirstLaunch(true);
+        // 2. 起動したことを記録
+        await AsyncStorage.setItem(HAS_LAUNCHED_KEY, 'true');
+      } else {
+        // 2回目以降の起動の場合
+        setIsFirstLaunch(false);
+        // アニメーションをスキップするため、すぐに終了フラグを立てる
+        setAnimationFinished(true); 
+      }
+      setIsReady(true); // 👈 AsyncStorageのチェックが完了
+    }
+
+    checkFirstLaunch();
+  }, []);
+
+  useEffect(() => {
+    // フォントとデータロードが完了し、かつ初回起動の場合のみアニメーションを実行
+    if (loaded && isFirstLaunch) {
       const timer = setTimeout(() => {
         setAnimationFinished(true);
-      }, 10000); // 5秒後にアニメーションを終了
+      }, 10000); // 10秒後にアニメーションを終了
 
       return () => clearTimeout(timer);
     }
-  }, [loaded]);
+    // isFirstLaunch が false の場合は、useEffectの最初に setAnimationFinished(true) が呼ばれているため、
+    // ここではタイマーは設定されない
+  }, [loaded, isFirstLaunch]);
 
-  if (!loaded) {
+
+  // データのロードまたはフォントのロードが完了していない場合はnullを返す
+  if (!loaded || !isReady) {
     return null;
   }
-
-  if (!isAnimationFinished) {
+  
+  // 初回起動時でアニメーションが終了していない場合のみGIFを表示
+  if (isFirstLaunch && !isAnimationFinished) {
     return (
       <View style={styles.container}>
         <Image source={require('../assets/image/animation.gif')} style={styles.gif} />
@@ -38,6 +75,7 @@ export default function RootLayout() {
     );
   }
 
+  // 初回ではない場合、またはアニメーションが終了した場合はメインコンテンツを表示
   return (
     <LocationProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

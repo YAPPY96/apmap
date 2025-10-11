@@ -76,7 +76,13 @@ export default function Building5253Screen() {
     const imageUrl = `${API_BASE_URL}/${item.image}`;
     return (
       <TouchableOpacity style={styles.eventItem} onPress={() => handleEventPress(item)}>
-        <Image source={{ uri: imageUrl }} style={styles.eventImage} contentFit="cover" />
+        <Image 
+          source={{ uri: imageUrl }} 
+          style={styles.eventImage} 
+          contentFit="cover"
+          cachePolicy="memory-disk"
+          transition={200}
+        />
         <View style={styles.eventInfo}>
           <Text style={styles.eventName} numberOfLines={2}>{item.eventName}</Text>
           <Text style={styles.eventGroup} numberOfLines={1}>{item.groupName}</Text>

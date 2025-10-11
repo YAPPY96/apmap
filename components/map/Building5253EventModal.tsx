@@ -6,13 +6,13 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Image } from 'expo-image';
 import React from 'react';
 import {
-  Linking,
-  Modal,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Linking,
+    Modal,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -70,7 +70,13 @@ export const Building5253EventModal: React.FC<Building5253EventModalProps> = ({
           </TouchableOpacity>
 
           <ScrollView contentContainerStyle={styles.scrollContent}>
-            <Image source={{ uri: imageUrl }} style={styles.eventImage} />
+            <Image 
+              source={{ uri: imageUrl }} 
+              style={styles.eventImage}
+              cachePolicy="memory-disk"
+              transition={300}
+              priority="high"
+            />
             <View style={styles.header}>
               <Text style={styles.eventName}>{event.eventName}</Text>
             </View>

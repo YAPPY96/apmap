@@ -1,12 +1,12 @@
 import { Image } from 'expo-image';
 import React, { useEffect, useState } from 'react';
 import {
-  FlatList,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    FlatList,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -65,7 +65,13 @@ export default function EventScreen() {
     const imageUrl = `${API_BASE_URL}/${item.image}`;
     return (
       <TouchableOpacity style={styles.eventItem} onPress={() => handleEventPress(item)}>
-        <Image source={{ uri: imageUrl }} style={styles.eventImage} contentFit="cover" />
+        <Image 
+          source={{ uri: imageUrl }} 
+          style={styles.eventImage} 
+          contentFit="cover"
+          cachePolicy="memory-disk"
+          transition={200}
+        />
         <View style={styles.eventDetails}>
           
           <Text style={styles.eventName}>{item.eventName}</Text>

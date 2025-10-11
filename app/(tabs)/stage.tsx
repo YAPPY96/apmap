@@ -64,7 +64,13 @@ export default function StageScreen() {
     const imageUrl = `${API_BASE_URL}/${item.image}`;
     return (
       <TouchableOpacity style={styles.eventItem} onPress={() => handleStagePress(item)}>
-        <Image source={{ uri: imageUrl }} style={styles.eventImage} contentFit="cover" />
+        <Image 
+          source={{ uri: imageUrl }} 
+          style={styles.eventImage} 
+          contentFit="cover"
+          cachePolicy="memory-disk"
+          transition={200}
+        />
         <View style={styles.eventDetails}>
           <Text style={styles.eventName}>{item.eventName}</Text>
           <Text style={styles.eventTime}>{item.time}</Text>
