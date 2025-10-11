@@ -8,14 +8,17 @@ import { Image } from 'expo-image';
 import { Link } from 'expo-router';
 import { useMemo, useState } from 'react';
 import {
-    FlatList,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  FlatList,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+// ...existing code...
+import { useBottomTabOverflow } from '@/components/ui/TabBarBackground'; // 追加
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+// ...existing code...
 
 const API_BASE_URL = Config.IMAGE_BASE_URL;
 
@@ -27,7 +30,7 @@ export default function OthersScreen() {
     loading,
     error,
   } = useRemoteData<AppEvent[]>(Config.OTHERS_URL);
-
+  const bottomOverflow = useBottomTabOverflow();
   const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
   const [eventModalVisible, setEventModalVisible] = useState(false);
 

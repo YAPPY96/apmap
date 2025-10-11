@@ -1,23 +1,23 @@
 import { Image } from 'expo-image';
 import React, { useEffect, useState } from 'react';
 import {
-    FlatList,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  FlatList,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AnnounceBar } from '@/components/AnnounceBar';
 import { EventDetailModal } from '@/components/map/EventDetailModal';
 import { AppEvent } from '@/components/map/types';
+import { useBottomTabOverflow } from '@/components/ui/TabBarBackground';
 import { Config } from '@/constants/Config';
 import DiamondBackground from '@/constants/DiamondBackground';
 import { useRemoteData } from '@/hooks/useRemoteData';
-
-const API_BASE_URL = 'https://koudaisai.com/dataforapp/image';
+const API_BASE_URL = Config.IMAGE_BASE_URL;
 
 export default function EventScreen() {
   const insets = useSafeAreaInsets(); // セーフエリアの値を取得
@@ -25,7 +25,7 @@ export default function EventScreen() {
   const [filteredEvents, setFilteredEvents] = useState<AppEvent[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
   const [isModalVisible, setModalVisible] = useState(false);
-
+  const bottomOverflow = useBottomTabOverflow();
   const { data: allEvents } = useRemoteData<AppEvent[]>(Config.EVENTS_URL);
 
   // 初期日付を設定

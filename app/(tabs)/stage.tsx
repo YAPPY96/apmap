@@ -14,9 +14,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+// ...existing code...
+import { useBottomTabOverflow } from '@/components/ui/TabBarBackground'; // 追加
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+// ...existing code...
 
-const API_BASE_URL = 'https://koudaisai.com/dataforapp/image';
+const API_BASE_URL = Config.IMAGE_BASE_URL;
 
 export default function StageScreen() {
   const insets = useSafeAreaInsets(); // セーフエリアの値を取得
@@ -24,7 +27,7 @@ export default function StageScreen() {
   const [filteredStages, setFilteredStages] = useState<AppEvent[]>([]);
   const [selectedStage, setSelectedStage] = useState<AppEvent | null>(null);
   const [isModalVisible, setModalVisible] = useState(false);
-
+  const bottomOverflow = useBottomTabOverflow();
   const { data: allStages } = useRemoteData<AppEvent[]>(Config.STAGE_URL);
 
   // 初期日付を設定
