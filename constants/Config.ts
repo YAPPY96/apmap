@@ -16,4 +16,5 @@ export const Config = {
   BUILDING_5253_URL: `${SERVER_BASE_URL}/5253.json`,
   STAGE_URL: `${SERVER_BASE_URL}/stage.json`,
   OTHERS_URL: `${SERVER_BASE_URL}/others.json`,
+  LOCATION_API_URL: 'https://your-server.com/api/location', // <-- REPLACE THIS with your location tracking server endpoint
 };

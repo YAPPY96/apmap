@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'; // 👈 追加
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -8,66 +7,96 @@ import { Image, StyleSheet, View } from 'react-native';
 import 'react-native-reanimated';
 
 import { LocationProvider } from '@/components/map/location_context';
+import { Config } from '@/constants/Config';
 import { useColorScheme } from '@/hooks/useColorScheme';
-
-// 起動状態を保存するためのキー
-const HAS_LAUNCHED_KEY = '@has_launched';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Location from 'expo-location';
+import * as SecureStore from 'expo-secure-store';
+import { startLocationTracking } from '../  tasks/locationTask';
+import SurveyScreen from './survey';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
-
-  // isFirstLaunch: 初回起動かどうか
-  // isReady: データのロードが完了したか
-  const [isFirstLaunch, setIsFirstLaunch] = useState(false); 
-  const [isReady, setIsReady] = useState(false); // 👈 追加: AsyncStorageの読み込み完了状態
   const [isAnimationFinished, setAnimationFinished] = useState(false);
+  const [isSurveyCompleted, setSurveyCompleted] = useState(false);
+  const [checkingSurvey, setCheckingSurvey] = useState(true);
 
   useEffect(() => {
-    async function checkFirstLaunch() {
-      // 1. AsyncStorageから起動履歴をチェック
-      const hasLaunched = await AsyncStorage.getItem(HAS_LAUNCHED_KEY);
-      
-      if (hasLaunched === null) {
-        // 初回起動の場合
-        setIsFirstLaunch(true);
-        // 2. 起動したことを記録
-        await AsyncStorage.setItem(HAS_LAUNCHED_KEY, 'true');
-      } else {
-        // 2回目以降の起動の場合
-        setIsFirstLaunch(false);
-        // アニメーションをスキップするため、すぐに終了フラグを立てる
-        setAnimationFinished(true); 
+    const checkSurveyStatus = async () => {
+      const surveyCompleted = await AsyncStorage.getItem('survey_completed');
+      if (surveyCompleted === 'true') {
+        setSurveyCompleted(true);
       }
-      setIsReady(true); // 👈 AsyncStorageのチェックが完了
-    }
+      setCheckingSurvey(false);
+    };
 
-    checkFirstLaunch();
+    checkSurveyStatus();
   }, []);
 
   useEffect(() => {
-    // フォントとデータロードが完了し、かつ初回起動の場合のみアニメーションを実行
-    if (loaded && isFirstLaunch) {
+    const requestPermissionsAndStartTracking = async () => {
+      const { status: foregroundStatus } = await Location.requestForegroundPermissionsAsync();
+      if (foregroundStatus === 'granted') {
+        const { status: backgroundStatus } = await Location.requestBackgroundPermissionsAsync();
+        if (backgroundStatus === 'granted') {
+          await startLocationTracking();
+        }
+      }
+    };
+
+    if (isSurveyCompleted) {
+      requestPermissionsAndStartTracking();
+    }
+  }, [isSurveyCompleted]);
+
+  useEffect(() => {
+    const sendDataInterval = setInterval(async () => {
+      const storedLocations = await AsyncStorage.getItem('location_data');
+      if (storedLocations) {
+        const anonymousId = await SecureStore.getItemAsync('anonymous_id');
+        try {
+          await fetch(Config.LOCATION_API_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              anonymousId,
+              locations: JSON.parse(storedLocations),
+            }),
+          });
+          await AsyncStorage.removeItem('location_data');
+        } catch (error) {
+          console.error('Failed to send location data', error);
+        }
+      }
+    }, 600000); // 10 minutes
+
+    return () => clearInterval(sendDataInterval);
+  }, [isSurveyCompleted]);
+
+  useEffect(() => {
+    if (loaded && isSurveyCompleted) {
       const timer = setTimeout(() => {
         setAnimationFinished(true);
       }, 10000); // 10秒後にアニメーションを終了
 
       return () => clearTimeout(timer);
     }
-    // isFirstLaunch が false の場合は、useEffectの最初に setAnimationFinished(true) が呼ばれているため、
-    // ここではタイマーは設定されない
-  }, [loaded, isFirstLaunch]);
+  }, [loaded, isSurveyCompleted]);
 
-
-  // データのロードまたはフォントのロードが完了していない場合はnullを返す
-  if (!loaded || !isReady) {
+  if (!loaded || checkingSurvey) {
     return null;
   }
-  
-  // 初回起動時でアニメーションが終了していない場合のみGIFを表示
-  if (isFirstLaunch && !isAnimationFinished) {
+
+  if (!isSurveyCompleted) {
+    return <SurveyScreen />;
+  }
+
+  if (!isAnimationFinished) {
     return (
       <View style={styles.container}>
         <Image source={require('../assets/image/animation.gif')} style={styles.gif} />
@@ -75,12 +104,12 @@ export default function RootLayout() {
     );
   }
 
-  // 初回ではない場合、またはアニメーションが終了した場合はメインコンテンツを表示
   return (
     <LocationProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="survey" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />
