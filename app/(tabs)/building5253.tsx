@@ -16,9 +16,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+// ...existing code...
+import { useBottomTabOverflow } from '@/components/ui/TabBarBackground'; // 追加
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+// ...existing code...
 
-const API_BASE_URL = 'https://koudaisai.com/dataforapp/image';
+const API_BASE_URL = Config.IMAGE_BASE_URL;
 
 export default function Building5253Screen() {
   const insets = useSafeAreaInsets();
@@ -27,7 +30,7 @@ export default function Building5253Screen() {
     isLoading,
     error,
   } = useRemoteData<Record<string, AppEvent>>(Config.BUILDING_5253_URL);
-
+  const bottomOverflow = useBottomTabOverflow();
   const [selectedEvent, setSelectedEvent] = useState<AppEvent | null>(null);
   const [eventModalVisible, setEventModalVisible] = useState(false);
   const [currentFloor, setCurrentFloor] = useState(1);
@@ -76,7 +79,13 @@ export default function Building5253Screen() {
     const imageUrl = `${API_BASE_URL}/${item.image}`;
     return (
       <TouchableOpacity style={styles.eventItem} onPress={() => handleEventPress(item)}>
-        <Image source={{ uri: imageUrl }} style={styles.eventImage} contentFit="cover" />
+        <Image 
+          source={{ uri: imageUrl }} 
+          style={styles.eventImage} 
+          contentFit="cover"
+          cachePolicy="memory-disk"
+          transition={200}
+        />
         <View style={styles.eventInfo}>
           <Text style={styles.eventName} numberOfLines={2}>{item.eventName}</Text>
           <Text style={styles.eventGroup} numberOfLines={1}>{item.groupName}</Text>

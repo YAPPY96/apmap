@@ -70,7 +70,14 @@ export const Building5253EventModal: React.FC<Building5253EventModalProps> = ({
           </TouchableOpacity>
 
           <ScrollView contentContainerStyle={styles.scrollContent}>
-            <Image source={{ uri: imageUrl }} style={styles.eventImage} />
+            <Image
+              source={{ uri: imageUrl }}
+              style={styles.eventImage}
+              contentFit="contain"
+              cachePolicy="memory-disk"
+              transition={300}
+              priority="high"
+            />
             <View style={styles.header}>
               <Text style={styles.eventName}>{event.eventName}</Text>
             </View>
@@ -98,38 +105,38 @@ export const Building5253EventModal: React.FC<Building5253EventModalProps> = ({
                   </TouchableOpacity>
                 </View>
               )}
- {event.X && (
+{event.X && (
   <View style={styles.detailRow}>
     <FontAwesome6 name="square-x-twitter" size={20} color="#000" style={styles.icon} />
     <TouchableOpacity
-      onPress={() =>
-        Linking.openURL(event.X).catch(err =>
-          console.error("URL open error:", err)
-        )
-      }
+      onPress={() => {
+        if (event.X) {
+          Linking.openURL(event.X).catch(err =>
+            console.error("URL open error:", err)
+          );
+        }
+      }}
     >
-                    <Text style={[styles.detailText, styles.linkText]}>
-                  公式X
-                  </Text>
-                  </TouchableOpacity>
-              </View>
-             )}
-              {event.instagram && (
+      <Text style={[styles.detailText, styles.linkText]}>公式X</Text>
+    </TouchableOpacity>
+  </View>
+)}
+{event.instagram && (
   <View style={styles.detailRow}>
     <Entypo name="instagram" size={20} color="#e12596ff" style={styles.icon} />
     <TouchableOpacity
-      onPress={() =>
-        Linking.openURL(event.instagram).catch(err =>
-          console.error("URL open error:", err)
-        )
-      }
+      onPress={() => {
+        if (event.instagram) {
+          Linking.openURL(event.instagram).catch(err =>
+            console.error("URL open error:", err)
+          );
+        }
+      }}
     >
-                    <Text style={[styles.detailText, styles.linkText]}>
-                  公式Instagram
-                  </Text>
-                  </TouchableOpacity>
-              </View>
-             )}
+      <Text style={[styles.detailText, styles.linkText]}>公式Instagram</Text>
+    </TouchableOpacity>
+  </View>
+)}
               <View style={styles.detailRow}>
                 <MaterialIcons name="info" size={20} color="#007AFF" style={styles.icon} />
                 <Text style={styles.descriptionText}>{event.description}</Text>
@@ -180,7 +187,6 @@ const styles = StyleSheet.create({
     height: 300,
     borderRadius: 10,
     marginBottom: 20,
-    resizeMode: 'contain',
   },
   header: {
     marginBottom: 20,

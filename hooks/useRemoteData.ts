@@ -32,28 +32,46 @@ export function useRemoteData<T>(remoteUrl: string): UseRemoteDataResult<T> {
         headers['If-Modified-Since'] = lastModifiedRef.current;
       }
 
-      const response = await fetch(remoteUrl, {
-        cache: 'no-store',
-        headers,
-      });
+      // Add timeout to fetch request
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
-      if (response.status === 304) {
-        // Data has not changed, do nothing.
-        return;
+      try {
+        const response = await fetch(remoteUrl, {
+          cache: 'no-store',
+          headers,
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (response.status === 304) {
+          // Data has not changed, do nothing.
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        eTagRef.current = response.headers.get('ETag');
+        lastModifiedRef.current = response.headers.get('Last-Modified');
+
+        const remoteData = await response.json();
+        setData(remoteData);
+      } catch (fetchError: any) {
+        clearTimeout(timeoutId);
+        if (fetchError.name === 'AbortError') {
+          throw new Error('Request timeout - please check your network connection');
+        }
+        throw fetchError;
       }
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      eTagRef.current = response.headers.get('ETag');
-      lastModifiedRef.current = response.headers.get('Last-Modified');
-
-      const remoteData = await response.json();
-      setData(remoteData);
     } catch (e) {
       setError(e as Error);
-      setData(null);
+      // Keep existing data on error instead of setting to null
+      if (isInitialFetch) {
+        setData(null);
+      }
     } finally {
       if (isInitialFetch) {
         setLoading(false);

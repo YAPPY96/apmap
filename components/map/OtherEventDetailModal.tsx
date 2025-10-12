@@ -2,13 +2,13 @@ import { Config } from '@/constants/Config';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import React, { useState } from 'react';
 import {
-  Linking,
-  Modal,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Linking,
+    Modal,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import ImageViewing from 'react-native-image-viewing';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -72,6 +72,9 @@ export const OtherEventDetailModal: React.FC<OtherEventDetailModalProps> = ({
               source={{ uri: imageUrl }}
               style={styles.eventImage}
               contentFit="contain"
+              cachePolicy="memory-disk"
+              transition={300}
+              priority="high"
             />
           </TouchableOpacity>
           <View style={styles.header}>

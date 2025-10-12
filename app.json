@@ -22,28 +22,17 @@
             "openstreetmap.org": {
               "NSIncludesSubdomains": true,
               "NSExceptionAllowsInsecureHTTPLoads": true
+            },
+            "koudaisai.com": {
+              "NSIncludesSubdomains": true,
+              "NSExceptionAllowsInsecureHTTPLoads": false,
+              "NSExceptionRequiresForwardSecrecy": false
             }
           }
         },
         "ITSAppUsesNonExemptEncryption": false
       },
       "bundleIdentifier": "com.NITKEC2025.Koudaisaimap"
-    },
-    "packagerOpts": {
-      "config": "metro_config.js",
-      "sourceExts": [
-        "expo.ts",
-        "expo.tsx",
-        "expo.js",
-        "expo.jsx",
-        "ts",
-        "tsx",
-        "js",
-        "jsx",
-        "json",
-        "wasm",
-        "svg"
-      ]
     },
     "android": {
       "icon": "./assets/image/icon.png",
