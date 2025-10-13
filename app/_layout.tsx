@@ -12,7 +12,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 import * as SecureStore from 'expo-secure-store';
-import { startLocationTracking } from '../  tasks/locationTask';
+import { startLocationTracking } from '../tasks/locationTask';
 import SurveyScreen from './survey';
 
 export default function RootLayout() {
