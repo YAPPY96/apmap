@@ -49,8 +49,8 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
 
     const startTime1UTC = Date.UTC(2025, 9, 14, 0, 0, 0); // Oct 14th 9:00 UTC (JST 9:00)
     const endTime1UTC = Date.UTC(2025, 9, 14, 7, 0, 0);   //Oct 14th 16:00
-    const startTime2UTC = Date.UTC(2025, 9, 16, 23, 30, 0); // Nov 16th 0:00 UTC (JST 9:00)
-    const endTime2UTC = Date.UTC(2025, 9, 17, 7, 0, 0);   // Nov 16th 10:00 UTC (JST 19:00)
+    const startTime2UTC = Date.UTC(2025, 9, 19, 23, 30, 0); // Nov 16th 0:00 UTC (JST 9:00)
+    const endTime2UTC = Date.UTC(2025, 9, 20, 7, 0, 0);   // Nov 16th 10:00 UTC (JST 19:00)
 
     const isWithinDay1 = nowUTC >= startTime1UTC && nowUTC <= endTime1UTC;
     const isWithinDay2 = nowUTC >= startTime2UTC && nowUTC <= endTime2UTC;

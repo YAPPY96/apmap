@@ -57,18 +57,39 @@ export default function RootLayout() {
       const storedLocations = await AsyncStorage.getItem('location_data');
       if (storedLocations) {
         const anonymousId = await SecureStore.getItemAsync('anonymous_id');
+        const surveyDataSent = await AsyncStorage.getItem('survey_data_sent');
+        const surveyAnswers = await AsyncStorage.getItem('survey_answers');
+
+        const payload: {
+          anonymousId: string | null;
+          locations: any;
+          surveyAnswers?: any;
+        } = {
+          anonymousId,
+          locations: JSON.parse(storedLocations),
+        };
+
+        if (surveyAnswers && surveyDataSent !== 'true') {
+          payload.surveyAnswers = JSON.parse(surveyAnswers);
+        }
+
         try {
-          await fetch(Config.LOCATION_API_URL, {
+          const response = await fetch(Config.LOCATION_API_URL, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-              anonymousId,
-              locations: JSON.parse(storedLocations),
-            }),
+            body: JSON.stringify(payload),
           });
-          await AsyncStorage.removeItem('location_data');
+
+          if (response.ok) {
+            await AsyncStorage.removeItem('location_data');
+            if (surveyAnswers && surveyDataSent !== 'true') {
+              await AsyncStorage.setItem('survey_data_sent', 'true');
+            }
+          } else {
+            console.error('Failed to send location data', response.status);
+          }
         } catch (error) {
           console.error('Failed to send location data', error);
         }
