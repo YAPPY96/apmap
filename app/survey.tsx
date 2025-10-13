@@ -27,11 +27,11 @@ const SURVEY_QUESTIONS = [
     question: '大学祭の情報をどこで知りましたか？',
     options: ['SNS', '家族、知り合い', '折込チラシ']
   }
-
 ];
 
 const SurveyScreen = () => {
   const [consent, setConsent] = useState(false);
+  const [showConsentScreen, setShowConsentScreen] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<{ [key: number]: string }>({});
   const router = useRouter();
@@ -43,7 +43,7 @@ const SurveyScreen = () => {
   const totalQuestions = SURVEY_QUESTIONS.length;
   const currentQuestionData = SURVEY_QUESTIONS[currentQuestion];
 
-  // 質問が変わるたびにアニメーションを実行
+  // 質問または同意画面が変わるたびにアニメーションを実行
   useEffect(() => {
     // リセット
     slideAnim.setValue(100);
@@ -62,7 +62,7 @@ const SurveyScreen = () => {
         useNativeDriver: true,
       }),
     ]).start();
-  }, [currentQuestion]);
+  }, [currentQuestion, showConsentScreen]);
 
   const handleSelectOption = (option: string) => {
     setAnswers({
@@ -74,10 +74,19 @@ const SurveyScreen = () => {
   const handleNext = () => {
     if (currentQuestion < totalQuestions - 1) {
       setCurrentQuestion(currentQuestion + 1);
+    } else if (currentQuestion === totalQuestions - 1 && allQuestionsAnswered) {
+      // 最後の質問で全て回答済みの場合、同意画面を表示
+      setShowConsentScreen(true);
     }
   };
 
   const handlePrevious = () => {
+    if (showConsentScreen) {
+      // 同意画面から最後の質問に戻る
+      setShowConsentScreen(false);
+      return;
+    }
+
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
     }
@@ -100,91 +109,29 @@ const SurveyScreen = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>アンケート</Text>
       
-      {/* 進捗表示 */}
-      <Text style={styles.progressText}>
-        質問 {currentQuestion + 1} / {totalQuestions}
-      </Text>
-
-      {/* 質問カード - アニメーション付き */}
-      <Animated.View 
-        style={[
-          styles.questionCard,
-          {
-            opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }]
-          }
-        ]}
-      >
-        <Text style={styles.questionText}>{currentQuestionData.question}</Text>
-        
-        {/* 選択肢 */}
-        <View style={styles.optionsContainer}>
-          {currentQuestionData.options.map((option, index) => {
-            const isSelected = answers[currentQuestionData.id] === option;
-            return (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.optionButton,
-                  isSelected && styles.optionButtonSelected
-                ]}
-                onPress={() => handleSelectOption(option)}
-              >
-                <Text style={[
-                  styles.optionText,
-                  isSelected && styles.optionTextSelected
-                ]}>
-                  {option}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </Animated.View>
-
-      {/* ナビゲーションボタン */}
-      <View style={styles.navigationContainer}>
-        <TouchableOpacity
-          style={[styles.navButton, currentQuestion === 0 && styles.navButtonDisabled]}
-          onPress={handlePrevious}
-          disabled={currentQuestion === 0}
-        >
-          <Text style={[styles.navButtonText, currentQuestion === 0 && styles.navButtonTextDisabled]}>
-            ← 戻る
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
+      {showConsentScreen ? (
+        // 同意画面の表示
+        <Animated.View 
           style={[
-            styles.navButton,
-            (!isCurrentQuestionAnswered || currentQuestion === totalQuestions - 1) && styles.navButtonDisabled
+            styles.questionCard, // アンケートカードのスタイルを再利用
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }]
+            }
           ]}
-          onPress={handleNext}
-          disabled={!isCurrentQuestionAnswered || currentQuestion === totalQuestions - 1}
         >
-          <Text style={[
-            styles.navButtonText,
-            (!isCurrentQuestionAnswered || currentQuestion === totalQuestions - 1) && styles.navButtonTextDisabled
-          ]}>
-            次へ →
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* 同意とアンケート完了後の送信 */}
-      {allQuestionsAnswered && (
-        <View style={styles.consentSection}>
+          <Text style={styles.consentTitle}>ご協力のお願い</Text>
           <Text style={styles.consentDescription}>
             今後の観客動線などに役立てるため、位置情報の匿名IDをつけた情報を入手します。
           </Text>
           <Text style={styles.consentDescription}>
-            送られる情報はアンケートの結果と大学校内(※1)内での移動経路です
+            送られる情報はアンケートの結果と大学校内(※1)での移動経路です。
           </Text>
           <Text style={styles.consentDescription}>
             また位置情報は2025年11月15,16日の9:30~19:00のみ取得され、この期間外は収集されません。
           </Text>
           <Text style={styles.consentDescription}>
-            ※1：大学構内とは、以下の四角で囲まれた範囲を指します。
+            ※1：大学構内とは、以下の地図中の赤色の線で囲まれた範囲を指します。
             ただし、GPS信号の特性上、実際の位置情報がこの範囲から外れる場合がありますが、ご了承ください。
           </Text>
           <Image 
@@ -197,14 +144,92 @@ const SurveyScreen = () => {
             <Switch value={consent} onValueChange={setConsent} />
           </View>
           
-          <TouchableOpacity
-            style={[styles.submitButton, !consent && styles.submitButtonDisabled]}
-            onPress={handleSubmit}
-            disabled={!consent}
+          <View style={styles.navigationContainer}>
+            <TouchableOpacity
+              style={styles.navButton}
+              onPress={handlePrevious}
+            >
+              <Text style={styles.navButtonText}>← 戻る</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.submitButton, !consent && styles.submitButtonDisabled, { flex: 1 }]}
+              onPress={handleSubmit}
+              disabled={!consent}
+            >
+              <Text style={styles.submitButtonText}>送信</Text>
+            </TouchableOpacity>
+          </View>
+         </Animated.View> 
+      ) : (
+        // アンケート質問の表示
+        <>
+          <Text style={styles.progressText}>
+            質問 {currentQuestion + 1} / {totalQuestions}
+          </Text>
+          <Animated.View 
+            style={[
+              styles.questionCard,
+              {
+                opacity: fadeAnim,
+                transform: [{ translateY: slideAnim }]
+              }
+            ]}
           >
-            <Text style={styles.submitButtonText}>送信</Text>
-          </TouchableOpacity>
-        </View>
+            <Text style={styles.questionText}>{currentQuestionData.question}</Text>
+            
+            <View style={styles.optionsContainer}>
+              {currentQuestionData.options.map((option, index) => {
+                const isSelected = answers[currentQuestionData.id] === option;
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.optionButton,
+                      isSelected && styles.optionButtonSelected
+                    ]}
+                    onPress={() => handleSelectOption(option)}
+                  >
+                    <Text style={[
+                      styles.optionText,
+                      isSelected && styles.optionTextSelected
+                    ]}>
+                      {option}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </Animated.View>
+
+          <View style={styles.navigationContainer}>
+            <TouchableOpacity
+              style={[styles.navButton, currentQuestion === 0 && styles.navButtonDisabled]}
+              onPress={handlePrevious}
+              disabled={currentQuestion === 0}
+            >
+              <Text style={[styles.navButtonText, currentQuestion === 0 && styles.navButtonTextDisabled]}>
+                ← 戻る
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.navButton,
+                !isCurrentQuestionAnswered && styles.navButtonDisabled
+              ]}
+              onPress={handleNext}
+              disabled={!isCurrentQuestionAnswered}
+            >
+              <Text style={[
+                styles.navButtonText,
+                !isCurrentQuestionAnswered && styles.navButtonTextDisabled
+              ]}>
+                {currentQuestion === totalQuestions - 1 ? '同意画面へ →' : '次へ →'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </>
       )}
     </ScrollView>
   );
@@ -295,16 +320,13 @@ const styles = StyleSheet.create({
   navButtonTextDisabled: {
     color: '#999',
   },
-  consentSection: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    marginTop: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+  // --- 同意画面用のスタイル ---
+  consentTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 20,
   },
   consentDescription: {
     fontSize: 14,
@@ -314,7 +336,7 @@ const styles = StyleSheet.create({
   },
   locationImage: {
     width: '100%',
-    height: 250,
+    height: 400, // 高さを増やして画像を大きく表示
     marginVertical: 15,
     borderRadius: 8,
   },
@@ -333,7 +355,7 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     backgroundColor: '#4caf50',
-    padding: 16,
+    paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
   },
@@ -342,7 +364,7 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });

@@ -15,6 +15,18 @@ pluginManagement {
     "../android/expo-gradle-plugin"
   ).absolutePath
   includeBuild(expoPluginsPath)
+
+  // 既存のコードがあれば残す
+    def settingsDir = settings.settingsDir.parentFile
+    includeBuild(settingsDir.toPath().resolve('../node_modules/expo-modules-core/android').toFile())
+
+    // 以下の部分を確認・追加
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "$rootDir/../node_modules/react-native/android" } // React NativeのローカルMavenリポジトリ
+        gradlePluginPortal()
+  }
 }
 
 plugins {
