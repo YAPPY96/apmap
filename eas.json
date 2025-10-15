@@ -11,21 +11,26 @@
     "preview": {
       "distribution": "internal",
       "android": {
-        "buildType": "apk",
-        "cache": {
-          "clear": true
-        }
+        "buildType": "apk"
       }
     },
     "production": {
-      "android": {
-        "buildType": "apk",
-        "cache": {
-          "clear": true
+          "autoIncrement": true, 
+          "ios": {
+            "simulator": false
+          }
+
         },
-        "env": {
-          "NODE_OPTIONS": "--max-old-space-size=4096"
-        }
+    "production-apk": {
+      "autoIncrement": true,
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production-aab": {
+      "autoIncrement": true,
+      "android": {
+        "buildType": "app-bundle"
       }
     }
   },

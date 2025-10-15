@@ -134,11 +134,13 @@ const SurveyScreen = () => {
             ※1：大学構内とは、以下の地図中の赤色の線で囲まれた範囲を指します。
             ただし、GPS信号の特性上、実際の位置情報がこの範囲から外れる場合がありますが、ご了承ください。
           </Text>
-          <Image 
-            source={require('@/assets/image/asklocation.webp')} 
-            style={styles.locationImage}
-            resizeMode="contain"
-          />
+<Image
+  source={require('@/assets/image/asklocation.webp')}
+  style={styles.locationImage}
+  resizeMode="contain"
+/>
+
+
           <View style={styles.switchContainer}>
             <Text style={styles.consentText}>匿名での位置情報提供への同意</Text>
             <Switch value={consent} onValueChange={setConsent} />
@@ -334,12 +336,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     lineHeight: 20,
   },
-  locationImage: {
-    width: '100%',
-    height: 400, // 高さを増やして画像を大きく表示
-    marginVertical: 15,
-    borderRadius: 8,
-  },
+// styles の locationImage を少し調整
+locationImage: {
+  width: '100%', // コンテナ幅に合わせる
+  height: 500, // 高さはそのまま
+  marginVertical: 15,
+  borderRadius: 8,
+  backgroundColor: '#f0f0f0', // 読み込み中の背景色（オプション）
+  alignSelf: 'center', // 中央に配置
+},
   switchContainer: {
     flexDirection: 'row',
     alignItems: 'center',

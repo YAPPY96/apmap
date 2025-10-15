@@ -47,8 +47,8 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
     // 日本時間 (JST = UTC+9) で 9:00-19:00 は UTC で 0:00-10:00
     const nowUTC = now.getTime();
 
-    const startTime1UTC = Date.UTC(2025, 9, 14, 0, 0, 0); // Oct 14th 9:00 UTC (JST 9:00)
-    const endTime1UTC = Date.UTC(2025, 9, 14, 9, 0, 0);   //Oct 14th 16:00
+    const startTime1UTC = Date.UTC(2025, 9, 16, 0, 0, 0); // Oct 14th 9:00 UTC (JST 9:00)
+    const endTime1UTC = Date.UTC(2025, 9, 16, 9, 0, 0);   //Oct 14th 16:00
     const startTime2UTC = Date.UTC(2025, 9, 19, 23, 30, 0); // Nov 16th 0:00 UTC (JST 9:00)
     const endTime2UTC = Date.UTC(2025, 9, 20, 7, 0, 0);   // Nov 16th 10:00 UTC (JST 19:00)
     const startTime3UTC = Date.UTC(2025, 9, 16, 23, 30, 0); // 2025-10-17 08:30 JST => 2025-10-16 23:30 UTC
