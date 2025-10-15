@@ -5,13 +5,13 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-    Linking,
-    Modal,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Linking,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import ImageViewing from 'react-native-image-viewing';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -176,37 +176,37 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
             {event.reservation && event.reservationSlots && (
               <>
                 <View style={styles.separator} />
-                <View style={styles.detailRow}>
+                <View style={styles.reservationHeader}>
                   <MaterialIcons name="event-available" size={20} color="#666" style={styles.icon} />
+                  <Text style={styles.reservationTitle}>予約状況</Text>
+                </View>
                 <View style={styles.reservationContainer}>
-  {event.reservationSlots.map((slot, index) => {
-    const statusStyles = {
-      available: styles.statusAvailable,
-      few_left: styles.statusFew_left,
-      closed: styles.statusClosed,
-      full: styles.statusFull,
-    };
+                  {event.reservationSlots.map((slot, index) => {
+                    const statusStyles = {
+                      available: styles.statusAvailable,
+                      few_left: styles.statusFew_left,
+                      closed: styles.statusClosed,
+                      full: styles.statusFull,
+                    };
 
-    const statusLabels = {
-      available: '空きあり',
-      few_left: '残りわずか',
-      closed: '受付終了',
-      full: '満席',
-    };
+                    const statusLabels = {
+                      available: '空きあり',
+                      few_left: '残りわずか',
+                      closed: '受付終了',
+                      full: '満席',
+                    };
 
-    return (
-      <View key={index} style={styles.slotRow}>
-        <Text style={styles.slotTime}>{slot.time}</Text>
-        <View style={[styles.statusBadge, statusStyles[slot.status]]}>
-          <Text style={styles.statusText}>
-            {statusLabels[slot.status] ?? '不明'}
-          </Text>
-        </View>
-      </View>
-    );
-  })}
-</View>
-
+                    return (
+                      <View key={index} style={styles.slotRow}>
+                        <Text style={styles.slotTime}>{slot.time}</Text>
+                        <View style={[styles.statusBadge, statusStyles[slot.status]]}>
+                          <Text style={styles.statusText}>
+                            {statusLabels[slot.status] ?? '不明'}
+                          </Text>
+                        </View>
+                      </View>
+                    );
+                  })}
                 </View>
               </>
             )}
@@ -354,8 +354,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
     marginVertical: 15,
   },
+  reservationHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  reservationTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
   reservationContainer: {
-    marginTop: 10,
+    width: '100%',
     borderWidth: 1,
     borderColor: '#e0e0e0',
     borderRadius: 8,
