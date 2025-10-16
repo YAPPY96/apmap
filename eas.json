@@ -15,9 +15,9 @@
       }
     },
     "production": {
-          "autoIncrement": true, // buildNumberを自動インクリメント
+          "autoIncrement": true, 
           "ios": {
-            "simulator": false // 実機/ストア提出用のビルドを指示
+            "simulator": false
           }
 
         },
