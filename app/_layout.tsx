@@ -54,8 +54,10 @@ export default function RootLayout() {
 
   useEffect(() => {
     const sendDataInterval = setInterval(async () => {
+      console.log('Checking for location data to send...');
       const storedLocations = await AsyncStorage.getItem('location_data');
       if (storedLocations) {
+        console.log('Found location data, preparing to send.');
         const anonymousId = await SecureStore.getItemAsync('anonymous_id');
         const surveyDataSent = await AsyncStorage.getItem('survey_data_sent');
         const surveyAnswers = await AsyncStorage.getItem('survey_answers');
@@ -74,6 +76,7 @@ export default function RootLayout() {
         }
 
         try {
+          console.log('Sending data to server:', JSON.stringify(payload, null, 2));
           const response = await fetch(Config.LOCATION_API_URL, {
             method: 'POST',
             headers: {
@@ -83,18 +86,21 @@ export default function RootLayout() {
           });
 
           if (response.ok) {
+            console.log('Data sent successfully. Removing local data.');
             await AsyncStorage.removeItem('location_data');
             if (surveyAnswers && surveyDataSent !== 'true') {
               await AsyncStorage.setItem('survey_data_sent', 'true');
             }
           } else {
-            console.error('Failed to send location data', response.status);
+            console.error('Failed to send location data. Status:', response.status);
           }
         } catch (error) {
-          console.error('Failed to send location data', error);
+          console.error('An error occurred while sending location data:', error);
         }
+      } else {
+        console.log('No location data to send.');
       }
-    }, 600000); // 10 minutes
+    }, 600000); // 10分ごとに実行
 
     return () => clearInterval(sendDataInterval);
   }, [isSurveyCompleted]);

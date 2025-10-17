@@ -13,6 +13,7 @@ const ALLOWED_AREA_POLYGON = [
   { latitude: 35.158643, longitude: 136.926901 },
   { latitude: 35.158852, longitude: 136.925710 },
   { latitude: 35.159309, longitude: 136.925721 },
+  { latitude: 35.159556, longitude: 136.923489},
 ];
 
 /**
@@ -49,8 +50,8 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
 
     // Active Time Windows
     // 2025-10-17 from 9:00 to 16:00 JST
-    const startTime1UTC = Date.UTC(2025, 9, 17, 0, 0, 0); // 2025-10-17 00:00 UTC
-    const endTime1UTC = Date.UTC(2025, 9, 17, 7, 0, 0);   // 2025-10-17 07:00 UTC
+    const startTime1UTC = Date.UTC(2025, 9, 21, 0, 0, 0); // 2025-10-17 00:00 UTC
+    const endTime1UTC = Date.UTC(2025, 9, 21, 7, 0, 0);   // 2025-10-17 07:00 UTC
 
     // 2025-10-20 from 10:00 to 20:00 JST
     const startTime2UTC = Date.UTC(2025, 9, 20, 1, 0, 0); // 2025-10-20 01:00 UTC

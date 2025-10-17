@@ -65,6 +65,13 @@ export default function EventScreen() {
     const imageUrl = `${API_BASE_URL}/${item.image}`;
     return (
       <TouchableOpacity style={styles.eventItem} onPress={() => handleEventPress(item)}>
+        {/* 要予約バッジ（item.reservation が true のときのみ表示） */}
+        {item.reservation && (
+          <View style={styles.reserveBadge}>
+            <Text style={styles.reserveBadgeText}>要当日予約</Text>
+          </View>
+        )}
+
         <Image 
           source={{ uri: imageUrl }} 
           style={styles.eventImage} 
@@ -73,7 +80,6 @@ export default function EventScreen() {
           transition={200}
         />
         <View style={styles.eventDetails}>
-          
           <Text style={styles.eventName}>{item.eventName}</Text>
           <Text style={styles.eventTime}>{item.time}</Text>
         </View>
@@ -195,6 +201,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   eventItem: {
+    position: 'relative', // ← 追加：バッジを絶対配置する基準
     flexDirection: 'row',
     backgroundColor: 'white',
     borderRadius: 12,
@@ -230,5 +237,23 @@ const styles = StyleSheet.create({
     marginTop: 50,
     fontSize: 16,
     color: '#999',
+  },
+  // 追加：要予約バッジ
+  reserveBadge: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: '#ff3b30', // 赤
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    zIndex: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  reserveBadgeText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 12,
   },
 });

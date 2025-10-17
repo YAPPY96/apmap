@@ -28,7 +28,6 @@ interface EventDetailModalProps {
   showViewLocationButton?: boolean;
 }
 
-
 export const EventDetailModal: React.FC<EventDetailModalProps> = ({
   visible,
   event,
@@ -57,7 +56,6 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
       );
     }
   };
-
 
   const imageUrl = `${Config.IMAGE_BASE_URL}/${event.image}`;
   const images = [{ uri: imageUrl }];
@@ -115,46 +113,42 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
               <MaterialIcons name="info" size={20} color="#007AFF" style={styles.icon} />
               <Text style={styles.descriptionText}>{event.description}</Text>
             </View>
-                          {event.snsLink && (
-                <View style={styles.detailRow}>
-                  <MaterialIcons name="web" size={20} color="#666" style={styles.icon} />
-                  <TouchableOpacity onPress={handleSnsLinkPress}>
-                    <Text style={[styles.detailText, styles.linkText]}>{event.snsLink}</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
- {event.X && (
-  <View style={styles.detailRow}>
-    <FontAwesome6 name="square-x-twitter" size={20} color="#666" style={styles.icon} />
-    <TouchableOpacity
-      onPress={() =>
-        Linking.openURL(event.X).catch(err =>
-          console.error("URL open error:", err)
-        )
-      }
-    >
-                    <Text style={[styles.detailText, styles.linkText]}>
-                  公式X
-                  </Text>
-                  </TouchableOpacity>
+            {event.snsLink && (
+              <View style={styles.detailRow}>
+                <MaterialIcons name="web" size={20} color="#666" style={styles.icon} />
+                <TouchableOpacity onPress={handleSnsLinkPress}>
+                  <Text style={[styles.detailText, styles.linkText]}>{event.snsLink}</Text>
+                </TouchableOpacity>
               </View>
-             )}
-              {event.instagram && (
-  <View style={styles.detailRow}>
-    <Entypo name="instagram" size={20} color="#e12596ff" style={styles.icon} />
-    <TouchableOpacity
-      onPress={() =>
-        Linking.openURL(event.instagram).catch(err =>
-          console.error("URL open error:", err)
-        )
-      }
-    >
-                    <Text style={[styles.detailText, styles.linkText]}>
-                  公式Instagram
-                  </Text>
-                  </TouchableOpacity>
+            )}
+            {event.X && (
+              <View style={styles.detailRow}>
+                <FontAwesome6 name="square-x-twitter" size={20} color="#666" style={styles.icon} />
+                <TouchableOpacity
+                  onPress={() =>
+                    Linking.openURL(event.X).catch((err) =>
+                      console.error('URL open error:', err)
+                    )
+                  }
+                >
+                  <Text style={[styles.detailText, styles.linkText]}>公式X</Text>
+                </TouchableOpacity>
               </View>
-             )}
+            )}
+            {event.instagram && (
+              <View style={styles.detailRow}>
+                <Entypo name="instagram" size={20} color="#e12596ff" style={styles.icon} />
+                <TouchableOpacity
+                  onPress={() =>
+                    Linking.openURL(event.instagram).catch((err) =>
+                      console.error('URL open error:', err)
+                    )
+                  }
+                >
+                  <Text style={[styles.detailText, styles.linkText]}>公式Instagram</Text>
+                </TouchableOpacity>
+              </View>
+            )}
             {event.caution && (
               <View style={styles.detailRow}>
                 <MaterialIcons name="warning" size={20} color="#FF9500" style={styles.icon} />
@@ -179,6 +173,8 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
                 <View style={styles.reservationHeader}>
                   <MaterialIcons name="event-available" size={20} color="#666" style={styles.icon} />
                   <Text style={styles.reservationTitle}>予約状況</Text>
+                  {/* 右上に表示する赤いラベル（予約が必要な場合） */}
+
                 </View>
                 <View style={styles.reservationContainer}>
                   {event.reservationSlots.map((slot, index) => {
@@ -364,29 +360,48 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
   },
+  reservationRequired: {
+    marginLeft: 'auto',        // 右端に移動
+    color: '#ff3b30',         // 赤（iOS風のアクセント赤）
+    fontWeight: '700',
+    fontSize: 14,
+    paddingLeft: 10,          // アイコンやタイトルと適度に間隔を取る
+    alignSelf: 'center',
+  },
   reservationContainer: {
-    width: '100%',
-    borderWidth: 1,
+    // offset the ScrollView padding (20) so this box reaches edges
+    marginHorizontal: 5,
+    width: '100%', // occupy full available width after negative margin
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
     borderColor: '#e0e0e0',
-    borderRadius: 8,
-    padding: 10,
+    backgroundColor: '#fff', // keep same background as modal
+  },
+  reservationInner: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   slotRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 8,
+    paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
   slotTime: {
     fontSize: 16,
     color: '#333',
+    // ensure time doesn't push badge out
+    flex: 1,
   },
   statusBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
     borderRadius: 12,
+    minWidth: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   statusAvailable: {
     backgroundColor: '#d4edda', // Green
@@ -397,7 +412,7 @@ const styles = StyleSheet.create({
   statusFull: {
     backgroundColor: '#f8d7da', // Red
   },
-  statusClosed:{
+  statusClosed: {
     backgroundColor: '#929292ff', // Red
   },
   statusText: {
